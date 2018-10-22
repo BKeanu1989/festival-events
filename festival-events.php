@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define('FESTIVAL_EVENTS_PLUGIN_PATH', WP_PLUGIN_DIR . '/festival-events/');
 
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'fe-core-functions.php');
+require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/class-Festival-Product.php');
 
 
 /**
