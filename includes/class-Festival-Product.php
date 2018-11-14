@@ -4,6 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+require ABSPATH. '/vendor/autoload.php';
+
+use Automattic\WooCommerce\Client;
+
+
 /**
  * Check if WooCommerce is active
  **/
@@ -146,21 +151,7 @@ function fe_festival_product_custom_js() {
 
 
 // save these things to have them later on
-// require ABSPATH. '/vendor/autoload.php';
 
-// use Automattic\WooCommerce\Client;
-
-// $woocommerce = new Client(
-//     'http://localhost:8888/safeboxen',
-//     $consumer_key,
-//     $consumer_secret,
-//     [
-//         'wp_api' => true,
-// 		'version' => 'wc/v2',
-// 		'verify_ssl' => false
-//     ]
-// );
-// print_r($woocommerce->get('products'));
 
 // $prod_data = [
 // 	'name'          => 'A great product',
@@ -336,20 +327,6 @@ function woo_save_lockers($post_id)
         }
     }
 }
-function fe_hook_general_tab_fields() {
-
-    // festival times
-    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_festival_times' );
-    add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
-
-    // location
-    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_locations' );
-    add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
-
-    // lockers
-    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_lockers' );
-    add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
-}
 
 function setupLocations($festivalLocations) 
 {
@@ -368,4 +345,67 @@ function setupLockers($locations)
         $lockers[$locations[$iterator]] = $lockerOptions;
     }
     return $lockers;
+}
+
+function woo_display_populate() 
+{
+    echo '<div class="options_group">';
+    
+    woocommerce_wp_checkbox(array(
+        'id' => "_populate_attributes",
+        'label' => __('Varianten erstellen?', 'festival-events'),
+        'description' => __('Willst du die verschiedenen Varianten erstellen?', 'festival-events'),
+    ));
+    
+    echo '</div>';
+}
+
+function woo_callback_populate($post_id)
+{
+    try {
+        // https://www.skyverge.com/blog/using-woocommerce-rest-api-introduction/
+        // https://docs.woocommerce.com/wc-apidocs/class-WC_REST_Authentication.html
+        // [woocommerce_rest_authentication_missing_parameter]
+        global $consumer_key, $consumer_secret, $woocommerce;
+        error_log("consumer key: {$consumer_key}");
+        error_log("consumer secret:{$consumer_secret}");
+        if (isset($_POST['_populate_attributes'])) {
+    
+    
+            $woocommerce = new Client(
+                'http://localhost:8888/safeboxen',
+                $consumer_key,
+                $consumer_secret,
+                [
+                    'wp_api' => true,
+                    'version' => 'wc/v2',
+                    'verify_ssl' => false
+                ]
+            );
+            // error_log(print_r($woocommerce->get('products', 1)));
+            error_log(print_r($woocommerce->get('products', 1)));
+    
+        }
+    } catch(Exception $e) {
+        echo 'Exception abgefangen: ',  $e->getMessage(), "\n";
+    }
+}
+
+function fe_hook_general_tab_fields() {
+
+    // festival times
+    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_festival_times' );
+    add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
+
+    // location
+    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_locations' );
+    add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
+
+    // lockers
+    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_lockers' );
+    add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
+
+    // populate attributes
+    add_action('woocommerce_product_options_general_product_data', 'woo_display_populate');
+    add_action('woocommerce_process_product_meta', 'woo_callback_populate');
 }
