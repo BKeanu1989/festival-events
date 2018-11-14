@@ -268,63 +268,76 @@ function woo_display_locations()
 function woo_save_locations($post_id) 
 {
     // global $woocommerce;
-    $festivalLocations = $_POST['_festival_locations'];
-    $festivalLocations_array = preg_split("/[,]+/", esc_attr($festivalLocations));
-    $festivalLocations_array = array_map(function($x) {
-        return trim($x);
-    }, $festivalLocations_array);
+    $festivalLocations = [];
+    if (isset($_POST["_festival_locations"])) {
+        $festivalLocations = setupLocations($_POST['_festival_locations']);
+    }
+    
     // add validation
     // 
-    if (!count( $festivalLocations_array ) == 0) {
-        update_post_meta( $post_id , '_festival_locations', $festivalLocations_array);
+    if (!count( $festivalLocations ) == 0) {
+        update_post_meta( $post_id , '_festival_locations', $festivalLocations);
     }
 }
 
+$lockerDescription = ["", "M", "M HV", "L", "L HV", "XL", "XL HV"];
+
 function woo_display_lockers() 
 {
+    
     // foreach location create checkbox ...
-    global $woocommerce, $thepostid, $post;
+    global $woocommerce, $thepostid, $post, $lockerDescription;
 
     $locations = get_post_meta( $thepostid, '_festival_locations', true );
     $lockers = get_post_meta( $thepostid, '_lockers', true );
-    $basis = ["M" => 'no', "M HV" => 'no', "L" => 'no', "L HV" => 'no', "XL" => 'no', "XL HV" => 'no'];
-    if (count($lockers) > 0) {
 
+    if (count($lockers) == 0) {
+        $lockers = setupLockers($locations);
     }
-    
+
     echo '<div class="options_group">';
     echo '<h2>Schließfächer</h2>';
-        for ($i=0; $i < count($locations); $i++) { 
-            echo "<h3>{$locations[$i]}</h3>";
-            // for($y = 0; $y < count($baseArray); $y++) {
-            $indexForLocker = 0;
-            foreach($basis AS $key => $locker) {
-                $lockerValue = $indexForLocker + 1;
+        foreach($lockers AS $location => $lockersForLocation) { 
+            echo "<h3>{$location}</h3>";
+
+            $iteratorLockerValue = 0;
+            foreach($lockersForLocation AS $key => $value) {
+                $lockerValue = $iteratorLockerValue + 1;
                 woocommerce_wp_checkbox(array(
-                    'id' => "_lockers[{$i}][{$lockerValue}]",
-                    'label' => __($key, 'festival-events'),
+                    'id' => "_lockers[{$location}][{$lockerValue}]",
+                    'label' => __($lockerDescription[$key], 'festival-events'),
                     'description' => __('vorhanden?', 'festival-events'),
                     'value' => 'yes',
-                    'cbvalue' => 'yes'
+                    'cbvalue' => $value
                 ));
-                $indexForLocker++;
+                $iteratorLockerValue++;
             }
         }
     echo '</div>';
-    // woocommerce_wp_checkbox(array(
-    //     'id' => '_'
-    // ))
 }
 
 function woo_save_lockers($post_id) 
 {
-    $lockersWithLocation = $_POST['_lockers'];
-    if (!count( $lockersWithLocation ) == 0) {
-        update_post_meta( $post_id , '_lockers', $lockersWithLocation);
+    if (isset($_POST['_lockers'])) {
+        $festivalLocations = setupLocations($_POST['_festival_locations']);
+    
+        $defaultLockers = setupLockers($festivalLocations);
+        $arrayToSave = $defaultLockers;
+
+        $postedLockers = $_POST['_lockers'];
+        foreach($postedLockers AS $key => $value) {
+            foreach($value AS $key2 => $value2) {
+                $arrayToSave[$key][$key2] = "yes";
+            }
+        }
+    
+        if (!count( $arrayToSave ) == 0) {
+            update_post_meta( $post_id , '_lockers', $arrayToSave);
+        }
     }
 }
-
 function fe_hook_general_tab_fields() {
+
     // festival times
     add_action( 'woocommerce_product_options_general_product_data', 'woo_display_festival_times' );
     add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
@@ -336,4 +349,23 @@ function fe_hook_general_tab_fields() {
     // lockers
     add_action( 'woocommerce_product_options_general_product_data', 'woo_display_lockers' );
     add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
+}
+
+function setupLocations($festivalLocations) 
+{
+    $festivalLocations_array = preg_split("/[,]+/", esc_attr($festivalLocations));
+    $festivalLocations_array = array_map(function($x) {
+        return trim($x);
+    }, $festivalLocations_array);
+    return $festivalLocations_array;
+}
+
+function setupLockers($locations) 
+{
+    $lockers = [];
+    $lockerOptions = ["1" => 'no',"2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
+    for ($iterator = 0; $iterator < count($locations); $iterator++) {
+        $lockers[$locations[$iterator]] = $lockerOptions;
+    }
+    return $lockers;
 }
