@@ -20,7 +20,8 @@ define('FESTIVAL_EVENTS_PLUGIN_PATH', WP_PLUGIN_DIR . '/festival-events/');
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'fe-core-functions.php');
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/class-Festival-Product.php');
 
-
+$consumer_key = 'ck_e2224eac17ff2404aa824fbfa2b0891af4258b32'; // Add your own Consumer Key here
+$consumer_secret = 'cs_dd6596af0493fbec1e30cf08c102989f2b886152'; // Add your own Consumer Secret here
 /**
  * Check if WooCommerce is active
  **/
@@ -58,88 +59,4 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 // }
 
 
-// main product
-// input DATE: StartDate
-// input DATE: EndDate
-// --> foreach day in between enumerate days as attribute
-// select Lockers
 
-
-// save these things to have them later on
-// require ABSPATH. '/vendor/autoload.php';
-
-// use Automattic\WooCommerce\Client;
-
-// $woocommerce = new Client(
-//     'http://localhost:8888/safeboxen',
-//     $consumer_key,
-//     $consumer_secret,
-//     [
-//         'wp_api' => true,
-// 		'version' => 'wc/v2',
-// 		'verify_ssl' => false
-//     ]
-// );
-// print_r($woocommerce->get('products'));
-
-// $prod_data = [
-// 	'name'          => 'A great product',
-// 	'type'          => 'simple',
-// 	'regular_price' => '15.00',
-// 	'description'   => 'A very meaningful product description',
-// 	'images'        => [
-
-// 	],
-// 	'categories'    => [
-// 		[
-// 			'id' => 1,
-// 		],
-// 	],
-// ];
-
-// Create Variable Product
-    // BASE:
-    // Name == Festival Name
-    // FestivalStart
-    // FestivalEnd
-    // What lockers are Available?
-    // Locations
-    // einzelene Tage buchbar?
-
-    // On Save
-        // Create Variations
-
-
-// all available woocommerce_ form fields can be found here: /woocommerce/includes/admin/wc-meta-box-functions.php
-// add_action( 'woocommerce_product_options_general_product_data', 'woo_add_festival_start' );
-// add_action( 'woocommerce_process_product_meta', 'woo_save_festival_start' );
-
-// function woo_add_festival_start() 
-// {
-//     global $woocommerce;
-
-//     echo '<div class="options_group">';
-    
-//     woocommerce_wp_text_input(
-//         [
-//             'id' => '_festival_start',
-//             'label' => __('Festivalstart:', 'festival-events'),
-//             'placeholder' => '01.08.2019',
-//             'desc_tip' => 'true',
-//             'description' => __('Trage hier das Datum vom Start des Festivals ein.', 'festival-events'),
-//             'type' => 'date'
-//         ]
-//     );
-    
-//     echo '</div>';
-// }
-
-// function woo_save_festival_start( $post_id ) 
-// {
-//     $festivalStart = $_POST['_festival_start'];
-//     // add validation
-//     // 
-//     if (!empty( $festivalStart )) {
-//         update__post_meta( $post_id , '_festival_start', esc_attr($festivalStart));
-//     }
-// }
