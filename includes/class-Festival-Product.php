@@ -20,20 +20,36 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 }
 
 function fe_register_festival_product_type() {
-    class WC_Product_Festival_Product extends WC_Product {
+    class WC_Product_Festival_Product extends WC_Product_Variation {
         public function __construct( $product ) {
-            $this->product_type = 'festival_product';
+            // $this->product_type = 'festival_product';
             parent::__construct( $product );
         }
 
-        
         // schließfächer options
         // m, l, xl 
         // m - hv, l - hv, xl 
         
         // full festival
         // daily
+        public function get_type() {
+            return 'festival_product';
+        }
+
+        // copied from WC_Product_Variation
+        public function get_catalog_visibility( $context = 'view' ) {
+            // return apply_filters( $this->get_hook_prefix() . 'catalog_visibility', $this->parent_data['catalog_visibility'], $this );
+            // 'my way'
+            return apply_filters( $this->get_hook_prefix() . 'catalog_visibility', $this->data['catalog_visibility'], $this );
+        }
         
+        // :487
+        public function is_purchasable() {
+            $parent = get_parent_class($this);
+            $baseParent = get_parent_class($parent);
+            return apply_filters( 'woocommerce_variation_is_purchasable', $this->variation_is_visible() && $baseParent::is_purchasable() && ( 'publish' === $this->data['status'] || current_user_can( 'edit_post', $this->get_parent_id() ) ), $this );
+        }
+
     }
 }
 
@@ -54,35 +70,48 @@ function festival_product_tab( $tabs) {
         'class'  => ('show_if_festival_product'),
     );
     
+    array_push($tabs['variations']['class'], 'show_if_festival_product');
     // array_push($tabs['general']['class'], 'show_if_festival_product');
     return $tabs;
 }
 
-function fe_festival_product_options_product_tab_content() {
-    // Dont forget to change the id in the div with your target of your product tab
-    ?><div id='festival_product_options' class='panel woocommerce_options_panel'><?php
-        ?><div class='options_group'><?php
-            woocommerce_wp_checkbox( array(
-                'id' 	=> '_enable_festival_product',
-                'label' => __( 'Enable Festival Produkt Product', 'wcpt' ),
-            ) );
-            woocommerce_wp_text_input( array(
-                'id'          => '_festival_product_price',
-                'label'       => __( 'Price', 'wcpt' ),
-                    'placeholder' => '',
-                    'desc_tip'    => 'true',
-                    'description' => __( 'Enter Festival Produkt Price.', 'wcpt' ),
-            ));
-        ?></div>
-    </div><?php
-}
+// function fe_festival_product_options_product_tab_content() {
+//     // Dont forget to change the id in the div with your target of your product tab
+//     ?>
+<!-- <div id='festival_product_options' class='panel woocommerce_options_panel'> -->
+<?php
+//         ?>
+<!-- <div class='options_group'> -->
+<?php
+//             woocommerce_wp_checkbox( array(
+//                 'id' 	=> '_enable_festival_product',
+//                 'label' => __( 'Enable Festival Produkt Product', 'wcpt' ),
+//             ) );
+//             woocommerce_wp_text_input( array(
+//                 'id'          => '_festival_product_price',
+//                 'label'       => __( 'Price', 'wcpt' ),
+//                     'placeholder' => '',
+//                     'desc_tip'    => 'true',
+//                     'description' => __( 'Enter Festival Produkt Price.', 'wcpt' ),
+//             ));
+//         ?>
+<!-- </div> -->
+    <!-- </div> -->
+<?php
+// }
 
-function fe_save_festival_product_options_field( $post_id ) {
-    $enable_festival_product = isset( $_POST['_enable_festival_product'] ) ? 'yes' : 'no';
-    update_post_meta( $post_id, '_enable_festival_product', $enable_festival_product );
-    if ( isset( $_POST['_festival_product_price'] ) ) :
-        update_post_meta( $post_id, '_festival_product_price', sanitize_text_field( $_POST['_festival_product_price'] ) );
-    endif;
+// function fe_save_festival_product_options_field( $post_id ) {
+//     $enable_festival_product = isset( $_POST['_enable_festival_product'] ) ? 'yes' : 'no';
+//     update_post_meta( $post_id, '_enable_festival_product', $enable_festival_product );
+//     if ( isset( $_POST['_festival_product_price'] ) ) :
+//         update_post_meta( $post_id, '_festival_product_price', sanitize_text_field( $_POST['_festival_product_price'] ) );
+//     endif;
+// }
+
+function hasProductAttributes() {
+    // if not
+    // prepopulate it
+
 }
 
 function fe_festival_product_template () {
@@ -139,3 +168,63 @@ function fe_festival_product_custom_js() {
     }, 1000);
     </script><?php
 }
+
+
+// main product
+// input DATE: StartDate
+// input DATE: EndDate
+// --> foreach day in between enumerate days as attribute
+// select Lockers
+
+
+// save these things to have them later on
+// require ABSPATH. '/vendor/autoload.php';
+
+// use Automattic\WooCommerce\Client;
+
+// $woocommerce = new Client(
+//     'http://localhost:8888/safeboxen',
+//     $consumer_key,
+//     $consumer_secret,
+//     [
+//         'wp_api' => true,
+// 		'version' => 'wc/v2',
+// 		'verify_ssl' => false
+//     ]
+// );
+// print_r($woocommerce->get('products'));
+
+// $prod_data = [
+// 	'name'          => 'A great product',
+// 	'type'          => 'simple',
+// 	'regular_price' => '15.00',
+// 	'description'   => 'A very meaningful product description',
+// 	'images'        => [
+
+// 	],
+// 	'categories'    => [
+// 		[
+// 			'id' => 1,
+// 		],
+// 	],
+// ];
+
+// Create Variable Product
+    // BASE:
+    // Name == Festival Name
+    // FestivalStart
+    // FestivalEnd
+    // What lockers are Available?
+    // Locations
+    // einzelene Tage buchbar?
+
+    // On Save
+        // Create Variations
+
+
+// all available woocommerce_ form fields can be found here: /woocommerce/includes/admin/wc-meta-box-functions.php
+// add_action( 'woocommerce_product_options_general_product_data', 'woo_add_festival_start' );
+// add_action( 'woocommerce_process_product_meta', 'woo_save_festival_start' );
+
+// /Applications/MAMP/htdocs/safeboxen/wp-content/plugins/woocommerce/includes/wc-product-functions.php
+// wc_get_product_visibility_options
