@@ -363,28 +363,8 @@ function woo_display_populate()
 function woo_callback_populate($post_id)
 {
     try {
-        // https://www.skyverge.com/blog/using-woocommerce-rest-api-introduction/
-        // https://docs.woocommerce.com/wc-apidocs/class-WC_REST_Authentication.html
-        // [woocommerce_rest_authentication_missing_parameter]
-        global $consumer_key, $consumer_secret, $woocommerce;
-        error_log("consumer key: {$consumer_key}");
-        error_log("consumer secret:{$consumer_secret}");
         if (isset($_POST['_populate_attributes'])) {
-    
-    
-            $woocommerce = new Client(
-                'https://safeboxen.dev:8890',
-                $consumer_key,
-                $consumer_secret,
-                [
-                    'wp_api' => true,
-                    'version' => 'wc/v2',
-                    'verify_ssl' => false
-                ]
-            );
-            // error_log(print_r($woocommerce->get('products', 1)));
-            error_log(print_r($woocommerce->get('products', 1)));
-    
+
         }
     } catch(Exception $e) {
         echo 'Exception abgefangen: ',  $e->getMessage(), "\n";
