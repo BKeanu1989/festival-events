@@ -311,16 +311,9 @@ function woo_save_lockers($post_id)
 {
     if (isset($_POST['_lockers'])) {
         $festivalLocations = setupLocations($_POST['_festival_locations']);
-    
-        $defaultLockers = setupLockers($festivalLocations);
-        $arrayToSave = $defaultLockers;
-
         $postedLockers = $_POST['_lockers'];
-        foreach($postedLockers AS $key => $value) {
-            foreach($value AS $key2 => $value2) {
-                $arrayToSave[$key][$key2] = "yes";
-            }
-        }
+
+        $arrayToSave = reformat_lockers($postedLockers, $festivalLocations);
     
         if (!count( $arrayToSave ) == 0) {
             update_post_meta( $post_id , '_lockers', $arrayToSave);
@@ -364,10 +357,36 @@ function woo_callback_populate($post_id)
 {
     try {
         if (isset($_POST['_populate_attributes'])) {
+            $parent_id = $post_id;
+            $posted_lockers = $_POST['_lockers'];
+            $festivalLocations = setupLocations($_POST['_festival_locations']);
 
+
+            $reformatted_lockers = reformat_lockers($posted_lockers, $festivalLocations);
+
+            foreach ($reformatted_lockers as $location_name => $value) {
+                foreach ($value AS $locker_description => $value2) {
+                    if ($value2 === 'yes') {
+                        $variation_data = [
+                            'attributes' => [
+                                'location' => $location_name,
+                                'locker' => $locker_description
+                            ],
+                            'sku' => '',
+                            'regular_price' => '5.00',
+                            'sale_price' => '',
+                            '_stock_status' => 'instock'
+                        ];
+                        
+                        create_product_variation($parent_id, $variation_data);
+                    }
+                }
+            }
         }
     } catch(Exception $e) {
+        error_log(print_r($e->getMessage()));
         echo 'Exception abgefangen: ',  $e->getMessage(), "\n";
+        
     }
 }
 
@@ -389,3 +408,118 @@ function fe_hook_general_tab_fields() {
     add_action('woocommerce_product_options_general_product_data', 'woo_display_populate');
     add_action('woocommerce_process_product_meta', 'woo_callback_populate');
 }
+
+/**
+ * Create a product variation for a defined variable product ID.
+ *
+ * @since 3.0.0
+ * @param int   $product_id | Post ID of the product parent variable product.
+ * @param array $variation_data | The data to insert in the product.
+ */
+
+function create_product_variation( $product_id, $variation_data ){
+    // Get the Variable product object (parent)
+    $product = wc_get_product($product_id);
+
+    $variation_post = array(
+        'post_title'  => $product->get_title(),
+        'post_name'   => 'product-'.$product_id.'-variation',
+        'post_status' => 'publish',
+        'post_parent' => $product_id,
+        'post_type'   => 'product_variation',
+        'guid'        => $product->get_permalink()
+    );
+
+    // Creating the product variation
+    $variation_id = wp_insert_post( $variation_post );
+
+    // Get an instance of the WC_Product_Variation object
+    $variation = new WC_Product_Variation( $variation_id );
+
+    // Iterating through the variations attributes
+    foreach ($variation_data['attributes'] as $attribute => $term_name )
+    {
+        $taxonomy = 'pa_'.$attribute; // The attribute taxonomy
+
+        // If taxonomy doesn't exists we create it (Thanks to Carl F. Corneil)
+        if( ! taxonomy_exists( $taxonomy ) ){
+            register_taxonomy(
+                $taxonomy,
+                'product_variation',
+                array(
+                    'hierarchical' => false,
+                    'label' => ucfirst( $taxonomy ),
+                    'query_var' => true,
+                    'rewrite' => array( 'slug' => '$taxonomy'), // The base slug
+                )
+            );
+        }
+
+        // Check if the Term name exist and if not we create it.
+        if( ! term_exists( $term_name, $taxonomy ) )
+            wp_insert_term( $term_name, $taxonomy ); // Create the term
+
+        $term_slug = get_term_by('name', $term_name, $taxonomy )->slug; // Get the term slug
+
+        // Get the post Terms names from the parent variable product.
+        $post_term_names =  wp_get_post_terms( $product_id, $taxonomy, array('fields' => 'names') );
+
+        // Check if the post term exist and if not we set it in the parent variable product.
+        if( ! in_array( $term_name, $post_term_names ) )
+            wp_set_post_terms( $product_id, $term_name, $taxonomy, true );
+
+        // Set/save the attribute data in the product variation
+        update_post_meta( $variation_id, 'attribute_'.$taxonomy, $term_slug );
+    }
+
+    ## Set/save all other data
+
+    // SKU
+    if( ! empty( $variation_data['sku'] ) )
+        $variation->set_sku( $variation_data['sku'] );
+
+    // Prices
+    if( empty( $variation_data['sale_price'] ) ){
+        $variation->set_price( $variation_data['regular_price'] );
+    } else {
+        $variation->set_price( $variation_data['sale_price'] );
+        $variation->set_sale_price( $variation_data['sale_price'] );
+    }
+    $variation->set_regular_price( $variation_data['regular_price'] );
+
+    // Stock
+    if( ! empty($variation_data['stock_qty']) ){
+        $variation->set_stock_quantity( $variation_data['stock_qty'] );
+        $variation->set_manage_stock(true);
+        $variation->set_stock_status('');
+    } else {
+        $variation->set_manage_stock(false);
+    }
+
+    $variation->set_weight(''); // weight (reseting)
+
+    $variation->save(); // Save the data
+}
+
+/**
+ *  Reformat data, so it can be saved as an array
+ * 
+ * @param   array $lockers | posted data from _lockers
+ * @param   array $festivalLocations | setup lockers so a complete array can be build
+ * @return  array - reformatted array
+ */
+function reformat_lockers($postedLockers, $festivalLocations) 
+{
+
+    $defaultLockers = setupLockers($festivalLocations);
+    $arrayToSave = $defaultLockers;
+
+    foreach($postedLockers AS $key => $value) {
+        foreach($value AS $key2 => $value2) {
+            $arrayToSave[$key][$key2] = "yes";
+        }
+    }
+    return $arrayToSave;
+}
+
+
