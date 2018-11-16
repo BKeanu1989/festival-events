@@ -68,16 +68,16 @@ function fe_add_festival_product_type ( $type ) {
 
 function festival_product_tab( $tabs) {
 
-    // write_log($tabs);
     
     $tabs['festival_product'] = array(
         'label'	 => __( 'Festival Produkt', 'wcpt' ),
         'target' => 'festival_product_options',
-        'class'  => ('show_if_festival_product'),
+        'class'  => array('show_if_festival_product'),
     );
     
-    array_push($tabs['variations']['class'], 'show_if_festival_product');
+    array_push($tabs['festival_product']['class'], 'show_if_variable');
     // array_push($tabs['general']['class'], 'show_if_festival_product');
+    write_log($tabs);
     return $tabs;
 }
 
@@ -392,21 +392,39 @@ function woo_callback_populate($post_id)
 
 function fe_hook_general_tab_fields() {
 
-    // festival times
-    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_festival_times' );
-    add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
+    // // festival times
+    // add_action( 'woocommerce_product_options_general_product_data', 'woo_display_festival_times' );
+    // add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
 
-    // location
-    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_locations' );
-    add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
+    // // location
+    // add_action( 'woocommerce_product_options_general_product_data', 'woo_display_locations' );
+    // add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
 
-    // lockers
-    add_action( 'woocommerce_product_options_general_product_data', 'woo_display_lockers' );
-    add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
+    // // lockers
+    // add_action( 'woocommerce_product_options_general_product_data', 'woo_display_lockers' );
+    // add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
 
-    // populate attributes
-    add_action('woocommerce_product_options_general_product_data', 'woo_display_populate');
-    add_action('woocommerce_process_product_meta', 'woo_callback_populate');
+    // // populate attributes
+    // add_action('woocommerce_product_options_general_product_data', 'woo_display_populate');
+    // add_action('woocommerce_process_product_meta', 'woo_callback_populate');
+
+
+        // WORKING
+        // festival times
+        add_action( 'woocommerce_product_options_advanced', 'woo_display_festival_times' );
+        add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
+    
+        // location
+        add_action( 'woocommerce_product_options_advanced', 'woo_display_locations' );
+        add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
+    
+        // lockers
+        add_action( 'woocommerce_product_options_advanced', 'woo_display_lockers' );
+        add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
+    
+        // populate attributes
+        add_action('woocommerce_product_options_advanced', 'woo_display_populate');
+        add_action('woocommerce_process_product_meta', 'woo_callback_populate');
 }
 
 /**
