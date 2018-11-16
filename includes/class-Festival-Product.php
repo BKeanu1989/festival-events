@@ -415,15 +415,15 @@ function fe_hook_general_tab_fields() {
         add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
     
         // location
-        add_action( 'woocommerce_product_options_advanced', 'woo_display_locations' );
+        add_action( 'woocommerce_product_options_festival', 'woo_display_locations' );
         add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
     
         // lockers
-        add_action( 'woocommerce_product_options_advanced', 'woo_display_lockers' );
+        add_action( 'woocommerce_product_options_festival_products', 'woo_display_lockers' );
         add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
     
         // populate attributes
-        add_action('woocommerce_product_options_advanced', 'woo_display_populate');
+        add_action('woocommerce_product_options_festival_product', 'woo_display_populate');
         add_action('woocommerce_process_product_meta', 'woo_callback_populate');
 }
 
@@ -540,4 +540,32 @@ function reformat_lockers($postedLockers, $festivalLocations)
     return $arrayToSave;
 }
 
+// its working as wished - but not 'clean' enough
+add_filter( 'woocommerce_product_data_tabs', 'add_my_custom_product_data_tab' , 99 , 1 );
+function add_my_custom_product_data_tab( $product_data_tabs ) {
+    $product_data_tabs['my-custom-tab'] = array(
+        'label' => __( 'My Custom Tab', 'my_text_domain' ),
+        'target' => 'my_custom_product_data',
+    );
+    return $product_data_tabs;
+}
 
+add_action( 'woocommerce_product_data_panels', 'add_my_custom_product_data_fields' );
+function add_my_custom_product_data_fields() {
+    global $woocommerce, $post;
+    ?>
+    <!-- id below must match target registered in above add_my_custom_product_data_tab function -->
+    <div id="my_custom_product_data" class="panel woocommerce_options_panel">
+        <?php
+        woocommerce_wp_checkbox( array( 
+            'id'            => '_my_custom_field', 
+            'wrapper_class' => 'show_if_simple', 
+            'label'         => __( 'My Custom Field Label', 'my_text_domain' ),
+            'description'   => __( 'My Custom Field Description', 'my_text_domain' ),
+            'default'       => '0',
+            'desc_tip'      => false,
+        ) );
+        ?>
+    </div>
+    <?php
+}
