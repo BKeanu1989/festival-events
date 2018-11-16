@@ -15,14 +15,15 @@ use Automattic\WooCommerce\Client;
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
     // Put your plugin code here
     add_action( 'plugins_loaded', 'fe_register_festival_product_type' );
-    // add_action( 'woocommerce_product_data_panels', 'fe_festival_product_options_product_tab_content');
+
+    add_action( 'woocommerce_product_data_panels', 'displayAllDataInTab');
     // add_action( 'woocommerce_process_product_meta', 'fe_save_festival_product_options_field' );
     add_action( 'woocommerce_single_product_summary', 'fe_festival_product_template', 60 );
 
     add_filter( 'product_type_selector', 'fe_add_festival_product_type' );
     add_filter( 'woocommerce_product_data_tabs', 'festival_product_tab' );
 
-    fe_hook_general_tab_fields();
+    fe_hook_save_custom_fields();
 }
 
 function fe_register_festival_product_type() {
@@ -72,12 +73,11 @@ function festival_product_tab( $tabs) {
     $tabs['festival_product'] = array(
         'label'	 => __( 'Festival Produkt', 'wcpt' ),
         'target' => 'festival_product_options',
-        'class'  => array('show_if_festival_product'),
+        'class'  => array(),
     );
     
     array_push($tabs['festival_product']['class'], 'show_if_variable');
     // array_push($tabs['general']['class'], 'show_if_festival_product');
-    write_log($tabs);
     return $tabs;
 }
 
@@ -236,23 +236,23 @@ function woo_save_festival_times( $post_id )
 function woo_display_locations() 
 {
 	global $woocommerce, $thepostid, $post;
+    $value_string = '';
 
     $value = get_post_meta( $thepostid, '_festival_locations', true );
-    $value_string = implode($value, ',');
+    if (!empty($value)) $value_string = implode($value, ',');
+    
     echo '<div class="options_group">';
-    
-    woocommerce_wp_text_input(
-        [
-            'id' => '_festival_locations',
-            'label' => __('Standorte:', 'festival-events'),
-            'placeholder' => 'Plaze, Center',
-            'desc_tip' => 'true',
-            'description' => __('Trage hier Kommasepariert die Standorte ein.', 'festival-events'),
-            'type' => 'text',
-            'value' => $value_string
-        ]
-    );
-    
+        woocommerce_wp_text_input(
+            [
+                'id' => '_festival_locations',
+                'label' => __('Standorte:', 'festival-events'),
+                'placeholder' => 'Plaza, Center',
+                'desc_tip' => 'true',
+                'description' => __('Trage hier Kommasepariert die Standorte ein.', 'festival-events'),
+                'type' => 'text',
+                'value' => $value_string
+            ]
+        );
     echo '</div>';
 }
 
@@ -282,12 +282,12 @@ function woo_display_lockers()
     $locations = get_post_meta( $thepostid, '_festival_locations', true );
     $lockers = get_post_meta( $thepostid, '_lockers', true );
 
-    if (count($lockers) == 0) {
+    if (count($lockers) == 0 || gettype($lockers) === 'string') {
         $lockers = setupLockers($locations);
     }
 
     echo '<div class="options_group">';
-    echo '<h2>Schließfächer</h2>';
+        echo '<h2>Schließfächer</h2>';
         foreach($lockers AS $location => $lockersForLocation) { 
             echo "<h3>{$location}</h3>";
 
@@ -334,7 +334,7 @@ function setupLockers($locations)
 {
     $lockers = [];
     $lockerOptions = ["1" => 'no',"2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
-    for ($iterator = 0; $iterator < count($locations); $iterator++) {
+    for ($iterator = 1; $iterator < count($locations); $iterator++) {
         $lockers[$locations[$iterator]] = $lockerOptions;
     }
     return $lockers;
@@ -390,41 +390,33 @@ function woo_callback_populate($post_id)
     }
 }
 
-function fe_hook_general_tab_fields() {
-
-    // // festival times
-    // add_action( 'woocommerce_product_options_general_product_data', 'woo_display_festival_times' );
-    // add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
-
-    // // location
-    // add_action( 'woocommerce_product_options_general_product_data', 'woo_display_locations' );
-    // add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
-
-    // // lockers
-    // add_action( 'woocommerce_product_options_general_product_data', 'woo_display_lockers' );
-    // add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
-
-    // // populate attributes
-    // add_action('woocommerce_product_options_general_product_data', 'woo_display_populate');
-    // add_action('woocommerce_process_product_meta', 'woo_callback_populate');
-
+function fe_hook_save_custom_fields() {
 
         // WORKING
         // festival times
-        add_action( 'woocommerce_product_options_advanced', 'woo_display_festival_times' );
         add_action( 'woocommerce_process_product_meta', 'woo_save_festival_times' );
     
         // location
-        add_action( 'woocommerce_product_options_festival', 'woo_display_locations' );
         add_action( 'woocommerce_process_product_meta', 'woo_save_locations' );
     
         // lockers
-        add_action( 'woocommerce_product_options_festival_products', 'woo_display_lockers' );
         add_action( 'woocommerce_process_product_meta', 'woo_save_lockers' );
     
         // populate attributes
-        add_action('woocommerce_product_options_festival_product', 'woo_display_populate');
         add_action('woocommerce_process_product_meta', 'woo_callback_populate');
+
+}
+
+function fe_wrapper_begin() {
+    ?>
+        <div id="festival_product_options" class="panel woocommerce_options_panel">
+    <?php
+}
+
+function fe_wrapper_end() {
+    ?>
+        </div>
+    <?php
 }
 
 /**
@@ -567,5 +559,19 @@ function add_my_custom_product_data_fields() {
         ) );
         ?>
     </div>
+    <?php
+}
+
+function displayAllDataInTab() 
+{
+    ?>
+        <div id="festival_product_options" class="panel woocommerce_options_panel">
+    <?php
+        woo_display_locations();
+        woo_display_festival_times();
+        woo_display_lockers();
+        woo_display_populate();
+    ?>
+        </div>
     <?php
 }
