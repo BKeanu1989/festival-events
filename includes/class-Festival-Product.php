@@ -373,7 +373,7 @@ function woo_callback_populate($post_id)
     
     
             $woocommerce = new Client(
-                'http://localhost:8888/safeboxen',
+                'https://safeboxen.dev:8890',
                 $consumer_key,
                 $consumer_secret,
                 [
