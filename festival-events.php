@@ -20,8 +20,7 @@ define('FESTIVAL_EVENTS_PLUGIN_PATH', WP_PLUGIN_DIR . '/festival-events/');
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'fe-core-functions.php');
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/class-Festival-Product.php');
 
-$consumer_key = 'ck_e2224eac17ff2404aa824fbfa2b0891af4258b32'; // Add your own Consumer Key here
-$consumer_secret = 'cs_dd6596af0493fbec1e30cf08c102989f2b886152'; // Add your own Consumer Secret here
+
 /**
  * Check if WooCommerce is active
  **/
