@@ -231,7 +231,7 @@ function woo_display_populate()
         echo '</div>';
     } else {
         echo '<div class="options_group">';
-            echo 'Um Varianten erstellen zu lassen, gib mindestens einen Standort ein.';
+            echo '<p>Um Varianten erstellen zu lassen, gib mindestens einen Standort ein.</p>';
         echo '</div>';
     }
 
