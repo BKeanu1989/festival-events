@@ -244,6 +244,12 @@ function woo_callback_populate($post_id)
 {
     try {
         if (isset($_POST['_populate_attributes'])) {
+            if (!isset($_POST['_lockers']) && !isset($_POST['_festival_locations']))  {
+                return;
+                // TODO:
+                // print error notice
+            }
+            
             $attributes = [];
             setProductAttributes($post_id, $attributes);
 
