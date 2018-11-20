@@ -157,26 +157,27 @@ function woo_display_lockers()
     if (count($lockers) == 0 || gettype($lockers) === 'string') {
         $lockers = setupLockers($locations);
     }
-
-    echo '<div class="options_group">';
-    echo '<h2>Schließfächer</h2>';
-    foreach ($lockers as $location => $lockersForLocation) {
-        echo "<h3>{$location}</h3>";
-
-        $iteratorLockerValue = 0;
-        foreach ($lockersForLocation as $key => $value) {
-            $lockerValue = $iteratorLockerValue + 1;
-            woocommerce_wp_checkbox(array(
-                'id' => "_lockers[{$location}][{$lockerValue}]",
-                'label' => __($lockerDescription[$key], 'festival-events'),
-                'description' => __('vorhanden?', 'festival-events'),
-                'value' => 'yes',
-                'cbvalue' => $value,
-            ));
-            $iteratorLockerValue++;
+    if (!empty($locations)) {
+        echo '<div class="options_group">';
+        echo '<h2>Schließfächer</h2>';
+        foreach ($lockers as $location => $lockersForLocation) {
+            echo "<h3>{$location}</h3>";
+    
+            $iteratorLockerValue = 0;
+            foreach ($lockersForLocation as $key => $value) {
+                $lockerValue = $iteratorLockerValue + 1;
+                woocommerce_wp_checkbox(array(
+                    'id' => "_lockers[{$location}][{$lockerValue}]",
+                    'label' => __($lockerDescription[$key], 'festival-events'),
+                    'description' => __('vorhanden?', 'festival-events'),
+                    'value' => 'yes',
+                    'cbvalue' => $value,
+                ));
+                $iteratorLockerValue++;
+            }
         }
+        echo '</div>';
     }
-    echo '</div>';
 }
 
 function woo_save_lockers($post_id)
@@ -205,24 +206,35 @@ function setupLocations($festivalLocations)
 function setupLockers($locations)
 {
     $lockers = [];
-    $lockerOptions = ["1" => 'no', "2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
-    for ($iterator = 0; $iterator < count($locations); $iterator++) {
-        $lockers[$locations[$iterator]] = $lockerOptions;
+    if (!empty($locations)) {
+        $lockerOptions = ["1" => 'no', "2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
+        for ($iterator = 1; $iterator <= count($locations); $iterator++) {
+        // for ($iterator = 0; $iterator < count($locations); $iterator++) {
+            $lockers[$locations[$iterator]] = $lockerOptions;
+        }
     }
     return $lockers;
 }
 
 function woo_display_populate()
 {
-    echo '<div class="options_group">';
+    if (!empty($locations)) {
 
-    woocommerce_wp_checkbox(array(
-        'id' => "_populate_attributes",
-        'label' => __('Varianten erstellen?', 'festival-events'),
-        'description' => __('Willst du die verschiedenen Varianten erstellen?', 'festival-events'),
-    ));
+        echo '<div class="options_group">';
 
-    echo '</div>';
+        woocommerce_wp_checkbox(array(
+            'id' => "_populate_attributes",
+            'label' => __('Varianten erstellen?', 'festival-events'),
+            'description' => __('Willst du die verschiedenen Varianten erstellen?', 'festival-events'),
+        ));
+
+        echo '</div>';
+    } else {
+        echo '<div class="options_group">';
+            echo 'Um Varianten erstellen zu lassen, gib mindestens einen Standort ein.';
+        echo '</div>';
+    }
+
 }
 
 function woo_callback_populate($post_id)
