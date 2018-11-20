@@ -208,8 +208,8 @@ function setupLockers($locations)
     $lockers = [];
     if (!empty($locations)) {
         $lockerOptions = ["1" => 'no', "2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
-        for ($iterator = 1; $iterator <= count($locations); $iterator++) {
-        // for ($iterator = 0; $iterator < count($locations); $iterator++) {
+        // for ($iterator = 1; $iterator <= count($locations); $iterator++) {
+        for ($iterator = 0; $iterator < count($locations); $iterator++) {
             $lockers[$locations[$iterator]] = $lockerOptions;
         }
     }
@@ -218,7 +218,10 @@ function setupLockers($locations)
 
 function woo_display_populate()
 {
-    if (!empty($locations)) {
+    global $post_id, $thepostid;
+    $savedLocations = get_post_meta($post_id, '_festival_locations', true);
+
+    if (!empty($savedLocations)) {
 
         echo '<div class="options_group">';
 
