@@ -468,7 +468,10 @@ function populateValueString($values, $key = null) {
             if (isset($key) && !empty($key)) {
                 return $element[$key];
             }
+            return $element;
         }, $values);
         return join("|", $valuesAsArray);
     }
 }
+
+// TODO: test 'simple' variable product with only one attribute (test = foo | bar)
