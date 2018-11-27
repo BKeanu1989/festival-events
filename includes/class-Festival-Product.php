@@ -251,8 +251,8 @@ function woo_callback_populate($post_id)
             }
             
             $attributes = [];
-            setProductAttributes($post_id, $attributes);
-
+            saveProductAttributes($post_id);
+            // setProductAttributes($post_id, $attributes);
             $parent_id = $post_id;
             $posted_lockers = $_POST['_lockers'];
             $festivalLocations = setupLocations($_POST['_festival_locations']);
@@ -277,6 +277,7 @@ function woo_callback_populate($post_id)
                     }
                 }
             }
+
         }
     } catch (Exception $e) {
         error_log(print_r($e->getMessage()));
@@ -427,19 +428,34 @@ function reformat_lockers($postedLockers, $festivalLocations)
  * @param array     | 
  * 
  */
-function setProductAttributes($post_id, $arrays) 
-{
-    write_log("festival start test:");
-    write_log($_POST['_festival_start']);
-// $array["baz"] = [];
-// $array["baz"]["name"] = "baz";
-// $array["baz"]["value"] = "set | via | code";
-// $array["baz"]["position"] = 1;
-// $array["baz"]["is_visible"] = 1;
-// $array["baz"]["is_variation"] = 1;
-// $array['baz']["is_taxonomy"] = 0;
 
-    // update_post_meta($post_id, '_product_attributes', $array);
+function saveProductAttributes($post_id) {
+    add_action( 'woocommerce_process_product_meta', 'setProductAttributes',999 );
+}
+function setProductAttributes($post_id) 
+{
+    write_log($_POST['_festival_start']);
+$arrays["baz"] = [];
+$arrays["baz"]["name"] = "baz";
+$arrays["baz"]["value"] = "set | via | code | for real";
+$arrays["baz"]["position"] = 0;
+$arrays["baz"]["is_visible"] = 1;
+$arrays["baz"]["is_variation"] = 1;
+$arrays['baz']["is_taxonomy"] = 0;
+
+    // write_log($arrays);
+    $serializedArray = maybe_serialize($arrays);
+    $unserializeArray = maybe_unserialize($serializedArray);
+    $inserted_id = add_post_meta($post_id, '_product_attributes', $arrays, true);
+    if (! $inserted_id) {
+        update_post_meta($post_id, '_product_attributes', $arrays);
+    }    
+
+    // this works
+    // $inserted_id_v2= add_post_meta($post_id, '_product_attributes_v2', $arrays, true);
+    // if (! $inserted_id_v2) {
+    //     update_post_meta($post_id, '_product_attributes_v2', $arrays);
+    // }    
 }
 
 function displayAllDataInTab()
