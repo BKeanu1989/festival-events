@@ -259,24 +259,24 @@ function woo_callback_populate($post_id)
 
             $reformatted_lockers = reformat_lockers($posted_lockers, $festivalLocations);
 
-            foreach ($reformatted_lockers as $location_name => $value) {
-                foreach ($value as $locker_description => $value2) {
-                    if ($value2 === 'yes') {
-                        $variation_data = [
-                            'attributes' => [
-                                'location' => $location_name,
-                                'locker' => $locker_description,
-                            ],
-                            'sku' => '',
-                            'regular_price' => '5.00',
-                            'sale_price' => '',
-                            '_stock_status' => 'instock',
-                        ];
+            // foreach ($reformatted_lockers as $location_name => $value) {
+            //     foreach ($value as $locker_description => $value2) {
+            //         if ($value2 === 'yes') {
+            //             $variation_data = [
+            //                 'attributes' => [
+            //                     'location' => $location_name,
+            //                     'locker' => $locker_description,
+            //                 ],
+            //                 'sku' => '',
+            //                 'regular_price' => '5.00',
+            //                 'sale_price' => '',
+            //                 '_stock_status' => 'instock',
+            //             ];
 
-                        create_product_variation($parent_id, $variation_data);
-                    }
-                }
-            }
+            //             create_product_variation($parent_id, $variation_data);
+            //         }
+            //     }
+            // }
 
         }
     } catch (Exception $e) {
@@ -334,7 +334,8 @@ function create_product_variation($product_id, $variation_data)
 
     // Iterating through the variations attributes
     foreach ($variation_data['attributes'] as $attribute => $term_name) {
-        $taxonomy = 'pa_' . $attribute; // The attribute taxonomy
+        // $taxonomy = 'pa_' . $attribute; // The attribute taxonomy
+        $taxonomy = $attribute; // The attribute taxonomy
 
         // If taxonomy doesn't exists we create it (Thanks to Carl F. Corneil)
         if (!taxonomy_exists($taxonomy)) {
@@ -434,28 +435,42 @@ function saveProductAttributes($post_id) {
 }
 function setProductAttributes($post_id) 
 {
-    write_log($_POST['_festival_start']);
-$arrays["baz"] = [];
-$arrays["baz"]["name"] = "baz";
-$arrays["baz"]["value"] = "set | via | code | for real";
-$arrays["baz"]["position"] = 0;
-$arrays["baz"]["is_visible"] = 1;
-$arrays["baz"]["is_variation"] = 1;
-$arrays['baz']["is_taxonomy"] = 0;
+    $arrays = [];
 
-    // write_log($arrays);
-    $serializedArray = maybe_serialize($arrays);
-    $unserializeArray = maybe_unserialize($serializedArray);
+    $lockers = $_POST['_lockers'];
+    $test = populateValueString($lockers);
+    write_log($test);
+    $arrays["lockers"] = [];
+    $arrays["lockers"]["name"] = "Schließfächer";
+    // $arrays["lockers"]["value"] = "M | M HV | L | L HV";
+    $arrays["lockers"]["value"] = "1 | 2 | 3 | 4";
+    $arrays["lockers"]["position"] = 0;
+    $arrays["lockers"]["is_visible"] = 1;
+    $arrays["lockers"]["is_variation"] = 1;
+    $arrays['lockers']["is_taxonomy"] = 0;
+// $arrays["baz"] = [];
+// $arrays["baz"]["name"] = "baz";
+// $arrays["baz"]["value"] = "set | via | code | for real";
+// $arrays["baz"]["position"] = 0;
+// $arrays["baz"]["is_visible"] = 1;
+// $arrays["baz"]["is_variation"] = 1;
+// $arrays['baz']["is_taxonomy"] = 0;
+
+    // $arrays[""] = [];
+
+    $arrays["timeframe"] = [];
+    $arrays["timeframe"]["name"] = "Dauer";
+    $arrays["timeframe"]["value"] = "Full Festival";
+    $arrays["timeframe"]["position"] = 1;
+    $arrays["timeframe"]["is_visible"] = 1;
+    $arrays["timeframe"]["is_variation"] = 1;
+    $arrays['timeframe']["is_taxonomy"] = 0;
+
+
     $inserted_id = add_post_meta($post_id, '_product_attributes', $arrays, true);
     if (! $inserted_id) {
         update_post_meta($post_id, '_product_attributes', $arrays);
     }    
-
-    // this works
-    // $inserted_id_v2= add_post_meta($post_id, '_product_attributes_v2', $arrays, true);
-    // if (! $inserted_id_v2) {
-    //     update_post_meta($post_id, '_product_attributes_v2', $arrays);
-    // }    
 }
 
 function displayAllDataInTab()
