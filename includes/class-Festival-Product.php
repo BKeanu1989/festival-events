@@ -4,6 +4,8 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
+require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/fe-template-functions.php');
+
 /**
  * Check if WooCommerce is active
  **/
@@ -503,3 +505,26 @@ function pullOutLockerDescription($lockers)
 }
 
 // TODO: test 'simple' variable product with only one attribute (test = foo | bar)
+
+
+add_action('wp_head', 'fe_rebuild_woocommerce');
+
+function fe_rebuild_woocommerce() {
+
+    remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
+
+    // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
+    
+    // might still not work
+    remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+
+    add_action('woocommerce_before_single_product_summary', 'fe_show_product_image', 20);
+
+    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs' , 10);
+    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display' , 15);
+    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products' , 20);
+    // * @hooked woocommerce_output_product_data_tabs - 10
+    // * @hooked woocommerce_upsell_display - 15
+    // * @hooked woocommerce_output_related_products - 20
+}
