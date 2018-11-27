@@ -281,8 +281,6 @@ function woo_callback_populate($post_id)
         }
     } catch (Exception $e) {
         error_log(print_r($e->getMessage()));
-        echo 'Exception abgefangen: ', $e->getMessage(), "\n";
-
     }
 }
 
@@ -445,11 +443,13 @@ function setProductAttributes($post_id)
     write_log($reformatedLockers);
 
     $locations = array_keys($reformatedLockers);
-
+    $lockerValues = pullOutLockerDescription($reformatedLockers);
+    $uniqueLockers = array_unique($lockerValues);
     $arrays["lockers"] = [];
     $arrays["lockers"]["name"] = "Schließfächer";
-    $arrays["lockers"]["value"] = "M | M HV | L | L HV";
-    $arrays["lockers"]["position"] = 0;
+    // $arrays["lockers"]["value"] = 'M|M HV|L|L HV';
+    $arrays["lockers"]["value"] = implode('|', $uniqueLockers);
+    $arrays["lockers"]["position"] = 2;
     $arrays["lockers"]["is_visible"] = 1;
     $arrays["lockers"]["is_variation"] = 1;
     $arrays['lockers']["is_taxonomy"] = 0;
@@ -464,9 +464,9 @@ function setProductAttributes($post_id)
     $arrays['timeframe']["is_taxonomy"] = 0;
 
     $arrays["locations"] = [];
-    $arrays["locations"]["name"] = implode('|',$locations);
-    $arrays["locations"]["value"] = "";
-    $arrays["locations"]["position"] = 2;
+    $arrays["locations"]["name"] = "Standort";
+    $arrays["locations"]["value"] = implode('|',$locations);
+    $arrays["locations"]["position"] = 0;
     $arrays["locations"]["is_visible"] = 1;
     $arrays["locations"]["is_variation"] = 1;
     $arrays["locations"]["is_taxonomy"] = 0;
@@ -513,9 +513,18 @@ function populateValueStringByKey($values, $key = null) {
 
 function pullOutLockerDescription($lockers)
 {
+    global $lockerDescription;
     $array = [];
 
-    
+    foreach ($lockers as $location => $lockersForLocation) {
+        foreach ($lockersForLocation as $key => $value) {
+            if ($value === 'yes') {
+                $array[] = $lockerDescription[$key];
+            }
+        }
+    }
+
+    return $array;
 }
 
 // TODO: test 'simple' variable product with only one attribute (test = foo | bar)
