@@ -257,7 +257,7 @@ function woo_callback_populate($post_id)
             $posted_lockers = $_POST['_lockers'];
             $festivalLocations = setupLocations($_POST['_festival_locations']);
 
-            $reformatted_lockers = reformat_lockers($posted_lockers, $festivalLocations);
+            // $reformatted_lockers = reformat_lockers($posted_lockers, $festivalLocations);
 
             // foreach ($reformatted_lockers as $location_name => $value) {
             //     foreach ($value as $locker_description => $value2) {
@@ -438,25 +438,22 @@ function setProductAttributes($post_id)
     $arrays = [];
 
     $lockers = $_POST['_lockers'];
-    $test = populateValueString($lockers);
+
+    $reformatedLockers = reformat_lockers($_POST['_lockers'], setupLocations($_POST['_festival_locations']));
+    $test = populateValueStringByKey($lockers);
     write_log($test);
+    write_log($reformatedLockers);
+
+    $locations = array_keys($reformatedLockers);
+
     $arrays["lockers"] = [];
     $arrays["lockers"]["name"] = "Schließfächer";
-    // $arrays["lockers"]["value"] = "M | M HV | L | L HV";
-    $arrays["lockers"]["value"] = "1 | 2 | 3 | 4";
+    $arrays["lockers"]["value"] = "M | M HV | L | L HV";
     $arrays["lockers"]["position"] = 0;
     $arrays["lockers"]["is_visible"] = 1;
     $arrays["lockers"]["is_variation"] = 1;
     $arrays['lockers']["is_taxonomy"] = 0;
-// $arrays["baz"] = [];
-// $arrays["baz"]["name"] = "baz";
-// $arrays["baz"]["value"] = "set | via | code | for real";
-// $arrays["baz"]["position"] = 0;
-// $arrays["baz"]["is_visible"] = 1;
-// $arrays["baz"]["is_variation"] = 1;
-// $arrays['baz']["is_taxonomy"] = 0;
 
-    // $arrays[""] = [];
 
     $arrays["timeframe"] = [];
     $arrays["timeframe"]["name"] = "Dauer";
@@ -465,6 +462,14 @@ function setProductAttributes($post_id)
     $arrays["timeframe"]["is_visible"] = 1;
     $arrays["timeframe"]["is_variation"] = 1;
     $arrays['timeframe']["is_taxonomy"] = 0;
+
+    $arrays["locations"] = [];
+    $arrays["locations"]["name"] = implode('|',$locations);
+    $arrays["locations"]["value"] = "";
+    $arrays["locations"]["position"] = 2;
+    $arrays["locations"]["is_visible"] = 1;
+    $arrays["locations"]["is_variation"] = 1;
+    $arrays["locations"]["is_taxonomy"] = 0;
 
 
     $inserted_id = add_post_meta($post_id, '_product_attributes', $arrays, true);
@@ -493,7 +498,7 @@ function displayAllDataInTab()
  * @param   string/null     | if key get value by key
  * @return  string          | e.g. foo | bar | baz
  */
-function populateValueString($values, $key = null) {
+function populateValueStringByKey($values, $key = null) {
     if (gettype($values) === 'array') {
         $valuesAsArray = array_map(function($element) {
             if (isset($key) && !empty($key)) {
@@ -503,6 +508,14 @@ function populateValueString($values, $key = null) {
         }, $values);
         return join("|", $valuesAsArray);
     }
+}
+
+
+function pullOutLockerDescription($lockers)
+{
+    $array = [];
+
+    
 }
 
 // TODO: test 'simple' variable product with only one attribute (test = foo | bar)
