@@ -147,6 +147,17 @@ function woo_save_locations($post_id)
 
 $lockerDescription = ["", "M", "M HV", "L", "L HV", "XL", "XL HV"];
 
+// TODO: add oeffnungszeiten foreach locations
+
+// --- do it as a 
+function woo_display_opening_times()
+{
+    global $woocommerce, $post, $thepostid;
+
+    // $locations = 
+
+}
+
 function woo_display_lockers()
 {
     // TODO: only show lockers if location is populated
@@ -514,7 +525,7 @@ function fe_rebuild_woocommerce() {
     remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
 
     // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
-    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
+    // add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
     
     // might still not work
     remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
@@ -527,4 +538,9 @@ function fe_rebuild_woocommerce() {
     // * @hooked woocommerce_output_product_data_tabs - 10
     // * @hooked woocommerce_upsell_display - 15
     // * @hooked woocommerce_output_related_products - 20
+
+    add_action ('woocommerce_after_single_product', 'fe_opening_items_and_locations_html', 20);
+    add_action ('woocommerce_after_single_product', 'fe_locker_info_html', 30);
 }
+
+// TODO: add option lockerdescription
