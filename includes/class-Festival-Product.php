@@ -256,28 +256,6 @@ function woo_callback_populate($post_id)
             $parent_id = $post_id;
             $posted_lockers = $_POST['_lockers'];
             $festivalLocations = setupLocations($_POST['_festival_locations']);
-
-            // $reformatted_lockers = reformat_lockers($posted_lockers, $festivalLocations);
-
-            // foreach ($reformatted_lockers as $location_name => $value) {
-            //     foreach ($value as $locker_description => $value2) {
-            //         if ($value2 === 'yes') {
-            //             $variation_data = [
-            //                 'attributes' => [
-            //                     'location' => $location_name,
-            //                     'locker' => $locker_description,
-            //                 ],
-            //                 'sku' => '',
-            //                 'regular_price' => '5.00',
-            //                 'sale_price' => '',
-            //                 '_stock_status' => 'instock',
-            //             ];
-
-            //             create_product_variation($parent_id, $variation_data);
-            //         }
-            //     }
-            // }
-
         }
     } catch (Exception $e) {
         error_log(print_r($e->getMessage()));
@@ -439,15 +417,12 @@ function setProductAttributes($post_id)
 
     $reformatedLockers = reformat_lockers($_POST['_lockers'], setupLocations($_POST['_festival_locations']));
     $test = populateValueStringByKey($lockers);
-    write_log($test);
-    write_log($reformatedLockers);
 
     $locations = array_keys($reformatedLockers);
     $lockerValues = pullOutLockerDescription($reformatedLockers);
     $uniqueLockers = array_unique($lockerValues);
     $arrays["lockers"] = [];
     $arrays["lockers"]["name"] = "Schließfächer";
-    // $arrays["lockers"]["value"] = 'M|M HV|L|L HV';
     $arrays["lockers"]["value"] = implode('|', $uniqueLockers);
     $arrays["lockers"]["position"] = 2;
     $arrays["lockers"]["is_visible"] = 1;
