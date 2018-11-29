@@ -1,3 +1,26 @@
+body.woocommerce {
+    .storefront-full-width-content.single-product div.product .summary {
+        width: 100%;
+    }
+}
+
+.storefront-full-width-content.single-product div#main div.product .summary {
+    width: 100%;
+}
+
+
 .storefront-full-width-content.single-product div.product .summary {
     width: 100%;
+}
+
+.storefront-full-width-content.single-product div.product .summary {
+    width: 100% !important;
+    float: unset !important;
+
+}
+
+.product_title.entry-title {
+    text-align: center;
+    color: $white;
+    background-color: $blackBG;
 }
