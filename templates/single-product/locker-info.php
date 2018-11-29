@@ -25,11 +25,9 @@ defined( 'ABSPATH' ) || exit;
 global $product;
 
 $variations = $product->get_available_variations();
-$lockers = getLockers($variations);
 
-$uniqueLockers = array_unique($lockers);
-foreach($variations AS $key => $variation) {
-
-    include(FESTIVAL_EVENTS_PLUGIN_PATH . 'templates/single-product/locker-single-info.php');
-}
+// foreach($variations AS $key => $variation) {
+    // global $uniqueLockers;
+include(FESTIVAL_EVENTS_PLUGIN_PATH . 'templates/single-product/locker-infos.php');
+// }
 ?>
