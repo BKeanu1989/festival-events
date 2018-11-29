@@ -5,6 +5,7 @@
  * 
  */
 
+defined( 'ABSPATH' ) || exit;
 
 /**
  * 

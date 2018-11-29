@@ -3,6 +3,7 @@
  * 
  * @param 
  */
+defined( 'ABSPATH' ) || exit;
 
 global $lockerDescription, $withOptional;
 global $variation;
