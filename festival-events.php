@@ -33,8 +33,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
     // add_filter( 'product_type_selector', 'wcpt_add_gift_card_type' );
     // add_filter( 'woocommerce_product_data_tabs', 'gift_card_tab' );
+    add_action( 'wp_enqueue_scripts', 'fe_add_styles');
 
 }
+
+function fe_add_styles() {
+    wp_enqueue_style('festival-events', plugins_url('/dist/css/festival-events.css', __FILE__), [], false, 'all');
+    
+}
+
 
 // create product type - Festival
 
