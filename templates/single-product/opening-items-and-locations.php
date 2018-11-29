@@ -36,9 +36,11 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
                 </div>
                 <div class="card__opening_times">
                     <h3><i class="fas fa-door-open"></i><?php _e('Öffnungszeiten', 'festival-events') ?></h3>
+                    <ul>
                     <?php foreach($get_opening_times_per_location[0] AS $key => $value) { ?>
                         <?php echo "<li>". ucfirst($value) . "</li>" ?>
                     <?php } ?>
+                    </ul>
                 </div>
             </div>
         </div>
