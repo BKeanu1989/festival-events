@@ -1,0 +1,17 @@
+.card {
+    flex: 1;
+    
+    &__container {
+        display: flex;
+    }
+
+    &__title {
+        text-align: center;
+    }
+
+    &.locker_infos {
+        &:not(:last-of-type) {
+            margin-right: 20px;
+        }
+    }
+}
