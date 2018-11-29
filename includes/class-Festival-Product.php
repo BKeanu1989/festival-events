@@ -153,9 +153,34 @@ $lockerDescription = ["", "M", "M HV", "L", "L HV", "XL", "XL HV"];
 function woo_display_opening_times()
 {
     global $woocommerce, $post, $thepostid;
-
+    $locations = get_post_meta($thepostid, '_festival_locations', true);
+    $savedOpeningTimes = get_post_meta($thepostid, '_opening_times', true);
     // $locations = 
+    echo '<div class="options_group">';
+    echo '<h2>' . __('Öffnungszeiten') . '</h2>';
+    foreach($locations AS $key => $value) {
+        // 
+        woocommerce_wp_textarea_input(
+            [
+                'id'    => '_opening_times['.$value.']',
+                'label' => __('Öffnungszeiten für '.$value.': ', 'festival-events'),
+                'name'  => '_opening_times['.$value.']',
+                'value' => (!empty($savedOpeningTimes)) ? $savedOpeningTimes[$value] : ''
 
+            ]
+        );
+    }
+
+    echo '</div>';
+}
+
+function woo_save_opening_times($post_id) 
+{
+    if (isset($_POST['_opening_times'])) {
+        $postedOpeningTimes = $_POST['_opening_times'];
+
+        update_post_meta($post_id, '_opening_times', $postedOpeningTimes);
+    }
 }
 
 function woo_display_lockers()
@@ -291,6 +316,7 @@ function fe_hook_save_custom_fields()
     // populate attributes
     add_action('woocommerce_process_product_meta', 'woo_callback_populate');
 
+    add_action('woocommerce_process_product_meta', 'woo_save_opening_times');
 }
 
 /**
@@ -473,6 +499,7 @@ function displayAllDataInTab()
     <?php
     woo_display_locations();
     woo_display_festival_times();
+    woo_display_opening_times();
     woo_display_lockers();
     woo_display_populate();
     ?>
