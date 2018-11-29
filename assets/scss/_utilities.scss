@@ -3,5 +3,15 @@
         text-align: center;
         color: $white;
         background-color: $blackBG;
+        padding: 15px;
+        font-weight: bold;
+        margin: 1em 0;
     }
+}
+
+.title-blue {
+    padding: 15px;
+    font-weight: bold;
+    background-color: $blackBG;
+    color: $white;
 }

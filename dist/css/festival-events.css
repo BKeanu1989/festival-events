@@ -1,10 +1,22 @@
 .wrapper__title {
   text-align: center;
   color: #fff;
-  background-color: #253746; }
+  background-color: #253746;
+  padding: 15px;
+  font-weight: bold;
+  margin: 1em 0; }
+
+.title-blue {
+  padding: 15px;
+  font-weight: bold;
+  background-color: #253746;
+  color: #fff; }
 
 .card {
   flex: 1; }
+  .card ul {
+    list-style-type: none;
+    margin: 0; }
   .card__container {
     display: flex; }
   .card__title {
@@ -24,13 +36,17 @@
       margin-right: 20px; }
 
 .banner__wrapper {
+  margin-bottom: 1em;
   position: relative; }
 
 .banner__text {
+  width: 80%;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%); }
+  transform: translate(-50%);
+  text-align: center;
+  font-size: 1.5em; }
   .banner__text--wrapper {
     background-color: rgba(87, 87, 87, 0.2);
     color: #fff;
@@ -53,4 +69,6 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
 .product_title.entry-title {
   text-align: center;
   color: #fff;
-  background-color: #253746; }
+  background-color: #253746;
+  padding: 15px;
+  font-weight: bold; }
