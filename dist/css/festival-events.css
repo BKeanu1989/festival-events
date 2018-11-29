@@ -1,2 +1,16 @@
-body {
-  color: black; }
+.wrapper__title {
+  text-align: center;
+  color: #fff;
+  background-color: #253746; }
+
+.card {
+  flex: 1; }
+  .card__container {
+    display: flex; }
+  .card__title {
+    text-align: center; }
+  .card.locker_infos:not(:last-of-type) {
+    margin-right: 20px; }
+
+.storefront-full-width-content.single-product div.product .summary {
+  width: 100%; }
