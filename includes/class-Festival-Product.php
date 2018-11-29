@@ -132,6 +132,29 @@ function woo_display_locations()
     echo '</div>';
 }
 
+function woo_display_banner_text() {
+    global $thepostid;
+
+    echo '<div class="options_group">';
+
+    woocommerce_wp_textarea_input(
+        [
+            'id'    => '_banner_text',
+            'label' => __('Banner Text:', 'festival-events'),
+            'name'  => '_banner_text'
+
+        ]
+    );
+    echo '</div>';
+}
+
+function woo_save_banner_text($post_id) {
+    $bannerText= $_POST['_banner_text'];
+    if (!empty($bannerText)) {
+        update_post_meta($post_id, '_banner_text', $bannerText);
+    }
+}
+
 function woo_save_locations($post_id)
 {
     // global $woocommerce;
@@ -158,22 +181,24 @@ function woo_display_opening_times()
     $locations = get_post_meta($thepostid, '_festival_locations', true);
     $savedOpeningTimes = get_post_meta($thepostid, '_opening_times', true);
     // $locations = 
-    echo '<div class="options_group">';
-    echo '<h2>' . __('Öffnungszeiten') . '</h2>';
-    foreach($locations AS $key => $value) {
-        // 
-        woocommerce_wp_textarea_input(
-            [
-                'id'    => '_opening_times['.$value.']',
-                'label' => __('Öffnungszeiten für '.$value.': ', 'festival-events'),
-                'name'  => '_opening_times['.$value.']',
-                'value' => (!empty($savedOpeningTimes)) ? $savedOpeningTimes[$value] : ''
-
-            ]
-        );
+    if (!empty($locations)) {
+        echo '<div class="options_group">';
+        echo '<h2>' . __('Öffnungszeiten') . '</h2>';
+        foreach($locations AS $key => $value) {
+            // 
+            woocommerce_wp_textarea_input(
+                [
+                    'id'    => '_opening_times['.$value.']',
+                    'label' => __('Öffnungszeiten für '.$value.': ', 'festival-events'),
+                    'name'  => '_opening_times['.$value.']',
+                    'value' => (!empty($savedOpeningTimes)) ? $savedOpeningTimes[$value] : ''
+    
+                ]
+            );
+        }
+        echo '</div>';
     }
 
-    echo '</div>';
 }
 
 function woo_save_opening_times($post_id) 
@@ -319,6 +344,7 @@ function fe_hook_save_custom_fields()
     add_action('woocommerce_process_product_meta', 'woo_callback_populate');
 
     add_action('woocommerce_process_product_meta', 'woo_save_opening_times');
+    add_action('woocommerce_process_product_meta', 'woo_save_banner_text');
 }
 
 /**
@@ -499,6 +525,7 @@ function displayAllDataInTab()
     ?>
         <div id="festival_product_options" class="panel woocommerce_options_panel">
     <?php
+    woo_display_banner_text();
     woo_display_locations();
     woo_display_festival_times();
     woo_display_opening_times();
