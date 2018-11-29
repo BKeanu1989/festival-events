@@ -1,0 +1,19 @@
+.banner {
+    &__wrapper {
+        position: relative;
+    }
+
+    &__text{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%);
+
+        &--wrapper{
+            background-color: rgba(87, 87, 87, 0.2);
+            color: $white;
+            font-weight: bold;
+            padding: 15px;
+        }
+    }
+}

@@ -23,6 +23,20 @@
     .card.locker_infos:not(:last-of-type) {
       margin-right: 20px; }
 
+.banner__wrapper {
+  position: relative; }
+
+.banner__text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%); }
+  .banner__text--wrapper {
+    background-color: rgba(87, 87, 87, 0.2);
+    color: #fff;
+    font-weight: bold;
+    padding: 15px; }
+
 body.woocommerce .storefront-full-width-content.single-product div.product .summary {
   width: 100%; }
 
