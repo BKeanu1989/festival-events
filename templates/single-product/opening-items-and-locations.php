@@ -27,7 +27,7 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
             </div>
             <div class="card__body">
                 <div class="card__locations">
-                    <h3><span class="icon">people</span><?php _e('Standorte:', 'festival-events'); ?></h3>
+                    <h3><i class="fas fa-users"></i><?php _e('Standorte:', 'festival-events'); ?></h3>
                     <ul>
                     <?php foreach($get_opening_times_per_location[0] AS $key => $value) { ?>
                         <?php echo "<li>". ucfirst($key) . "</li>" ?>
@@ -35,7 +35,7 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
                     </ul>
                 </div>
                 <div class="card__opening_times">
-                    <h3><span class="icon">play</span><?php _e('Öffnungszeiten', 'festival-events') ?></h3>
+                    <h3><i class="fas fa-door-open"></i><?php _e('Öffnungszeiten', 'festival-events') ?></h3>
                     <?php foreach($get_opening_times_per_location[0] AS $key => $value) { ?>
                         <?php echo "<li>". ucfirst($value) . "</li>" ?>
                     <?php } ?>
@@ -54,10 +54,10 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
             </div>
             <div class="card__body">
                 <ul>
-                    <li><span class="icon">key</span><span class="description">Alle Schließfächer sind mit einer Steckdose ausgestattet.</span></li>
-                    <li><span class="icon">alert</span><span class="description">High-Voltage Schließfächer für stromintensive Geräte wie z.B. JBL Soundboxen oder Notebooks.</span></li>
-                    <li><span class="icon">heart</span><span class="description">Du kannst jederzeit an Dein Schließfach. Unser Personal ist rund um die Uhr für Dich da.</span></li>
-                    <li><span class="icon">like</span><span class="description">Dein Schließfach-Inhalt ist mit bis zu 500 Euro versichert.</span></li>
+                    <li><i class="fas fa-charging-station"></i><span class="description">Alle Schließfächer sind mit einer Steckdose ausgestattet.</span></li>
+                    <li><i class="fas fa-exclamation-circle"></i><span class="description">High-Voltage Schließfächer für stromintensive Geräte wie z.B. JBL Soundboxen oder Notebooks.</span></li>
+                    <li><i class="fas fa-heart"></i><span class="description">Du kannst jederzeit an Dein Schließfach. Unser Personal ist rund um die Uhr für Dich da.</span></li>
+                    <li><i class="fas fa-thumbs-up"></i><span class="description">Dein Schließfach-Inhalt ist mit bis zu 500 Euro versichert.</span></li>
                 </ul>
             </div>
         </div>
