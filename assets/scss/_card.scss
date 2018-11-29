@@ -8,10 +8,34 @@
     &__title {
         text-align: center;
     }
-
+    
     &.locker_infos {
+        background-color: $blackBG;
+        padding: 10px;
+        .card__title {
+            background-color: $green;
+        }
+
+        .card__body {
+            background-color: $white;
+
+            
+            &--description {
+                padding: 15px;
+                &:not(:last-of-type) {
+                    border-bottom: 1px solid $blackBG;
+                }
+            }
+        }
         &:not(:last-of-type) {
             margin-right: 20px;
         }
+
+
+
+        // .card__body {
+        //     background-color: $blackBG;
+        //     color: $white;
+        // }
     }
 }
