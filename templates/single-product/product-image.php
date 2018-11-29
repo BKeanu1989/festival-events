@@ -22,7 +22,6 @@ global $product;
 $product_id = $product->get_id();
 // TODO: implement banner text
 $bannerText = get_post_meta($product_id, '_banner_text',true);
-$bannerText = "Dein Schließfach für das Wacken Open Air 2019";
 
 $post_thumbnail_id = $product->get_image_id();
 $img_src = wp_get_attachment_image_url($post_thumbnail_id, 'full');
