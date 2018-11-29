@@ -15,7 +15,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     // add_action( 'woocommerce_process_product_meta', 'fe_save_festival_product_options_field' );
 
     add_filter('woocommerce_product_data_tabs', 'festival_product_tab');
-
+    // TODO: front end only (and woocommerce page)
+    
+    
     fe_hook_save_custom_fields();
 }
 
@@ -552,6 +554,7 @@ function fe_rebuild_woocommerce() {
     remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
 
     // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+    // add_action( 'woocommerce_single_product_summary', 'fe_template_single_title', 5 );
     // add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
     
     // might still not work
