@@ -24,3 +24,9 @@ if (! function_exists( 'fe_opening_items_and_locations_html') ) {
         include_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'templates/single-product/opening-items-and-locations.php');
     }
 }
+
+if (! function_exists('fe_template_single_title')) {
+    function fe_template_single_title() {
+        
+    }
+}
