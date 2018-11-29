@@ -58,6 +58,5 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
                 <li><span class="icon">like</span><span class="description">Dein Schließfach-Inhalt ist mit bis zu 500 Euro versichert.</span></li>
             </ul>
         </div>
-        </div>
     </div>
 </div>
