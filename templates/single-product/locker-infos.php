@@ -19,24 +19,29 @@ $lockerInfo = [
 "XL" => ["", "", "", ""], 
 "XL HV" => ["", "", "", ""]];
 ?>
-<div class="card__container">
-    <?php 
-        foreach($uniqueLockers as $key => $value) { ?>
-            <div class="card">
-                <div class="card__title">
-                    <?php echo $value; ?>
+<div class="wrapper">
+    <h2 class="wrapper__title">
+        <?php _e('Information zu den Schließfach', 'festival-events'); ?>
+    </h2>
+    <div class="card__container">
+        <?php 
+            foreach($uniqueLockers as $key => $value) { ?>
+                <div class="card locker_infos">
+                    <div class="card__title">
+                        <?php echo $value; ?>
+                    </div>
+                    <div class="card__body">
+                        <?php
+                            foreach($lockerInfo[$value] AS $description) { ?>
+                                <div class="card__body--description">
+                                    <?php echo $description; ?>
+                                </div>
+                            <?php }
+                        ?>
+                    </div>
+                    <div class="card__footer">
+                    </div>
                 </div>
-                <div class="card__body">
-                    <?php
-                        foreach($lockerInfo[$value] AS $description) { ?>
-                            <div class="card__body--description">
-                                <?php echo $description; ?>
-                            </div>
-                        <?php }
-                    ?>
-                </div>
-                <div class="card__footer">
-                </div>
-            </div>
-        <?php } ?>
+            <?php } ?>
+    </div>
 </div>
