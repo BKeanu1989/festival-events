@@ -1,4 +1,4 @@
-.margin-next, .title-blue {
+.margin-next {
   margin-bottom: 1rem; }
 
 .wrapper__title {
@@ -8,13 +8,6 @@
   padding: 15px;
   font-weight: bold;
   margin: 1em 0; }
-
-.title-blue {
-  padding: 15px;
-  font-weight: bold;
-  background-color: #253746;
-  text-align: center;
-  color: #fff; }
 
 .festivals__past {
   display: flex; }
