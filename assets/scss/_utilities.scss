@@ -15,7 +15,9 @@
     background-color: $blackBG;
     text-align: center;
     color: $white;
+    @extend .margin-next;
 }
+
 
 .festivals__past {
     display: flex;
