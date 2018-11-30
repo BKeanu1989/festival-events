@@ -87,7 +87,6 @@ add_shortcode('fe_past_festivals_this_year', 'fe_past_festivals_this_year_shortc
 if (!function_exists('fe_past_festivals_this_year_shortcode')) {
     function fe_past_festivals_this_year_shortcode() {
         global $product, $woocommerce, $woocommerce_loop;
-        $columns = 4;
 
         $now = date('Y-m-d');
         $year = date('Y');
@@ -110,15 +109,20 @@ if (!function_exists('fe_past_festivals_this_year_shortcode')) {
 
         $loop = new WP_Query($args);
         ob_start();
-        woocommerce_product_loop_start();
+        // woocommerce_product_loop_start();
         while($loop->have_posts()) : $loop->the_post();
-            wc_get_template_part('content', 'product');
+            // wc_get_template_part('content', 'product');
+            // the_thumbnail();
+            echo '<div class="festivals__past--single">';
+            echo get_the_post_thumbnail();
+            echo '<p class="festivals__past--single-title">'.get_the_title().'</p>';
+            echo '</div>';
 
         endwhile;
-        woocommerce_product_loop_end();
-        woocommerce_reset_loop();
+        // woocommerce_product_loop_end();
+        // woocommerce_reset_loop();
         wp_reset_postdata();
-        return '<div class="woocommerce columns-'.$columns.'">'.ob_get_clean().'</div>';
+        return '<div class="festivals__past">'.ob_get_clean().'</div>';
     }
 }
 
