@@ -40,3 +40,83 @@ if (! function_exists('fe_checkout_template_per_product')) {
         include_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'templates/cart/user-infos.php');
     }
 }
+
+/**
+ * shortcode for 'live' products
+ * aka which haven't taken place yet 
+ * 
+ */
+add_shortcode('fe_coming_festivals', 'fe_coming_festivals_shortcode');
+if (!function_exists('fe_coming_festivals_shortcode')) {
+    function fe_coming_festivals_shortcode() {
+        global $product, $woocommerce, $woocommerce_loop;
+        $columns = 4;
+
+        $now = date('Y-m-d');
+        $args = [
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            'meta_query' => [
+                [
+                    'key' => '_festival_start',
+                    'value' => $now,
+                    'compare' => '>'
+                ]
+            ]
+        ];
+
+        $loop = new WP_Query($args);
+        ob_start();
+        woocommerce_product_loop_start();
+        while($loop->have_posts()) : $loop->the_post();
+            wc_get_template_part('content', 'product');
+        endwhile;
+        woocommerce_product_loop_end();
+        woocommerce_reset_loop();
+        wp_reset_postdata();
+        return '<div class="woocommerce columns-'.$columns.'">'.ob_get_clean().'</div>';
+    }
+}
+
+/**
+ * shortcode for 'finished'/past festivals
+ * aka which haven't taken place yet 
+ * 
+ */
+add_shortcode('fe_past_festivals_this_year', 'fe_past_festivals_this_year_shortcode');
+if (!function_exists('fe_past_festivals_this_year_shortcode')) {
+    function fe_past_festivals_this_year_shortcode() {
+        global $product, $woocommerce, $woocommerce_loop;
+        $columns = 4;
+
+        $now = date('Y-m-d');
+        $year = date('Y');
+        $args = [
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            'meta_query' => [
+                [
+                    'key' => '_festival_start',
+                    'value' => $now,
+                    'compare' => '<'
+                ], 
+                [
+                    'key' => '_festival_start',
+                    'value' => $year,
+                    'compare' => 'LIKE'
+                ]
+            ]
+        ];
+
+        $loop = new WP_Query($args);
+        ob_start();
+        woocommerce_product_loop_start();
+        while($loop->have_posts()) : $loop->the_post();
+            wc_get_template_part('content', 'product');
+        endwhile;
+        woocommerce_product_loop_end();
+        woocommerce_reset_loop();
+        wp_reset_postdata();
+        return '<div class="woocommerce columns-'.$columns.'">'.ob_get_clean().'</div>';
+    }
+}
