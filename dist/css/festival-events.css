@@ -10,7 +10,15 @@
   padding: 15px;
   font-weight: bold;
   background-color: #253746;
+  text-align: center;
   color: #fff; }
+
+.festivals__past {
+  display: flex; }
+  .festivals__past--single {
+    max-width: 25%; }
+    .festivals__past--single-title {
+      text-align: center; }
 
 .card {
   flex: 1; }
@@ -48,7 +56,7 @@
   text-align: center;
   font-size: 1.5em; }
   .banner__text--wrapper {
-    background-color: rgba(87, 87, 87, 0.2);
+    background-color: rgba(87, 87, 87, 0.4);
     color: #fff;
     font-weight: bold;
     padding: 15px; }

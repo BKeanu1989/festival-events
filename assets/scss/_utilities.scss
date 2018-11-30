@@ -13,5 +13,17 @@
     padding: 15px;
     font-weight: bold;
     background-color: $blackBG;
+    text-align: center;
     color: $white;
+}
+
+.festivals__past {
+    display: flex;
+
+    &--single{
+        max-width: 25%;
+        &-title{
+            text-align: center;
+        }
+    }
 }
