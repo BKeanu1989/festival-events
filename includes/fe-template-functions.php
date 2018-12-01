@@ -27,6 +27,7 @@ if (! function_exists( 'fe_opening_items_and_locations_html') ) {
 
 if (! function_exists('fe_template_single_title')) {
     function fe_template_single_title() {
+        include_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'templates/single-product/title.php');
         
     }
 }
@@ -141,4 +142,15 @@ function fe_woocommerce_set_purchasable() {
     // return ( 'yes' === $festivalStart ? false : true );
     return ( $productPurchasable === true ? true : false );
     // return false;
+}
+
+// add_filter('fe_product_is_purchasable', 'fe_product_is_purchasable_func');
+add_action('fe_product_is_purchasable', 'fe_product_is_purchasable_func', 5, 0);
+function fe_product_is_purchasable_func() 
+{
+    global $product;
+    $purchasable = $product->is_purchasable();
+    if ($purchasable) return;
+    // echo $purchasable;
+    echo '<p class="wrapper__title wrapper__title--warning">test123</p>';
 }
