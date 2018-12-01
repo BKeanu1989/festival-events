@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/fe-template-functions.php');
+require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/set-data-checkout.php');
 
 /**
  * Check if WooCommerce is active
