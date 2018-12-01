@@ -112,16 +112,12 @@ if (!function_exists('fe_past_festivals_this_year_shortcode')) {
         ob_start();
         // woocommerce_product_loop_start();
         while($loop->have_posts()) : $loop->the_post();
-            // wc_get_template_part('content', 'product');
-            // the_thumbnail();
             echo '<div class="festivals__past--single">';
             echo get_the_post_thumbnail();
             echo '<p class="festivals__past--single-title">'.get_the_title().'</p>';
             echo '</div>';
 
         endwhile;
-        // woocommerce_product_loop_end();
-        // woocommerce_reset_loop();
         wp_reset_postdata();
         return '<div class="festivals__past">'.ob_get_clean().'</div>';
     }
@@ -151,5 +147,4 @@ function fe_product_is_not_purchasable_func()
     $purchasable = $product->is_purchasable();
     if ($purchasable) return;
     echo '<p class="wrapper__title wrapper__title--warning">'. __('Dieses Produkt ist leider nicht mehr erhältlich.', 'festival-events'); '</p>';
-    
 }
