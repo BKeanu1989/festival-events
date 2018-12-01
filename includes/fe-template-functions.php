@@ -124,20 +124,22 @@ if (!function_exists('fe_past_festivals_this_year_shortcode')) {
 }
 
 
-add_filter( 'woocommerce_is_purchasable', 'fe_woocommerce_set_purchasable' );
+// add_filter( 'woocommerce_is_purchasable', 'fe_woocommerce_set_purchasable' );
 add_filter( 'woocommerce_variation_is_purchasable', 'fe_woocommerce_set_purchasable' );
 /**
  * Mark "Not ready to sell" products as not purchasable.
  */
 function fe_woocommerce_set_purchasable() {
     global $product, $thepostid, $post;
-    $festivalStart = get_post_meta( get_the_ID(), '_festival_start', true );
-    $now = date('Y-m-d');
 
+    //TODO: if product has not purchasable ... return false
+    $id = get_the_ID();
+    $festivalStart = get_post_meta( $id, '_festival_start', true );
+    $now = date('Y-m-d');
+    // needs to be set after using translation plugins
+    if (!$id) return true;
     $productPurchasable = $now < $festivalStart;
-    // return ( 'yes' === $festivalStart ? false : true );
     return ( $productPurchasable === true ? true : false );
-    // return false;
 }
 
 add_action('fe_product_is_not_purchasable', 'fe_product_is_not_purchasable_func', 5, 0);
