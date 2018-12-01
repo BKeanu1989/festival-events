@@ -8,6 +8,8 @@
   padding: 15px;
   font-weight: bold;
   margin: 1em 0; }
+  .wrapper__title--warning {
+    background-color: #253746; }
 
 .festivals__past {
   display: flex; }

@@ -6,6 +6,10 @@
         padding: 15px;
         font-weight: bold;
         margin: 1em 0;
+
+        &--warning{
+            background-color: $warning;
+        }
     }
 }
 
@@ -19,3 +23,4 @@
         }
     }
 }
+
