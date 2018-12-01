@@ -69,3 +69,12 @@ function fe_add_styles() {
 
 
 
+function fe_plugin_name_load_plugin_textdomain() {
+	$domain = 'festival-events';
+	$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
+	// wp-content/languages/plugin-name/plugin-name-de_DE.mo
+	load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
+	// wp-content/plugins/plugin-name/languages/plugin-name-de_DE.mo
+	load_plugin_textdomain( $domain, FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'init', 'fe_plugin_name_load_plugin_textdomain' );
