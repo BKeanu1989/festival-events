@@ -144,13 +144,12 @@ function fe_woocommerce_set_purchasable() {
     // return false;
 }
 
-// add_filter('fe_product_is_purchasable', 'fe_product_is_purchasable_func');
-add_action('fe_product_is_purchasable', 'fe_product_is_purchasable_func', 5, 0);
-function fe_product_is_purchasable_func() 
+add_action('fe_product_is_not_purchasable', 'fe_product_is_not_purchasable_func', 5, 0);
+function fe_product_is_not_purchasable_func() 
 {
     global $product;
     $purchasable = $product->is_purchasable();
     if ($purchasable) return;
-    // echo $purchasable;
-    echo '<p class="wrapper__title wrapper__title--warning">test123</p>';
+    echo '<p class="wrapper__title wrapper__title--warning">'. __('Dieses Produkt ist leider nicht mehr erhältlich.', 'festival-events'); '</p>';
+    
 }
