@@ -124,29 +124,44 @@ if (!function_exists('fe_past_festivals_this_year_shortcode')) {
 }
 
 
-// add_filter( 'woocommerce_is_purchasable', 'fe_woocommerce_set_purchasable' );
-add_filter( 'woocommerce_variation_is_purchasable', 'fe_woocommerce_set_purchasable' );
+// add_filter( 'woocommerce_is_purchasable', 'fe_woocommerce_is_purchasable' );
+add_filter( 'woocommerce_variation_is_purchasable', 'fe_woocommerce_is_purchasable' );
 /**
  * Mark "Not ready to sell" products as not purchasable.
  */
-function fe_woocommerce_set_purchasable() {
+
+function fe_woocommerce_is_purchasable($id) {
     global $product, $thepostid, $post;
+    // source of truth is product cat now
 
     //TODO: if product has not purchasable ... return false
     $id = get_the_ID();
     $festivalStart = get_post_meta( $id, '_festival_start', true );
     $now = date('Y-m-d');
+
+    $terms = get_the_terms($id, 'product_cat');
+    $found = false;
+    $slugs = array_column($terms,'slug');
+    
+    $black_listed_slugs = ['not-purchasable', 'nicht-erhaeltlich'];
+
+    foreach($slugs AS $key => $value) {
+        if (in_array($value, $black_listed_slugs)) {
+            $found = true;
+        }
+    }
+    
     // needs to be set after using translation plugins
     if (!$id) return true;
-    $productPurchasable = $now < $festivalStart;
-    return ( $productPurchasable === true ? true : false );
+    return ( $found === true ? false : true );
 }
 
-add_action('fe_product_is_not_purchasable', 'fe_product_is_not_purchasable_func', 5, 0);
+add_action('fe_product_is_not_purchasable', 'fe_product_is_not_purchasable_func', 15, 0);
 function fe_product_is_not_purchasable_func() 
 {
     global $product;
-    $purchasable = $product->is_purchasable();
+    // $purchasable = $product->is_purchasable();
+    $purchasable = fe_woocommerce_is_purchasable($product->get_id());
     if ($purchasable) return;
     echo '<p class="wrapper__title wrapper__title--warning">'. __('Dieses Produkt ist leider nicht mehr erhältlich.', 'festival-events'); '</p>';
 }
