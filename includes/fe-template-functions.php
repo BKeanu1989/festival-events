@@ -35,7 +35,10 @@ if (! function_exists('fe_template_single_title')) {
 /**
  * 
  * @ hooked into woocommerce_checkout_shipping
+ * used in custom wc template file
  */
+
+
 if (! function_exists('fe_checkout_template_per_product')) {
     function fe_checkout_template_per_product() {
         include_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'templates/cart/user-infos.php');
