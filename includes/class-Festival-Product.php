@@ -600,7 +600,10 @@ function fe_rebuild_woocommerce() {
     add_action ('woocommerce_after_single_product', 'fe_opening_items_and_locations_html', 20);
     add_action ('woocommerce_after_single_product', 'fe_locker_info_html', 30);
 
-    add_action('woocommerce_checkout_shipping', 'fe_checkout_template_per_product', 10);
+    // include user infos template
+    // do that in custom theme child template
+    // add_action('woocommerce_checkout_shipping', 'fe_checkout_template_per_product', 10);
+    add_action('include_custom_user_infos', 'fe_checkout_template_per_product', 10);
 }
 
 // TODO: add option lockerdescription
