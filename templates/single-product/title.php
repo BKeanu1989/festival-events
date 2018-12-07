@@ -21,5 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 the_title( '<h1 class="product_title entry-title">', '</h1>' );
-
 do_action('fe_product_is_not_purchasable');
+
+echo '<div class="single-product-form-wrapper">';
