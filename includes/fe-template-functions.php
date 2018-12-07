@@ -44,3 +44,9 @@ if (! function_exists('fe_checkout_template_per_product')) {
         include_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'templates/cart/user-infos.php');
     }
 }
+
+if (! function_exists('fe_after_shop_loop_wrapper_close')) {
+    function fe_after_shop_loop_wrapper_close() {
+        echo '</div> <!-- end here -->';
+    }
+}
