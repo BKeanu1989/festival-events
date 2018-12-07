@@ -22,14 +22,23 @@ class PriceSetter {
     constructor(variationsWrapper) {
         this.observerInstalled = false;
         this.variationsWrapper = variationsWrapper;
-        this.lockerPrices = getDomLockerPrices();
+        this.lockerPrices = this.getDomLockerPrices();
     }
     
     populatePrices(mutationsList, observer) {
         console.log("all mutations done");
         this.variations = Array.from(this.variationsWrapper.querySelectorAll('.woocommerce_variation'));
-        this.variations.forEach(variation => {
-            console.log(variation);
+        this.variations.forEach($variation => {
+            console.log($variation);
+            let lockerOfVariation = $variation.querySelector('select[name^="attribute_schliessf"]');
+            // find locker of variation lockerPrices
+            let lockerInfoOfVariation = this.lockerPrices.find((lockerInfo) => {
+                return lockerInfo.lockerType === lockerOfVariation.value;
+            })
+            // set price
+            let $priceOfVariation = $variation.querySelector('[name^="variable_regular_price"]');
+            $priceOfVariation.value = (lockerInfoOfVariation.price + '').replace('.', ',');
+
         });
         if (this.observerInstalled) this.removeObserver();
     }
@@ -48,7 +57,15 @@ class PriceSetter {
     }
 
     getDomLockerPrices() {
-        
+        let lockerPrices = [];
+        let priceInputs = Array.from(document.querySelectorAll('[type="number"][name^="_schließf"]'));
+        priceInputs.forEach((x) => {
+            let obj = {};
+            obj.lockerType = x.dataset.lockertype;
+            obj.price = x.value;
+            lockerPrices.push(obj);
+        })
+        return lockerPrices;
     }
 }
 
