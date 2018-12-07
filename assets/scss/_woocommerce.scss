@@ -26,3 +26,11 @@ body.woocommerce {
     padding: 15px;
     font-weight: bold;
 }
+
+.single-product-form-wrapper {
+    display: flex;
+
+    > * {
+        flex: 1;
+    }
+}

@@ -78,3 +78,8 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
   background-color: #253746;
   padding: 15px;
   font-weight: bold; }
+
+.single-product-form-wrapper {
+  display: flex; }
+  .single-product-form-wrapper > * {
+    flex: 1; }
