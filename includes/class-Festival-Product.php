@@ -282,6 +282,11 @@ function setupLockers($locations)
     return $lockers;
 }
 
+function _woo_display_populate_wrapper_begin()
+{
+    echo '<div class="options_group">';
+}
+
 function woo_display_populate()
 {
     global $post_id, $thepostid;
@@ -289,7 +294,7 @@ function woo_display_populate()
 
     if (!empty($savedLocations)) {
 
-        echo '<div class="options_group">';
+        // echo '<div class="options_group">';
 
         woocommerce_wp_checkbox(array(
             'id' => "_populate_attributes",
@@ -297,13 +302,40 @@ function woo_display_populate()
             'description' => __('Willst du die verschiedenen Varianten erstellen?', 'festival-events'),
         ));
 
-        echo '</div>';
+        // echo '</div>';
     } else {
-        echo '<div class="options_group">';
+        // echo '<div class="options_group">';
             echo '<p>Um Varianten erstellen zu lassen, gib mindestens einen Standort ein.</p>';
-        echo '</div>';
+        // echo '</div>';
     }
 
+}
+
+function woo_display_populate_price()
+{
+    global $post_id, $thepostid, $wpdb;
+
+    $lockers = get_post_meta($thepostid, '_lockers', true);
+
+    $variationsQuery = $wpdb->prepare("SELECT {$wpdb->prefix}posts.*, {$wpdb->prefix}postmeta.* FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}postmeta ON {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id AND {$wpdb->prefix}postmeta.meta_key = 'attribute_schliessfaecher' WHERE post_parent = %d", $post_id);
+    $variationExist = $wpdb->get_results($variationsQuery, ARRAY_A);
+    
+    if (!empty($variationExist)) {
+        foreach($variationExist AS $key => $variation) {
+            woocommerce_wp_text_input([
+                'id' => '_schließfaecher_' . $variation["meta_value"],
+                'label' => __('Preis für ', 'festival-events') . $variation["meta_value"],
+                'data_type' => 'decimal',
+                'custom_attributes' => ['lockertype' => $variation["meta_value"], 'step' => '0.01'],
+                'type' => 'number',
+            ]);
+        }
+    } 
+}
+
+function _woo_display_populate_wrapper_end()
+{
+    echo '</div>';
 }
 
 function woo_callback_populate($post_id)
@@ -531,7 +563,11 @@ function displayAllDataInTab()
     woo_display_festival_times();
     woo_display_opening_times();
     woo_display_lockers();
+    _woo_display_populate_wrapper_begin();
     woo_display_populate();
+    woo_display_populate_price();
+    _woo_display_populate_wrapper_end();
+
     ?>
         </div>
     <?php
