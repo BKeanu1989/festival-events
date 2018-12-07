@@ -28,15 +28,33 @@ class PriceSetter {
     populatePrices(mutationsList, observer) {
         this.variations = Array.from(this.variationsWrapper.querySelectorAll('.woocommerce_variation'));
         this.variations.forEach($variation => {
+            let lockerInfoOfVariation;
             console.log($variation);
             let lockerOfVariation = $variation.querySelector('select[name^="attribute_schliessf"]');
+            let lockerVariation_ID = $variation.querySelector('.remove_variation').getAttribute('rel');
             // find locker of variation lockerPrices
-            let lockerInfoOfVariation = this.lockerPrices.find((lockerInfo) => {
-                return lockerInfo.lockerType === lockerOfVariation.value;
+            this.lockerPrices.forEach((lockerInfo) => {
+                if (lockerInfo.lockerType === lockerOfVariation.value) {
+                    lockerInfoOfVariation = lockerInfo;
+                }
             })
-            // set price
-            let $priceOfVariation = $variation.querySelector('[name^="variable_regular_price"]');
-            // $priceOfVariation.value = (lockerInfoOfVariation.price + '').replace('.', ',');
+
+            Object.assign(lockerInfoOfVariation, {ID: lockerVariation_ID});
+
+            jQuery.ajax({
+                url: ajaxurl,
+                data: {
+                    'action': 'fe_set_prices',
+                    // 'data': JSON.stringify()
+                    'data': lockerInfoOfVariation
+                },
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
 
         });
         if (this.observerInstalled) this.removeObserver();
