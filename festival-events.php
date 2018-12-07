@@ -34,7 +34,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
     // add_filter( 'product_type_selector', 'wcpt_add_gift_card_type' );
     // add_filter( 'woocommerce_product_data_tabs', 'gift_card_tab' );
     add_action( 'wp_enqueue_scripts', 'fe_add_styles');
+    add_action( 'admin_enqueue_scripts', 'fe_admin_scripts');
+    
+}
 
+function fe_admin_scripts() {
+    wp_enqueue_script('fe-admin-script', plugins_url('assets/js/fe-custom-admin.js', __FILE__), [], false, true);
 }
 
 function fe_add_styles() {
