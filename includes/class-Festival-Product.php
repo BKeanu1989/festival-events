@@ -326,10 +326,12 @@ function woo_display_populate_price()
                 'id' => '_schließfaecher_' . $variation["meta_value"],
                 'label' => __('Preis für ', 'festival-events') . $variation["meta_value"],
                 'data_type' => 'decimal',
-                'custom_attributes' => ['lockertype' => $variation["meta_value"], 'step' => '0.01'],
+                'custom_attributes' => ['data-lockertype' => $variation["meta_value"], 'step' => '0.01', 'min' => '0.01'],
                 'type' => 'number',
+                'value' => '9.00'
             ]);
         }
+        echo '<button id="trigger_populate_prices" type="button" class="button is-primary">Füge Preise Hinzu</button>';
     } 
 }
 
