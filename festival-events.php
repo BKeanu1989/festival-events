@@ -40,6 +40,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 function fe_admin_scripts() {
     wp_enqueue_script('fe-admin-script', plugins_url('assets/js/fe-custom-admin.js', __FILE__), [], false, true);
+    wp_enqueue_style('fe-bulma', 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css');
 }
 
 function fe_add_styles() {
@@ -48,6 +49,7 @@ function fe_add_styles() {
         // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
         wp_enqueue_style('font-awesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css');
     // }
+
 }
 
 
