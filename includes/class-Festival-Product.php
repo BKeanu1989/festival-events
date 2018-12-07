@@ -583,6 +583,10 @@ function fe_rebuild_woocommerce() {
 
     remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
     add_action( 'woocommerce_single_product_summary', 'fe_template_single_title', 5 );
+    add_action ('woocommerce_single_product_summary', 'fe_opening_items_and_locations_html', 70);
+
+    // woocommerce_after_shop_loop_item
+    add_action('woocommerce_after_shop_loop_item', 'fe_after_shop_loop_wrapper_close', 0);
     // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
     remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10);
@@ -597,7 +601,7 @@ function fe_rebuild_woocommerce() {
     // * @hooked woocommerce_upsell_display - 15
     // * @hooked woocommerce_output_related_products - 20
 
-    add_action ('woocommerce_after_single_product', 'fe_opening_items_and_locations_html', 20);
+    // add_action ('woocommerce_after_single_product', 'fe_opening_items_and_locations_html', 20);
     add_action ('woocommerce_after_single_product', 'fe_locker_info_html', 30);
 
     // include user infos template
