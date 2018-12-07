@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) {
 
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/fe-template-functions.php');
 require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/set-data-checkout.php');
+require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/ajax-functions.php');
 
 /**
  * Check if WooCommerce is active
@@ -18,7 +19,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     add_filter('woocommerce_product_data_tabs', 'festival_product_tab');
     // TODO: front end only (and woocommerce page)
     
-    
+    // install ajax
+    add_action('wp_ajax_fe_set_prices', 'fe_set_prices');
     fe_hook_save_custom_fields();
 }
 
@@ -318,15 +320,17 @@ function woo_display_populate_price()
     $lockers = get_post_meta($thepostid, '_lockers', true);
 
     $variationsQuery = $wpdb->prepare("SELECT {$wpdb->prefix}posts.*, {$wpdb->prefix}postmeta.* FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}postmeta ON {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id AND {$wpdb->prefix}postmeta.meta_key = 'attribute_schliessfaecher' WHERE post_parent = %d", $post_id);
-    $variationExist = $wpdb->get_results($variationsQuery, ARRAY_A);
+    $variations = $wpdb->get_results($variationsQuery, ARRAY_A);
     
-    if (!empty($variationExist)) {
-        foreach($variationExist AS $key => $variation) {
+    $uniqueLockers = array_unique(array_column($variations, 'meta_value'));
+
+    if (!empty($variations)) {
+        foreach($uniqueLockers AS $key => $variation) {
             woocommerce_wp_text_input([
-                'id' => '_schließfaecher_' . $variation["meta_value"],
-                'label' => __('Preis für ', 'festival-events') . $variation["meta_value"],
+                'id' => '_schließfaecher_' . $variation,
+                'label' => __('Preis für ', 'festival-events') . $variation,
                 'data_type' => 'decimal',
-                'custom_attributes' => ['data-lockertype' => $variation["meta_value"], 'step' => '0.01', 'min' => '0.01'],
+                'custom_attributes' => ['data-lockertype' => $variation, 'step' => '0.01', 'min' => '0.01'],
                 'type' => 'number',
                 'value' => '9.00'
             ]);
