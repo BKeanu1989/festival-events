@@ -45,13 +45,11 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
             </div>
         </div>
     
-        <div class="card our-service">
+        <!-- <div class="card our-service">
             <div class="card__title">
                 <h2><?php _e('Unser Service für dich', 'festival-events'); ?></h2>
             </div>
             <div class="card__image">
-                <!-- this is hardcoded for now -->
-                <!-- TODO: srcset-->
                 <img src="https://festivalsafeboxen.bigboxberlin.de/wp-content/uploads/2016/02/strom.jpg" alt="">
             </div>
             <div class="card__body">
@@ -62,6 +60,6 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
                     <li><i class="fas fa-thumbs-up"></i><span class="description">Dein Schließfach-Inhalt ist mit bis zu 500 Euro versichert.</span></li>
                 </ul>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
