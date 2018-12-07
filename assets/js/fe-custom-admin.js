@@ -26,7 +26,6 @@ class PriceSetter {
     }
     
     populatePrices(mutationsList, observer) {
-        console.log("all mutations done");
         this.variations = Array.from(this.variationsWrapper.querySelectorAll('.woocommerce_variation'));
         this.variations.forEach($variation => {
             console.log($variation);
@@ -37,19 +36,17 @@ class PriceSetter {
             })
             // set price
             let $priceOfVariation = $variation.querySelector('[name^="variable_regular_price"]');
-            $priceOfVariation.value = (lockerInfoOfVariation.price + '').replace('.', ',');
+            // $priceOfVariation.value = (lockerInfoOfVariation.price + '').replace('.', ',');
 
         });
         if (this.observerInstalled) this.removeObserver();
     }
 
     removeObserver() {
-        console.log("remove observer");
         this.observer.disconnect();
     }
     
     installObserver() {
-        console.log("install observer");
         this.config = { attributes: false, childList: true, subtree: true };
         this.observer = new MutationObserver(this.populatePrices.bind(this));
         this.observer.observe(variationsWrapper, this.config);
