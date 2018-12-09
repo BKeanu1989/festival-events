@@ -355,7 +355,7 @@ function woo_callback_populate($post_id)
             }
             
             $attributes = [];
-            saveProductAttributes($post_id);
+            // saveProductAttributes($post_id);
             // setProductAttributes($post_id, $attributes);
             $parent_id = $post_id;
             // $posted_lockers = $_POST['_lockers'];
@@ -372,8 +372,8 @@ function woo_callback_populate($post_id)
                 'sale_price'    => '',
                 'stock_qty'     => 10,
             );
-
-            create_product_variation($parent_id, $variation_data);
+            // working now with saveProductAttributes (in combination)
+            // create_product_variation($parent_id, $variation_data);
 
         }
     } catch (Exception $e) {
@@ -431,8 +431,8 @@ function create_product_variation($product_id, $variation_data)
 
     // Iterating through the variations attributes
     foreach ($variation_data['attributes'] as $attribute => $term_name) {
-        // $taxonomy = 'pa_' . $attribute; // The attribute taxonomy
-        $taxonomy = $attribute; // The attribute taxonomy
+        $taxonomy = 'pa_' . $attribute; // The attribute taxonomy
+        // $taxonomy = $attribute; // The attribute taxonomy
 
         // If taxonomy doesn't exists we create it (Thanks to Carl F. Corneil)
         if (!taxonomy_exists($taxonomy)) {
@@ -467,9 +467,11 @@ function create_product_variation($product_id, $variation_data)
         //
         $post_term_names_new = wp_get_post_terms($product_id, $taxonomy, array('fields' => 'names'));
 
+        // if attribute is prepended with pa
+        update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_slug);
         // Set/save the attribute data in the product variation
         // update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_slug);
-        update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_name);
+        // update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_name);
     }
 
     ## Set/save all other data
@@ -553,7 +555,7 @@ function setProductAttributes($post_id)
     $arrays["lockers"]["position"] = 2;
     $arrays["lockers"]["is_visible"] = 1;
     $arrays["lockers"]["is_variation"] = 1;
-    $arrays['lockers']["is_taxonomy"] = 0;
+    $arrays["lockers"]["is_taxonomy"] = 0;
 
 
     $arrays["timeframes"] = [];
@@ -563,7 +565,7 @@ function setProductAttributes($post_id)
     $arrays["timeframes"]["position"] = 1;
     $arrays["timeframes"]["is_visible"] = 1;
     $arrays["timeframes"]["is_variation"] = 1;
-    $arrays['timeframes']["is_taxonomy"] = 0;
+    $arrays["timeframes"]["is_taxonomy"] = 0;
 
     $arrays["locations"] = [];
     // $arrays["locations"]["name"] = "Standort";
@@ -687,3 +689,87 @@ function fe_rebuild_woocommerce() {
 //     'sale_price'    => '',
 //     'stock_qty'     => 10,
 // );
+
+
+// wp_safeboxen_term_taxonomy
+// wp insert new term
+// _pa_...
+
+
+// add new attribute taxonomy
+// setting transient is necessary to update product attributes
+// $attribute_taxonomies = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name != '' ORDER BY attribute_name ASC;" );
+// set_transient( 'wc_attribute_taxonomies', $attribute_taxonomies );
+
+// $attribute_taxonomies = array_filter( $attribute_taxonomies  ) ;
+
+
+add_action( 'save_post', 'fe_auto_add_product_attributes', 50, 3 );
+function fe_auto_add_product_attributes( $post_id, $post, $update  ) {
+    // if (isset($_POST['_populate_attributes'])) {
+
+        ## --- Checking --- ##
+    
+        if ( $post->post_type != 'product') return; // Only products
+    
+        // Exit if it's an autosave
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+            return $post_id;
+    
+        // Exit if it's an update
+        // if( $update )
+        //     return $post_id;
+    
+        // Exit if user is not allowed
+        if ( ! current_user_can( 'edit_product', $post_id ) )
+            return $post_id;
+    
+        ## --- The Settings for your product attributes --- ##
+    
+        $visible   = ''; // can be: '' or '1'
+        $variation = ''; // can be: '' or '1'
+    
+        ## --- The code --- ##
+    
+        // Get all existing product attributes
+        global $wpdb;
+        $attributes = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies" );
+    
+        $position   = 0;  // Auto incremented position value starting at '0'
+        $data       = array(); // initialising (empty array)
+    
+        // Loop through each exiting product attribute
+        foreach( $attributes as $attribute ){
+            // Get the correct taxonomy for product attributes
+            $taxonomy = 'pa_'.$attribute->attribute_name;
+            // $taxonomy = $attribute->attribute_name;
+            $attribute_id = $attribute->attribute_id;
+            
+            // Get all term Ids values for the current product attribute (array)
+            $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids'));
+    
+            // Get an empty instance of the WC_Product_Attribute object
+            $product_attribute = new WC_Product_Attribute();
+    
+            // Set the related data in the WC_Product_Attribute object
+            $product_attribute->set_id( $attribute_id );
+            $product_attribute->set_name( $taxonomy );
+            $product_attribute->set_options( $term_ids );
+            $product_attribute->set_position( $position );
+            $product_attribute->set_visible( $visible );
+            $product_attribute->set_variation( $variation );
+    
+            // Add the product WC_Product_Attribute object in the data array
+            $data[$taxonomy] = $product_attribute;
+    
+            $position++; // Incrementing position
+        }
+        // Get an instance of the WC_Product object
+        $product = wc_get_product( $post_id );
+    
+        // Set the array of WC_Product_Attribute objects in the product
+        $product->set_attributes( $data );
+    
+        $product->save(); // Save the product
+    // }
+}
