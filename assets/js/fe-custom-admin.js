@@ -83,30 +83,3 @@ class PriceSetter {
         return lockerPrices;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-function simulateClick(element) {
-    var event = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: true
-    });
-    // var cb = document.getElementById('checkbox'); 
-    let clicked = element.dispatchEvent(event);
-    if (clicked) {
-        alert("not cancelled");
-        // A handler called preventDefault.
-    } else {
-        // None of the handlers called preventDefault.
-        alert("cancelled");
-    }
-}
