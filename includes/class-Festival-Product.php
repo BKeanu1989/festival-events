@@ -1,0 +1,655 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/fe-template-functions.php');
+require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/set-data-checkout.php');
+require_once(FESTIVAL_EVENTS_PLUGIN_PATH . 'includes/ajax-functions.php');
+
+/**
+ * Check if WooCommerce is active
+ **/
+if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    // Put your plugin code here
+    add_action('woocommerce_product_data_panels', 'displayAllDataInTab');
+    // add_action( 'woocommerce_process_product_meta', 'fe_save_festival_product_options_field' );
+
+    add_filter('woocommerce_product_data_tabs', 'festival_product_tab');
+    // TODO: front end only (and woocommerce page)
+    
+    // install ajax
+    add_action('wp_ajax_fe_set_prices', 'fe_set_prices');
+    fe_hook_save_custom_fields();
+}
+
+function festival_product_tab($tabs)
+{
+
+    $tabs['festival_product'] = array(
+        'label' => __('Festival Produkt', 'wcpt'),
+        'target' => 'festival_product_options',
+        'class' => array(),
+    );
+
+    array_push($tabs['festival_product']['class'], 'show_if_variable');
+    return $tabs;
+}
+
+function hasProductAttributes()
+{
+    // if not
+    // prepopulate it
+
+}
+
+// parent product: 57
+//  needs
+// _product_attributes
+// a:1:{s:3:"hmm";a:6:{s:4:"name";s:3:"hmm";s:5:"value";s:9:"aaa | bbb";s:8:"position";i:1;s:10:"is_visible";i:1;s:12:"is_variation";i:1;s:11:"is_taxonomy";i:0;}}
+
+// Create Variable Product
+// BASE:
+// Name == Festival Name
+// FestivalStart
+// FestivalEnd
+// What lockers are Available?
+// Locations
+// einzelene Tage buchbar?
+
+// On Save
+// Create Variations
+/**
+ * displays Festival Times (Start & End)
+ * @return void
+ */
+function woo_display_festival_times()
+{
+    global $woocommerce;
+
+    echo '<div class="options_group">';
+
+    woocommerce_wp_text_input(
+        [
+            'id' => '_festival_start',
+            'label' => __('Festivalstart:', 'festival-events'),
+            'placeholder' => '01.08.2019',
+            'desc_tip' => 'true',
+            'description' => __('Trage hier das Datum vom Start des Festivals ein.', 'festival-events'),
+            'type' => 'date',
+        ]
+    );
+
+    woocommerce_wp_text_input(
+        [
+            'id' => '_festival_end',
+            'label' => __('Festivalende:', 'festival-events'),
+            'placeholder' => '08.08.2019',
+            'desc_tip' => 'true',
+            'description' => __('Trage hier das Datum vom Ende des Festivals ein.', 'festival-events'),
+            'type' => 'date',
+        ]
+    );
+
+    echo '</div>';
+}
+
+function woo_save_festival_times($post_id)
+{
+    // global $woocommerce;
+    $festivalStart = $_POST['_festival_start'];
+    $festivalEnd = $_POST['_festival_end'];
+    // add validation
+    //
+    if (!empty($festivalStart)) {
+        update_post_meta($post_id, '_festival_start', esc_attr($festivalStart));
+    }
+    if (!empty($festivalEnd)) {
+        update_post_meta($post_id, '_festival_end', esc_attr($festivalEnd));
+    }
+}
+
+function woo_display_locations()
+{
+    global $woocommerce, $thepostid, $post;
+    $value_string = '';
+
+    $value = get_post_meta($thepostid, '_festival_locations', true);
+    if (!empty($value)) {
+        $value_string = implode($value, ',');
+    }
+
+    echo '<div class="options_group">';
+    woocommerce_wp_text_input(
+        [
+            'id' => '_festival_locations',
+            'label' => __('Standorte:', 'festival-events'),
+            'placeholder' => 'Plaza, Center',
+            'desc_tip' => 'true',
+            'description' => __('Trage hier Kommasepariert die Standorte ein.', 'festival-events'),
+            'type' => 'text',
+            'value' => $value_string,
+        ]
+    );
+    echo '</div>';
+}
+
+function woo_display_banner_text() {
+    global $thepostid;
+
+    echo '<div class="options_group">';
+
+    woocommerce_wp_textarea_input(
+        [
+            'id'    => '_banner_text',
+            'label' => __('Banner Text:', 'festival-events'),
+            'name'  => '_banner_text'
+
+        ]
+    );
+    echo '</div>';
+}
+
+function woo_save_banner_text($post_id) {
+    $bannerText= $_POST['_banner_text'];
+    if (!empty($bannerText)) {
+        update_post_meta($post_id, '_banner_text', $bannerText);
+    }
+}
+
+function woo_save_locations($post_id)
+{
+    // global $woocommerce;
+    $festivalLocations = [];
+    if (isset($_POST["_festival_locations"])) {
+        $festivalLocations = setupLocations($_POST['_festival_locations']);
+    }
+
+    // add validation
+    //
+    if (!count($festivalLocations) == 0) {
+        update_post_meta($post_id, '_festival_locations', $festivalLocations);
+    }
+}
+
+$lockerDescription = ["", "M", "M HV", "L", "L HV", "XL", "XL HV"];
+
+// TODO: add oeffnungszeiten foreach locations
+
+// --- do it as a 
+function woo_display_opening_times()
+{
+    global $woocommerce, $post, $thepostid;
+    $locations = get_post_meta($thepostid, '_festival_locations', true);
+    $savedOpeningTimes = get_post_meta($thepostid, '_opening_times', true);
+    // $locations = 
+    if (!empty($locations)) {
+        echo '<div class="options_group">';
+        echo '<h2>' . __('Öffnungszeiten') . '</h2>';
+        foreach($locations AS $key => $value) {
+            // 
+            woocommerce_wp_textarea_input(
+                [
+                    'id'    => '_opening_times['.$value.']',
+                    'label' => __('Öffnungszeiten für '.$value.': ', 'festival-events'),
+                    'name'  => '_opening_times['.$value.']',
+                    'value' => (!empty($savedOpeningTimes)) ? $savedOpeningTimes[$value] : ''
+    
+                ]
+            );
+        }
+        echo '</div>';
+    }
+
+}
+
+function woo_save_opening_times($post_id) 
+{
+    if (isset($_POST['_opening_times'])) {
+        $postedOpeningTimes = $_POST['_opening_times'];
+
+        update_post_meta($post_id, '_opening_times', $postedOpeningTimes);
+    }
+}
+
+function woo_display_lockers()
+{
+    // TODO: only show lockers if location is populated
+    // foreach location create checkbox ...
+    global $woocommerce, $thepostid, $post, $lockerDescription;
+
+    $locations = get_post_meta($thepostid, '_festival_locations', true);
+    $lockers = get_post_meta($thepostid, '_lockers', true);
+
+    if (count($lockers) == 0 || gettype($lockers) === 'string') {
+        $lockers = setupLockers($locations);
+    }
+    if (!empty($locations)) {
+        echo '<div class="options_group">';
+        echo '<h2>Schließfächer</h2>';
+        foreach ($lockers as $location => $lockersForLocation) {
+            echo "<h3>{$location}</h3>";
+    
+            $iteratorLockerValue = 0;
+            foreach ($lockersForLocation as $key => $value) {
+                $lockerValue = $iteratorLockerValue + 1;
+                woocommerce_wp_checkbox(array(
+                    'id' => "_lockers[{$location}][{$lockerValue}]",
+                    'label' => __($lockerDescription[$key], 'festival-events'),
+                    'description' => __('vorhanden?', 'festival-events'),
+                    'value' => 'yes',
+                    'cbvalue' => $value,
+                ));
+                $iteratorLockerValue++;
+            }
+        }
+        echo '</div>';
+    }
+}
+
+function woo_save_lockers($post_id)
+{
+    if (isset($_POST['_lockers'])) {
+        $festivalLocations = setupLocations($_POST['_festival_locations']);
+        $postedLockers = $_POST['_lockers'];
+
+        $arrayToSave = reformat_lockers($postedLockers, $festivalLocations);
+
+        if (!count($arrayToSave) == 0) {
+            update_post_meta($post_id, '_lockers', $arrayToSave);
+        }
+    }
+}
+
+function setupLocations($festivalLocations)
+{
+    $festivalLocations_array = preg_split("/[,]+/", esc_attr($festivalLocations));
+    $festivalLocations_array = array_map(function ($x) {
+        return trim($x);
+    }, $festivalLocations_array);
+    return $festivalLocations_array;
+}
+
+function setupLockers($locations)
+{
+    $lockers = [];
+    if (!empty($locations)) {
+        $lockerOptions = ["1" => 'no', "2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
+        // for ($iterator = 1; $iterator <= count($locations); $iterator++) {
+        for ($iterator = 0; $iterator < count($locations); $iterator++) {
+            $lockers[$locations[$iterator]] = $lockerOptions;
+        }
+    }
+    return $lockers;
+}
+
+function _woo_display_populate_wrapper_begin()
+{
+    echo '<div class="options_group">';
+}
+
+function woo_display_populate()
+{
+    global $post_id, $thepostid;
+    $savedLocations = get_post_meta($post_id, '_festival_locations', true);
+
+    if (!empty($savedLocations)) {
+
+        // echo '<div class="options_group">';
+
+        woocommerce_wp_checkbox(array(
+            'id' => "_populate_attributes",
+            'label' => __('Varianten erstellen?', 'festival-events'),
+            'description' => __('Willst du die verschiedenen Varianten erstellen?', 'festival-events'),
+        ));
+
+        // echo '</div>';
+    } else {
+        // echo '<div class="options_group">';
+            echo '<p>Um Varianten erstellen zu lassen, gib mindestens einen Standort ein.</p>';
+        // echo '</div>';
+    }
+
+}
+
+function woo_display_populate_price()
+{
+    global $post_id, $thepostid, $wpdb;
+
+    $lockers = get_post_meta($thepostid, '_lockers', true);
+
+    $variationsQuery = $wpdb->prepare("SELECT {$wpdb->prefix}posts.*, {$wpdb->prefix}postmeta.* FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}postmeta ON {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id AND {$wpdb->prefix}postmeta.meta_key = 'attribute_schliessfaecher' WHERE post_parent = %d", $post_id);
+    $variations = $wpdb->get_results($variationsQuery, ARRAY_A);
+    
+    $uniqueLockers = array_unique(array_column($variations, 'meta_value'));
+
+    if (!empty($variations)) {
+        foreach($uniqueLockers AS $key => $variation) {
+            woocommerce_wp_text_input([
+                'id' => '_schließfaecher_' . $variation,
+                'label' => __('Preis für ', 'festival-events') . $variation,
+                'data_type' => 'decimal',
+                'custom_attributes' => ['data-lockertype' => $variation, 'step' => '0.01', 'min' => '0.01'],
+                'type' => 'number',
+                'value' => '9.00'
+            ]);
+        }
+        echo '<button id="trigger_populate_prices" type="button" class="button is-primary">Füge Preise Hinzu</button>';
+    } 
+}
+
+function _woo_display_populate_wrapper_end()
+{
+    echo '</div>';
+}
+
+function woo_callback_populate($post_id)
+{
+    try {
+        if (isset($_POST['_populate_attributes'])) {
+            if (!isset($_POST['_lockers']) && !isset($_POST['_festival_locations']))  {
+                return;
+                // TODO:
+                // print error notice
+            }
+            
+            $attributes = [];
+            saveProductAttributes($post_id);
+            // setProductAttributes($post_id, $attributes);
+            $parent_id = $post_id;
+            $posted_lockers = $_POST['_lockers'];
+            $festivalLocations = setupLocations($_POST['_festival_locations']);
+        }
+    } catch (Exception $e) {
+        error_log(print_r($e->getMessage()));
+    }
+}
+
+function fe_hook_save_custom_fields()
+{
+
+    // WORKING
+    // festival times
+    add_action('woocommerce_process_product_meta', 'woo_save_festival_times');
+
+    // location
+    add_action('woocommerce_process_product_meta', 'woo_save_locations');
+
+    // lockers
+    add_action('woocommerce_process_product_meta', 'woo_save_lockers');
+
+    // populate attributes
+    add_action('woocommerce_process_product_meta', 'woo_callback_populate');
+
+    add_action('woocommerce_process_product_meta', 'woo_save_opening_times');
+    add_action('woocommerce_process_product_meta', 'woo_save_banner_text');
+}
+
+/**
+ * Create a product variation for a defined variable product ID.
+ *
+ * @since 3.0.0
+ * @param int   $product_id | Post ID of the product parent variable product.
+ * @param array $variation_data | The data to insert in the product.
+ */
+
+function create_product_variation($product_id, $variation_data)
+{
+    // Get the Variable product object (parent)
+    $product = wc_get_product($product_id);
+
+    $variation_post = array(
+        'post_title' => $product->get_title(),
+        'post_name' => 'product-' . $product_id . '-variation',
+        'post_status' => 'publish',
+        'post_parent' => $product_id,
+        'post_type' => 'product_variation',
+        'guid' => $product->get_permalink(),
+    );
+
+    // Creating the product variation
+    $variation_id = wp_insert_post($variation_post);
+
+    // Get an instance of the WC_Product_Variation object
+    $variation = new WC_Product_Variation($variation_id);
+
+    // Iterating through the variations attributes
+    foreach ($variation_data['attributes'] as $attribute => $term_name) {
+        // $taxonomy = 'pa_' . $attribute; // The attribute taxonomy
+        $taxonomy = $attribute; // The attribute taxonomy
+
+        // If taxonomy doesn't exists we create it (Thanks to Carl F. Corneil)
+        if (!taxonomy_exists($taxonomy)) {
+            register_taxonomy(
+                $taxonomy,
+                'product_variation',
+                array(
+                    'hierarchical' => false,
+                    'label' => ucfirst($taxonomy),
+                    'query_var' => true,
+                    'rewrite' => array('slug' => $taxonomy), // The base slug
+                )
+            );
+        }
+
+        // Check if the Term name exist and if not we create it.
+        if (!term_exists($term_name, $taxonomy)) {
+            wp_insert_term($term_name, $taxonomy);
+        }
+        // Create the term
+
+        $term_slug = get_term_by('name', $term_name, $taxonomy)->slug; // Get the term slug
+
+        // Get the post Terms names from the parent variable product.
+        $post_term_names = wp_get_post_terms($product_id, $taxonomy, array('fields' => 'names'));
+
+        // Check if the post term exist and if not we set it in the parent variable product.
+        if (!in_array($term_name, $post_term_names)) {
+            wp_set_post_terms($product_id, $term_name, $taxonomy, true);
+        }
+
+        // Set/save the attribute data in the product variation
+        update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_slug);
+    }
+
+    ## Set/save all other data
+
+    // SKU
+    if (!empty($variation_data['sku'])) {
+        $variation->set_sku($variation_data['sku']);
+    }
+
+    // Prices
+    if (empty($variation_data['sale_price'])) {
+        $variation->set_price($variation_data['regular_price']);
+    } else {
+        $variation->set_price($variation_data['sale_price']);
+        $variation->set_sale_price($variation_data['sale_price']);
+    }
+    $variation->set_regular_price($variation_data['regular_price']);
+
+    // Stock
+    if (!empty($variation_data['stock_qty'])) {
+        $variation->set_stock_quantity($variation_data['stock_qty']);
+        $variation->set_manage_stock(true);
+        $variation->set_stock_status('');
+    } else {
+        $variation->set_manage_stock(false);
+    }
+
+    $variation->set_weight(''); // weight (resetting)
+
+    $variation->save(); // Save the data
+}
+
+/**
+ *  Reformat data, so it can be saved as an array
+ *
+ * @param   array $lockers | posted data from _lockers
+ * @param   array $festivalLocations | setup lockers so a complete array can be build
+ * @return  array - reformatted array
+ */
+function reformat_lockers($postedLockers, $festivalLocations)
+{
+
+    $defaultLockers = setupLockers($festivalLocations);
+    $arrayToSave = $defaultLockers;
+
+    foreach ($postedLockers as $key => $value) {
+        foreach ($value as $key2 => $value2) {
+            $arrayToSave[$key][$key2] = "yes";
+        }
+    }
+    return $arrayToSave;
+}
+
+/**
+ * Sets product attributes according to given array
+ * 
+ * @param integer   | product_id to save _product_attributes for 
+ * @param array     | 
+ * 
+ */
+
+function saveProductAttributes($post_id) {
+    add_action( 'woocommerce_process_product_meta', 'setProductAttributes',999 );
+}
+function setProductAttributes($post_id) 
+{
+    $arrays = [];
+
+    $lockers = $_POST['_lockers'];
+
+    $reformatedLockers = reformat_lockers($_POST['_lockers'], setupLocations($_POST['_festival_locations']));
+    $test = populateValueStringByKey($lockers);
+
+    $locations = array_keys($reformatedLockers);
+    $lockerValues = pullOutLockerDescription($reformatedLockers);
+    $uniqueLockers = array_unique($lockerValues);
+    $arrays["lockers"] = [];
+    $arrays["lockers"]["name"] = "Schließfächer";
+    $arrays["lockers"]["value"] = implode('|', $uniqueLockers);
+    $arrays["lockers"]["position"] = 2;
+    $arrays["lockers"]["is_visible"] = 1;
+    $arrays["lockers"]["is_variation"] = 1;
+    $arrays['lockers']["is_taxonomy"] = 0;
+
+
+    $arrays["timeframe"] = [];
+    $arrays["timeframe"]["name"] = "Dauer";
+    $arrays["timeframe"]["value"] = "Full Festival";
+    $arrays["timeframe"]["position"] = 1;
+    $arrays["timeframe"]["is_visible"] = 1;
+    $arrays["timeframe"]["is_variation"] = 1;
+    $arrays['timeframe']["is_taxonomy"] = 0;
+
+    $arrays["locations"] = [];
+    $arrays["locations"]["name"] = "Standort";
+    $arrays["locations"]["value"] = implode('|',$locations);
+    $arrays["locations"]["position"] = 0;
+    $arrays["locations"]["is_visible"] = 1;
+    $arrays["locations"]["is_variation"] = 1;
+    $arrays["locations"]["is_taxonomy"] = 0;
+
+
+    $inserted_id = add_post_meta($post_id, '_product_attributes', $arrays, true);
+    if (! $inserted_id) {
+        update_post_meta($post_id, '_product_attributes', $arrays);
+    }    
+}
+
+function displayAllDataInTab()
+{
+    ?>
+        <div id="festival_product_options" class="panel woocommerce_options_panel">
+    <?php
+    woo_display_banner_text();
+    woo_display_locations();
+    woo_display_festival_times();
+    woo_display_opening_times();
+    woo_display_lockers();
+    _woo_display_populate_wrapper_begin();
+    woo_display_populate();
+    woo_display_populate_price();
+    _woo_display_populate_wrapper_end();
+
+    ?>
+        </div>
+    <?php
+}
+
+/**
+ * Takes values as an array and returns string with '|' separator
+ * @param   array           | values
+ * @param   string/null     | if key get value by key
+ * @return  string          | e.g. foo | bar | baz
+ */
+function populateValueStringByKey($values, $key = null) {
+    if (gettype($values) === 'array') {
+        $valuesAsArray = array_map(function($element) {
+            if (isset($key) && !empty($key)) {
+                return $element[$key];
+            }
+            return $element;
+        }, $values);
+        return join("|", $valuesAsArray);
+    }
+}
+
+
+function pullOutLockerDescription($lockers)
+{
+    global $lockerDescription;
+    $array = [];
+
+    foreach ($lockers as $location => $lockersForLocation) {
+        foreach ($lockersForLocation as $key => $value) {
+            if ($value === 'yes') {
+                $array[] = $lockerDescription[$key];
+            }
+        }
+    }
+
+    return $array;
+}
+
+// TODO: test 'simple' variable product with only one attribute (test = foo | bar)
+
+
+add_action('wp_head', 'fe_rebuild_woocommerce');
+
+function fe_rebuild_woocommerce() {
+
+    remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
+
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+    add_action( 'woocommerce_single_product_summary', 'fe_template_single_title', 5 );
+    add_action ('woocommerce_single_product_summary', 'fe_opening_items_and_locations_html', 70);
+
+    // woocommerce_after_shop_loop_item
+    // add_action('woocommerce_after_shop_loop_item', 'fe_after_shop_loop_wrapper_close', 0);
+    // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10);
+    // might still not work
+    remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+    add_action('woocommerce_before_single_product_summary', 'fe_show_product_image', 20);
+
+    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs' , 10);
+    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display' , 15);
+    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products' , 20);
+    // * @hooked woocommerce_output_product_data_tabs - 10
+    // * @hooked woocommerce_upsell_display - 15
+    // * @hooked woocommerce_output_related_products - 20
+
+    // add_action ('woocommerce_after_single_product', 'fe_opening_items_and_locations_html', 20);
+    add_action ('woocommerce_after_single_product', 'fe_locker_info_html', 30);
+
+    // include user infos template
+    // do that in custom theme child template
+    // add_action('woocommerce_checkout_shipping', 'fe_checkout_template_per_product', 10);
+    add_action('include_custom_user_infos', 'fe_checkout_template_per_product', 10);
+}
+
+// TODO: add option lockerdescription

@@ -1,0 +1,85 @@
+.margin-next {
+  margin-bottom: 1rem; }
+
+.wrapper__title {
+  text-align: center;
+  color: #fff;
+  background-color: #253746;
+  padding: 15px;
+  font-weight: bold;
+  margin: 1em 0; }
+  .wrapper__title--warning {
+    background-color: #db0000; }
+
+.festivals__past {
+  display: flex; }
+  .festivals__past--single {
+    max-width: 25%; }
+    .festivals__past--single-title {
+      text-align: center; }
+
+.card {
+  flex: 1; }
+  .card ul {
+    list-style-type: none;
+    margin: 0; }
+  .card__container {
+    display: flex; }
+  .card__title {
+    text-align: center; }
+  .card.locker_infos {
+    background-color: #253746;
+    padding: 10px; }
+    .card.locker_infos .card__title {
+      background-color: #a0ce4e; }
+    .card.locker_infos .card__body {
+      background-color: #fff; }
+      .card.locker_infos .card__body--description {
+        padding: 15px; }
+        .card.locker_infos .card__body--description:not(:last-of-type) {
+          border-bottom: 1px solid #253746; }
+    .card.locker_infos:not(:last-of-type) {
+      margin-right: 20px; }
+
+.banner__wrapper {
+  margin-bottom: 1em;
+  position: relative; }
+
+.banner__text {
+  width: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  text-align: center;
+  font-size: 1.5em; }
+  .banner__text--wrapper {
+    background-color: rgba(87, 87, 87, 0.4);
+    color: #fff;
+    font-weight: bold;
+    padding: 15px; }
+
+body.woocommerce .storefront-full-width-content.single-product div.product .summary {
+  width: 100%; }
+
+.storefront-full-width-content.single-product div#main div.product .summary {
+  width: 100%; }
+
+.storefront-full-width-content.single-product div.product .summary {
+  width: 100%; }
+
+.storefront-full-width-content.single-product div.product .summary {
+  width: 100% !important;
+  float: unset !important; }
+
+.product_title.entry-title {
+  text-align: center;
+  color: #fff;
+  background-color: #253746;
+  padding: 15px;
+  font-weight: bold; }
+
+.single-product-form-wrapper {
+  display: flex; }
+  .single-product-form-wrapper > * {
+    flex: 1; }

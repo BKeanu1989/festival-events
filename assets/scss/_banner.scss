@@ -1,0 +1,24 @@
+.banner {
+    
+    &__wrapper {
+        margin-bottom: 1em;
+        position: relative;
+    }
+
+    &__text{
+        width: 80%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%);
+        text-align: center;
+        font-size: 1.5em;
+
+        &--wrapper{
+            background-color: rgba(87, 87, 87, 0.4);
+            color: $white;
+            font-weight: bold;
+            padding: 15px;
+        }
+    }
+}

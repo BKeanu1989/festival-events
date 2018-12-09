@@ -1,0 +1,26 @@
+.wrapper {
+    &__title {
+        text-align: center;
+        color: $white;
+        background-color: $blackBG;
+        padding: 15px;
+        font-weight: bold;
+        margin: 1em 0;
+
+        &--warning{
+            background-color: $warning;
+        }
+    }
+}
+
+.festivals__past {
+    display: flex;
+
+    &--single{
+        max-width: 25%;
+        &-title{
+            text-align: center;
+        }
+    }
+}
+
