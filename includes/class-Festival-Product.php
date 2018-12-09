@@ -726,8 +726,8 @@ function fe_auto_add_product_attributes( $post_id, $post, $update  ) {
     
         ## --- The Settings for your product attributes --- ##
     
-        $visible   = ''; // can be: '' or '1'
-        $variation = ''; // can be: '' or '1'
+        $visible   = '1'; // can be: '' or '1'
+        $variation = '1'; // can be: '' or '1'
     
         ## --- The code --- ##
     
@@ -746,7 +746,7 @@ function fe_auto_add_product_attributes( $post_id, $post, $update  ) {
             $attribute_id = $attribute->attribute_id;
             
             // Get all term Ids values for the current product attribute (array)
-            $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids'));
+            $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
     
             // Get an empty instance of the WC_Product_Attribute object
             $product_attribute = new WC_Product_Attribute();
