@@ -358,8 +358,23 @@ function woo_callback_populate($post_id)
             saveProductAttributes($post_id);
             // setProductAttributes($post_id, $attributes);
             $parent_id = $post_id;
-            $posted_lockers = $_POST['_lockers'];
-            $festivalLocations = setupLocations($_POST['_festival_locations']);
+            // $posted_lockers = $_POST['_lockers'];
+            // $festivalLocations = setupLocations($_POST['_festival_locations']);
+
+            $variation_data =  array(
+                'attributes' => array(
+                    'lockers'  => 'M',
+                    'timeframes' => 'Full Festival',
+                    'locations' => 'Center'
+                ),
+                'sku'           => '',
+                'regular_price' => '22.00',
+                'sale_price'    => '',
+                'stock_qty'     => 10,
+            );
+
+            create_product_variation($parent_id, $variation_data);
+
         }
     } catch (Exception $e) {
         error_log(print_r($e->getMessage()));
@@ -449,8 +464,12 @@ function create_product_variation($product_id, $variation_data)
             wp_set_post_terms($product_id, $term_name, $taxonomy, true);
         }
 
+        //
+        $post_term_names_new = wp_get_post_terms($product_id, $taxonomy, array('fields' => 'names'));
+
         // Set/save the attribute data in the product variation
-        update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_slug);
+        // update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_slug);
+        update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_name);
     }
 
     ## Set/save all other data
@@ -528,7 +547,8 @@ function setProductAttributes($post_id)
     $lockerValues = pullOutLockerDescription($reformatedLockers);
     $uniqueLockers = array_unique($lockerValues);
     $arrays["lockers"] = [];
-    $arrays["lockers"]["name"] = "Schließfächer";
+    // $arrays["lockers"]["name"] = "Schließfächer";
+    $arrays["lockers"]["name"] = "Lockers";
     $arrays["lockers"]["value"] = implode('|', $uniqueLockers);
     $arrays["lockers"]["position"] = 2;
     $arrays["lockers"]["is_visible"] = 1;
@@ -536,16 +556,18 @@ function setProductAttributes($post_id)
     $arrays['lockers']["is_taxonomy"] = 0;
 
 
-    $arrays["timeframe"] = [];
-    $arrays["timeframe"]["name"] = "Dauer";
-    $arrays["timeframe"]["value"] = "Full Festival";
-    $arrays["timeframe"]["position"] = 1;
-    $arrays["timeframe"]["is_visible"] = 1;
-    $arrays["timeframe"]["is_variation"] = 1;
-    $arrays['timeframe']["is_taxonomy"] = 0;
+    $arrays["timeframes"] = [];
+    $arrays["timeframes"]["name"] = "Timeframes";
+    // $arrays["timeframes"]["name"] = "Dauer";
+    $arrays["timeframes"]["value"] = "Full Festival";
+    $arrays["timeframes"]["position"] = 1;
+    $arrays["timeframes"]["is_visible"] = 1;
+    $arrays["timeframes"]["is_variation"] = 1;
+    $arrays['timeframes']["is_taxonomy"] = 0;
 
     $arrays["locations"] = [];
-    $arrays["locations"]["name"] = "Standort";
+    // $arrays["locations"]["name"] = "Standort";
+    $arrays["locations"]["name"] = "Locations";
     $arrays["locations"]["value"] = implode('|',$locations);
     $arrays["locations"]["position"] = 0;
     $arrays["locations"]["is_visible"] = 1;
@@ -653,3 +675,15 @@ function fe_rebuild_woocommerce() {
 }
 
 // TODO: add option lockerdescription
+
+
+// $variation_data =  array(
+//     'attributes' => array(
+//         'size'  => 'M',
+//         'color' => 'Green',
+//     ),
+//     'sku'           => '',
+//     'regular_price' => '22.00',
+//     'sale_price'    => '',
+//     'stock_qty'     => 10,
+// );
