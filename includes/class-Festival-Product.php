@@ -201,7 +201,7 @@ function woo_save_locations($post_id)
     }
 }
 
-$lockerDescription = ["", "M", "M HV", "L", "L HV", "XL", "XL HV"];
+$lockerDescription = ["", "M", "M High-Voltage", "L", "L High-Voltage", "XL", "XL High-Voltage"];
 
 // TODO: add oeffnungszeiten foreach locations
 
