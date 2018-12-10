@@ -352,32 +352,46 @@ function woo_display_populate()
  * 
  * Displays input fields foreach unique locker if variations are present
  * 
+ * 
+ * Notes:
+ *  - period__attributes: Full Festival at least. If array is bigger > 1 -> turn it into daily
  * @source: of truth:
  *  - variations
- * 
+ * - 'Full Festival'
  * 
  */
 function woo_display_populate_price()
 {
     global $post_id, $thepostid, $wpdb;
 
+    $productIsParent = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}posts WHERE post_parent = {$thepostid}");
     $lockers = get_post_meta($thepostid, '_lockers', true);
-
-    $variationsQuery = $wpdb->prepare("SELECT {$wpdb->prefix}posts.*, {$wpdb->prefix}postmeta.* FROM {$wpdb->prefix}posts JOIN {$wpdb->prefix}postmeta ON {$wpdb->prefix}posts.ID = {$wpdb->prefix}postmeta.post_id AND {$wpdb->prefix}postmeta.meta_key = 'attribute_schliessfaecher' WHERE post_parent = %d", $post_id);
-    $variations = $wpdb->get_results($variationsQuery, ARRAY_A);
     
-    $uniqueLockers = array_unique(array_column($variations, 'meta_value'));
+    $product = new WC_Product_Variable($thepostid);
+    $locker__attributes = array_map('trim', explode(',',$product->get_attribute('pa_locker')));
+    $period__attributes = array_unique(array_map(function($x) {
+        if ($x === 'Full Festival') {
+            return $x;
+        } else {
+            return 'Daily';
+        }
+    }, array_map('trim', explode(',',$product->get_attribute('pa_period')))));
 
-    if (!empty($variations)) {
-        foreach($uniqueLockers AS $key => $variation) {
-            woocommerce_wp_text_input([
-                'id' => '_schließfaecher_' . $variation,
-                'label' => __('Preis für ', 'festival-events') . $variation,
-                'data_type' => 'decimal',
-                'custom_attributes' => ['data-lockertype' => $variation, 'step' => '0.01', 'min' => '0.01'],
-                'type' => 'number',
-                'value' => '9.00'
-            ]);
+    
+
+    if (!empty($productIsParent)) {
+        foreach($period__attributes AS $key2 => $period) {
+            echo "<h3>$period</h3>";
+            foreach($locker__attributes AS $key => $variation) {
+                woocommerce_wp_text_input([
+                    'id' => '_schließfaecher_' . strtolower(str_replace(' ', '',$variation)),
+                    'label' => __('Preis für ', 'festival-events') . $variation,
+                    'data_type' => 'decimal',
+                    'custom_attributes' => ['data-lockertype' => $variation, 'step' => '0.01', 'min' => '0.01', 'data-period' => $period],
+                    'type' => 'number',
+                    'value' => '9.00'
+                ]);
+            }
         }
         echo '<button id="trigger_populate_prices" type="button" class="button is-primary">Füge Preise Hinzu</button>';
     } 
