@@ -87,20 +87,8 @@ class PriceSetter {
 }
 
 function fe_auto_add_product_atts() {
-    console.log("POSTID", localizedVars.postID);
-    jQuery.ajax({
-        url: ajaxurl,
-        data: {
-            'action': 'fe_set_product_atts',
-            // 'data': JSON.stringify()
-            'data': {ID: localizedVars.postID}
-        },
-        success: function(data) {
-            console.log(data);
-        },
-        error: function(err) {
-            console.log(err);
-        }
-    });
+
 }
+
+
 
