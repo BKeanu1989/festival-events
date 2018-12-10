@@ -192,6 +192,12 @@ function woo_save_locations($post_id)
     //
     if (!count($festivalLocations) == 0) {
         update_post_meta($post_id, '_festival_locations', $festivalLocations);
+        foreach ($festivalLocations as $key => $location) {
+            $term_exists = term_exists($location, 'pa_location');
+            if ($term_exists === 0 || $term_exists === null) {
+                wp_insert_term($location, 'pa_location');
+            }
+        }
     }
 }
 
