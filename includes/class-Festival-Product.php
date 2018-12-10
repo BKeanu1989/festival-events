@@ -266,6 +266,7 @@ function woo_display_lockers()
                     'id' => "_lockers[{$location}][{$lockerValue}]",
                     'label' => __($lockerDescription[$key], 'festival-events'),
                     'description' => __('vorhanden?', 'festival-events'),
+                    'custom_attributes' => ['data-lockertype' => $lockerDescription[$key]],
                     'value' => 'yes',
                     'cbvalue' => $value,
                 ));
