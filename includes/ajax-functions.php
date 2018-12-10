@@ -38,6 +38,8 @@ function fe_set_product_atts( ) {
         $position   = 0;  // Auto incremented position value starting at '0'
         $data_attributes       = array(); // initialising (empty array)
     
+        
+
         // Loop through each exiting product attribute
         foreach( $attributes as $attribute ){
             // Get the correct taxonomy for product attributes
