@@ -21,7 +21,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     
     // install ajax
     add_action('wp_ajax_fe_set_prices', 'fe_set_prices');
-    add_action('wp_ajax_fe_auto_add_product_atts', 'fe_auto_add_product_atts');
+    add_action('wp_ajax_fe_set_product_atts', 'fe_set_product_atts');
     fe_hook_save_custom_fields();
 }
 
