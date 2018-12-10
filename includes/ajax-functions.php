@@ -4,6 +4,7 @@ defined('ABSPATH') || exit;
 
 function fe_set_prices() {
     if (isset($_REQUEST)) {
+        
         $data = $_REQUEST["data"];
 
         $ID = $data["ID"];
