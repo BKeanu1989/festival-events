@@ -4,19 +4,21 @@ variationsTab = document.querySelector('.variations_tab');
 triggerPopulateButton = document.querySelector('#trigger_populate_prices');
 variationsWrapper = document.querySelector('#variable_product_options_inner > div.woocommerce_variations');
 
-triggerPopulateButton.addEventListener('click', () => {
-    console.log("populate prices!!!");
+
+if (triggerPopulateButton) {
+    triggerPopulateButton.addEventListener('click', () => {
+        console.log("populate prices!!!");
+        console.log(variationsWrapper);
+    
+        let priceSetter = new PriceSetter(variationsWrapper);
+        if ((variationsWrapper.querySelectorAll('.woocommerce_variation')).length == 0) {
+            priceSetter.installObserver();
+        } else {
+            priceSetter.populatePrices();
+        }
+    })
     console.log(variationsWrapper);
-
-    let priceSetter = new PriceSetter(variationsWrapper);
-    if ((variationsWrapper.querySelectorAll('.woocommerce_variation')).length == 0) {
-        priceSetter.installObserver();
-    } else {
-        priceSetter.populatePrices();
-    }
-})
-
-console.log(variationsWrapper);
+}
 
 class PriceSetter {
     constructor(variationsWrapper) {
@@ -85,28 +87,6 @@ class PriceSetter {
 }
 
 
+function fe_auto_add_product_atts() {
 
-
-
-
-
-
-
-
-
-function simulateClick(element) {
-    var event = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: true
-    });
-    // var cb = document.getElementById('checkbox'); 
-    let clicked = element.dispatchEvent(event);
-    if (clicked) {
-        alert("not cancelled");
-        // A handler called preventDefault.
-    } else {
-        // None of the handlers called preventDefault.
-        alert("cancelled");
-    }
 }

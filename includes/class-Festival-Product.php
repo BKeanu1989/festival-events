@@ -21,6 +21,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     
     // install ajax
     add_action('wp_ajax_fe_set_prices', 'fe_set_prices');
+
+    add_action('wp_ajax_fe_set_product_atts', 'fe_set_product_atts');
     fe_hook_save_custom_fields();
 }
 
@@ -66,8 +68,9 @@ function hasProductAttributes()
  */
 function woo_display_festival_times()
 {
-    global $woocommerce;
 
+    global $woocommerce, $thepostid;
+    $enumerateDays = get_post_meta($thepostid, '_enumerate_days', true);
     echo '<div class="options_group">';
 
     woocommerce_wp_text_input(
@@ -92,6 +95,14 @@ function woo_display_festival_times()
         ]
     );
 
+
+    woocommerce_wp_checkbox(array(
+        'id' => "_enumerate_days",
+        'label' => __('Einzelne Tage:', 'festival-events'),
+        'description' => __('Willst du neben dem Full Festival Zeitraum auch die einzelnen Tage auflisten?', 'festival-events'),
+        'value' => (!empty($enumerateDays)) ? $enumerateDays : ''
+    ));
+
     echo '</div>';
 }
 
@@ -100,6 +111,8 @@ function woo_save_festival_times($post_id)
     // global $woocommerce;
     $festivalStart = $_POST['_festival_start'];
     $festivalEnd = $_POST['_festival_end'];
+
+    $enumerateDays = $_POST['_enumerate_days'];
     // add validation
     //
     if (!empty($festivalStart)) {
@@ -107,6 +120,19 @@ function woo_save_festival_times($post_id)
     }
     if (!empty($festivalEnd)) {
         update_post_meta($post_id, '_festival_end', esc_attr($festivalEnd));
+    }
+
+    if (!empty($enumerateDays)) {
+        update_post_meta($post_id, '_enumerate_days', esc_attr($enumerateDays));
+    }
+
+    if ('yes' === $enumerateDays) {
+        $days = enumerateDaysBetween($festivalStart, $festivalEnd, true);
+        foreach ($days as $key => $day) {
+            if (!term_exists($day, 'pa_period')) {
+                wp_insert_term($day, 'pa_period');
+            }
+        }
     }
 }
 
@@ -170,10 +196,16 @@ function woo_save_locations($post_id)
     //
     if (!count($festivalLocations) == 0) {
         update_post_meta($post_id, '_festival_locations', $festivalLocations);
+        foreach ($festivalLocations as $key => $location) {
+            $term_exists = term_exists($location, 'pa_location');
+            if ($term_exists === 0 || $term_exists === null) {
+                wp_insert_term($location, 'pa_location');
+            }
+        }
     }
 }
 
-$lockerDescription = ["", "M", "M HV", "L", "L HV", "XL", "XL HV"];
+$lockerDescription = ["", "M", "M High-Voltage", "L", "L High-Voltage", "XL", "XL High-Voltage"];
 
 // TODO: add oeffnungszeiten foreach locations
 
@@ -238,6 +270,8 @@ function woo_display_lockers()
                     'id' => "_lockers[{$location}][{$lockerValue}]",
                     'label' => __($lockerDescription[$key], 'festival-events'),
                     'description' => __('vorhanden?', 'festival-events'),
+
+                    'custom_attributes' => ['data-lockertype' => $lockerDescription[$key]],
                     'value' => 'yes',
                     'cbvalue' => $value,
                 ));
@@ -313,6 +347,16 @@ function woo_display_populate()
 
 }
 
+
+/**
+ * 
+ * Displays input fields foreach unique locker if variations are present
+ * 
+ * @source: of truth:
+ *  - variations
+ * 
+ * 
+ */
 function woo_display_populate_price()
 {
     global $post_id, $thepostid, $wpdb;
@@ -355,11 +399,27 @@ function woo_callback_populate($post_id)
             }
             
             $attributes = [];
-            saveProductAttributes($post_id);
+
+            // saveProductAttributes($post_id);
             // setProductAttributes($post_id, $attributes);
             $parent_id = $post_id;
-            $posted_lockers = $_POST['_lockers'];
-            $festivalLocations = setupLocations($_POST['_festival_locations']);
+            // $posted_lockers = $_POST['_lockers'];
+            // $festivalLocations = setupLocations($_POST['_festival_locations']);
+
+            $variation_data =  array(
+                'attributes' => array(
+                    'lockers'  => 'M',
+                    'timeframes' => 'Full Festival',
+                    'locations' => 'Center'
+                ),
+                'sku'           => '',
+                'regular_price' => '22.00',
+                'sale_price'    => '',
+                'stock_qty'     => 10,
+            );
+            // working now with saveProductAttributes (in combination)
+            // create_product_variation($parent_id, $variation_data);
+            // fe_auto_add_product_attributes($post_id);
         }
     } catch (Exception $e) {
         error_log(print_r($e->getMessage()));
@@ -416,8 +476,9 @@ function create_product_variation($product_id, $variation_data)
 
     // Iterating through the variations attributes
     foreach ($variation_data['attributes'] as $attribute => $term_name) {
-        // $taxonomy = 'pa_' . $attribute; // The attribute taxonomy
-        $taxonomy = $attribute; // The attribute taxonomy
+
+        $taxonomy = 'pa_' . $attribute; // The attribute taxonomy
+        // $taxonomy = $attribute; // The attribute taxonomy
 
         // If taxonomy doesn't exists we create it (Thanks to Carl F. Corneil)
         if (!taxonomy_exists($taxonomy)) {
@@ -428,7 +489,8 @@ function create_product_variation($product_id, $variation_data)
                     'hierarchical' => false,
                     'label' => ucfirst($taxonomy),
                     'query_var' => true,
-                    'rewrite' => array('slug' => '$taxonomy'), // The base slug
+
+                    'rewrite' => array('slug' => $taxonomy), // The base slug
                 )
             );
         }
@@ -449,8 +511,15 @@ function create_product_variation($product_id, $variation_data)
             wp_set_post_terms($product_id, $term_name, $taxonomy, true);
         }
 
-        // Set/save the attribute data in the product variation
+
+        //
+        $post_term_names_new = wp_get_post_terms($product_id, $taxonomy, array('fields' => 'names'));
+
+        // if attribute is prepended with pa
         update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_slug);
+        // Set/save the attribute data in the product variation
+        // update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_slug);
+        // update_post_meta($variation_id, 'attribute_' . $taxonomy, $term_name);
     }
 
     ## Set/save all other data
@@ -528,24 +597,29 @@ function setProductAttributes($post_id)
     $lockerValues = pullOutLockerDescription($reformatedLockers);
     $uniqueLockers = array_unique($lockerValues);
     $arrays["lockers"] = [];
-    $arrays["lockers"]["name"] = "Schließfächer";
+
+    // $arrays["lockers"]["name"] = "Schließfächer";
+    $arrays["lockers"]["name"] = "Lockers";
     $arrays["lockers"]["value"] = implode('|', $uniqueLockers);
     $arrays["lockers"]["position"] = 2;
     $arrays["lockers"]["is_visible"] = 1;
     $arrays["lockers"]["is_variation"] = 1;
-    $arrays['lockers']["is_taxonomy"] = 0;
+
+    $arrays["lockers"]["is_taxonomy"] = 0;
 
 
-    $arrays["timeframe"] = [];
-    $arrays["timeframe"]["name"] = "Dauer";
-    $arrays["timeframe"]["value"] = "Full Festival";
-    $arrays["timeframe"]["position"] = 1;
-    $arrays["timeframe"]["is_visible"] = 1;
-    $arrays["timeframe"]["is_variation"] = 1;
-    $arrays['timeframe']["is_taxonomy"] = 0;
+    $arrays["timeframes"] = [];
+    $arrays["timeframes"]["name"] = "Timeframes";
+    // $arrays["timeframes"]["name"] = "Dauer";
+    $arrays["timeframes"]["value"] = "Full Festival";
+    $arrays["timeframes"]["position"] = 1;
+    $arrays["timeframes"]["is_visible"] = 1;
+    $arrays["timeframes"]["is_variation"] = 1;
+    $arrays["timeframes"]["is_taxonomy"] = 0;
 
     $arrays["locations"] = [];
-    $arrays["locations"]["name"] = "Standort";
+    // $arrays["locations"]["name"] = "Standort";
+    $arrays["locations"]["name"] = "Locations";
     $arrays["locations"]["value"] = implode('|',$locations);
     $arrays["locations"]["position"] = 0;
     $arrays["locations"]["is_visible"] = 1;
@@ -652,4 +726,171 @@ function fe_rebuild_woocommerce() {
     add_action('include_custom_user_infos', 'fe_checkout_template_per_product', 10);
 }
 
+
 // TODO: add option lockerdescription
+
+
+// $variation_data =  array(
+//     'attributes' => array(
+//         'size'  => 'M',
+//         'color' => 'Green',
+//     ),
+//     'sku'           => '',
+//     'regular_price' => '22.00',
+//     'sale_price'    => '',
+//     'stock_qty'     => 10,
+// );
+
+
+// wp_safeboxen_term_taxonomy
+// wp insert new term
+// _pa_...
+
+
+// add new attribute taxonomy
+// setting transient is necessary to update product attributes
+// $attribute_taxonomies = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name != '' ORDER BY attribute_name ASC;" );
+// set_transient( 'wc_attribute_taxonomies', $attribute_taxonomies );
+
+// $attribute_taxonomies = array_filter( $attribute_taxonomies  ) ;
+
+
+// not working?!?!??!
+// function fe_auto_add_product_attributes( $post_id ) {
+//     // if (isset($_POST['_populate_attributes'])) {
+
+//         ## --- Checking --- ##
+    
+//         // if ( $post->post_type != 'product') return; // Only products
+    
+//         // // Exit if it's an autosave
+//         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+//         //     return $post_id;
+    
+//         // // Exit if it's an update
+//         // // if( $update )
+//         // //     return $post_id;
+    
+//         // // Exit if user is not allowed
+//         // if ( ! current_user_can( 'edit_product', $post_id ) )
+//         //     return $post_id;
+    
+//         ## --- The Settings for your product attributes --- ##
+    
+//         $visible   = '1'; // can be: '' or '1'
+//         $variation = '1'; // can be: '' or '1'
+    
+//         ## --- The code --- ##
+    
+//         // Get all existing product attributes
+//         global $wpdb;
+//         $attributes = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies" );
+    
+//         $position   = 0;  // Auto incremented position value starting at '0'
+//         $data       = array(); // initialising (empty array)
+    
+//         // Loop through each exiting product attribute
+//         foreach( $attributes as $attribute ){
+//             // Get the correct taxonomy for product attributes
+//             $taxonomy = 'pa_'.$attribute->attribute_name;
+//             // $taxonomy = $attribute->attribute_name;
+//             $attribute_id = $attribute->attribute_id;
+            
+//             // Get all term Ids values for the current product attribute (array)
+//             $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
+    
+//             // Get an empty instance of the WC_Product_Attribute object
+//             $product_attribute = new WC_Product_Attribute();
+    
+//             // Set the related data in the WC_Product_Attribute object
+//             $product_attribute->set_id( $attribute_id );
+//             $product_attribute->set_name( $taxonomy );
+//             $product_attribute->set_options( $term_ids );
+//             $product_attribute->set_position( $position );
+//             $product_attribute->set_visible( $visible );
+//             $product_attribute->set_variation( $variation );
+    
+//             // Add the product WC_Product_Attribute object in the data array
+//             $data[$taxonomy] = $product_attribute;
+    
+//             $position++; // Incrementing position
+//         }
+//         // Get an instance of the WC_Product object
+//         $product = wc_get_product( $post_id );
+    
+//         // Set the array of WC_Product_Attribute objects in the product
+//         $product->set_attributes( $data );
+    
+//         $product->save(); // Save the product
+//     // }
+// }
+
+// add_action( 'save_post', 'fe_auto_add_product_attributes_save_post', 50, 3 );
+// function fe_auto_add_product_attributes_save_post( $post_id, $post, $update ) {
+//     // if (isset($_POST['_populate_attributes'])) {
+
+//         ## --- Checking --- ##
+    
+//         if ( $post->post_type != 'product') return; // Only products
+    
+//         // Exit if it's an autosave
+//         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+//             return $post_id;
+    
+//         // Exit if it's an update
+//         // if( $update )
+//         //     return $post_id;
+    
+//         // Exit if user is not allowed
+//         if ( ! current_user_can( 'edit_product', $post_id ) )
+//             return $post_id;
+    
+//         ## --- The Settings for your product attributes --- ##
+    
+//         $visible   = '1'; // can be: '' or '1'
+//         $variation = '1'; // can be: '' or '1'
+    
+//         ## --- The code --- ##
+    
+//         // Get all existing product attributes
+//         global $wpdb;
+//         $attributes = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies" );
+    
+//         $position   = 0;  // Auto incremented position value starting at '0'
+//         $data       = array(); // initialising (empty array)
+    
+//         // Loop through each exiting product attribute
+//         foreach( $attributes as $attribute ){
+//             // Get the correct taxonomy for product attributes
+//             $taxonomy = 'pa_'.$attribute->attribute_name;
+//             // $taxonomy = $attribute->attribute_name;
+//             $attribute_id = $attribute->attribute_id;
+            
+//             // Get all term Ids values for the current product attribute (array)
+//             $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
+    
+//             // Get an empty instance of the WC_Product_Attribute object
+//             $product_attribute = new WC_Product_Attribute();
+    
+//             // Set the related data in the WC_Product_Attribute object
+//             $product_attribute->set_id( $attribute_id );
+//             $product_attribute->set_name( $taxonomy );
+//             $product_attribute->set_options( $term_ids );
+//             $product_attribute->set_position( $position );
+//             $product_attribute->set_visible( $visible );
+//             $product_attribute->set_variation( $variation );
+    
+//             // Add the product WC_Product_Attribute object in the data array
+//             $data[$taxonomy] = $product_attribute;
+    
+//             $position++; // Incrementing position
+//         }
+//         // Get an instance of the WC_Product object
+//         $product = wc_get_product( $post_id );
+    
+//         // Set the array of WC_Product_Attribute objects in the product
+//         $product->set_attributes( $data );
+    
+//         $product->save(); // Save the product
+//     // }
+// }
