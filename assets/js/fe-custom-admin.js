@@ -103,3 +103,4 @@ function fe_auto_add_product_atts() {
         }
     });
 }
+
