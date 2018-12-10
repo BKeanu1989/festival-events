@@ -20,7 +20,16 @@ function fe_set_prices() {
     }
 }
 
-
+/**
+ * This sets the given attributes via an ajax call
+ * data:
+ *  @param id $post_id
+ *  @param string $festivalStart
+ *  @param string $festivalEnd
+ *  @param bool $enumerateDays
+ * 
+ * @return void - reloads the page in success js callback
+ */
 function fe_set_product_atts( ) {
     if (isset($_REQUEST)) {
         try {
@@ -42,50 +51,18 @@ function fe_set_product_atts( ) {
             $attributes = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_name IN ('locker', 'period', 'location');" );
         
             list($lockerAttributes, $periodAttributes, $locationAttributes) = $attributes;
-            // $position   = 0;  // Auto incremented position value starting at '0'
+
+
             $data_attributes       = array(); // initialising (empty array)
-    
-            
             setDataForAttribute($data_attributes, $lockerAttributes, $lockers);
             setDataForPeriods($data_attributes, $periodAttributes, [$festivalStart, $festivalEnd, $enumerateDays]);
             setDataForAttribute($data_attributes, $locationAttributes, $locations);
 
-            // Loop through each exiting product attribute
-            // foreach( $attributes as $attribute ){
-            //     // Get the correct taxonomy for product attributes
-            //     $taxonomy = 'pa_'.$attribute->attribute_name;
-            //     // $taxonomy = $attribute->attribute_name;
-            //     $attribute_id = $attribute->attribute_id;
-                
-            //     // Get all term Ids values for the current product attribute (array)
-            //     $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
-        
-            //     // Get an empty instance of the WC_Product_Attribute object
-            //     $product_attribute = new WC_Product_Attribute();
-        
-            //     // Set the related data_attributes in the WC_Product_Attribute object
-            //     $product_attribute->set_id( $attribute_id );
-            //     $product_attribute->set_name( $taxonomy );
-            //     $product_attribute->set_options( $term_ids );
-            //     $product_attribute->set_position( $position );
-            //     $product_attribute->set_visible( $visible );
-            //     $product_attribute->set_variation( $variation );
-        
-            //     // Add the product WC_Product_Attribute object in the data_attributes array
-            //     $data_attributes[$taxonomy] = $product_attribute;
-        
-            //     $position++; // Incrementing position
-            // }
-            // Get an instance of the WC_Product object
             $product = wc_get_product( $post_id );
-        
-            // Set the array of WC_Product_Attribute objects in the product
-            // write_log("data attributes working");
-            // write_log($data_attributes);
+
             $product->set_attributes( $data_attributes );
         
             $saved = $product->save(); // Save the product
-            write_log($saved);
         } catch(Exception $e) {
             echo 'Exception: '. $e->getMessage();
             die;
@@ -132,11 +109,11 @@ function enumerateDaysBetween($start, $end, $includeEnd) {
 function setDataForAttribute(&$data_attributes, $attribute, $whiteListed) 
 {
     // TODO: make it 'nicer'
-    $position = 2;
+    $position = 0;
     $visible = 1;
     $variation = 1;
 
-    if ($attribute->attribute_name === 'pa_location') $position = 0;
+    if ($attribute->attribute_name === 'pa_location') $position = 2;
     // Get the correct taxonomy for product attributes
     $taxonomy = 'pa_'.$attribute->attribute_name;
     // $taxonomy = $attribute->attribute_name;
