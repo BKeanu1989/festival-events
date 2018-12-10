@@ -51,6 +51,10 @@ function fe_set_product_atts( ) {
             if ($enumerateDays) {
                 $whiteListed__Period = array_merge($whiteListed__Period, enumerateDaysBetween($festivalStart, $festivalEnd, true));
             }
+
+            fe_maybe_createTerm('pa_period', $whiteListed__Period);
+            fe_maybe_createTerm('pa_locker', $lockers);
+            fe_maybe_createTerm('pa_location', $locations);
             
 
             global $wpdb;
@@ -155,7 +159,6 @@ function setDataForAttribute(&$data_attributes, $attribute, $whiteListed)
 
 function setDataForPeriods(&$data_attributes, $attribute, $whiteListed = []) {
 
-    // $whiteListed[] = 'Full Festival';
     $visible = 1;
     $variation = 1;
 
@@ -187,7 +190,11 @@ function setDataForPeriods(&$data_attributes, $attribute, $whiteListed = []) {
     $data_attributes[$taxonomy] = $product_attribute;
 }
 
-
+/**
+ * Creates Terms if not yet existent
+ * @param string $taxonomy 
+ * @param array $terms          | single term names
+ */
 function fe_maybe_createTerm($taxonomy, $terms) {
     foreach($terms AS $key => $term) {
         if (!term_exists($term, $taxonomy)) {
