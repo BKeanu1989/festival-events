@@ -55,7 +55,6 @@ function fe_set_product_atts( ) {
             fe_maybe_createTerm('pa_period', $whiteListed__Period);
             fe_maybe_createTerm('pa_locker', $lockers);
             fe_maybe_createTerm('pa_location', $locations);
-            
 
             global $wpdb;
             $attributes = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_name IN ('locker', 'period', 'location');" );
@@ -197,7 +196,8 @@ function setDataForPeriods(&$data_attributes, $attribute, $whiteListed = []) {
  */
 function fe_maybe_createTerm($taxonomy, $terms) {
     foreach($terms AS $key => $term) {
-        if (!term_exists($term, $taxonomy)) {
+        $term_exists = term_exists($term, $taxonomy);
+        if ($term_exists === 0 || $term_exists === null) {
             wp_insert_term($term, $taxonomy);
         }
     }
