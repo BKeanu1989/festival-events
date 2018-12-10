@@ -4,19 +4,21 @@ variationsTab = document.querySelector('.variations_tab');
 triggerPopulateButton = document.querySelector('#trigger_populate_prices');
 variationsWrapper = document.querySelector('#variable_product_options_inner > div.woocommerce_variations');
 
-triggerPopulateButton.addEventListener('click', () => {
-    console.log("populate prices!!!");
+if (triggerPopulateButton) {
+    triggerPopulateButton.addEventListener('click', () => {
+        console.log("populate prices!!!");
+        console.log(variationsWrapper);
+    
+        let priceSetter = new PriceSetter(variationsWrapper);
+        if ((variationsWrapper.querySelectorAll('.woocommerce_variation')).length == 0) {
+            priceSetter.installObserver();
+        } else {
+            priceSetter.populatePrices();
+        }
+    })
     console.log(variationsWrapper);
+}
 
-    let priceSetter = new PriceSetter(variationsWrapper);
-    if ((variationsWrapper.querySelectorAll('.woocommerce_variation')).length == 0) {
-        priceSetter.installObserver();
-    } else {
-        priceSetter.populatePrices();
-    }
-})
-
-console.log(variationsWrapper);
 
 class PriceSetter {
     constructor(variationsWrapper) {
@@ -82,4 +84,22 @@ class PriceSetter {
         })
         return lockerPrices;
     }
+}
+
+function fe_auto_add_product_atts() {
+    console.log("POSTID", localizedVars.postID);
+    jQuery.ajax({
+        url: ajaxurl,
+        data: {
+            'action': 'fe_set_product_atts',
+            // 'data': JSON.stringify()
+            'data': {ID: localizedVars.postID}
+        },
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
 }
