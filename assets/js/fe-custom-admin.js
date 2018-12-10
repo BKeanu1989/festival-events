@@ -13,8 +13,10 @@ if (triggerPopulateButton) {
         let priceSetter = new PriceSetter(variationsWrapper);
         if ((variationsWrapper.querySelectorAll('.woocommerce_variation')).length == 0) {
             priceSetter.installObserver();
+            console.log(priceSetter.variations);
         } else {
             priceSetter.populatePrices();
+            console.log(priceSetter.variations);
         }
     })
     console.log(variationsWrapper);
@@ -32,12 +34,21 @@ class PriceSetter {
         this.variations.forEach($variation => {
             let lockerInfoOfVariation;
             console.log($variation);
-            let lockerOfVariation = $variation.querySelector('select[name^="attribute_schliessf"]');
+            let lockerOfVariation = $variation.querySelector('select[name^="attribute_pa_locker"]').value;
+            let periodOfVariation = ($variation.querySelector('select[name^="attribute_pa_period"]').value === 'Full Festival') ? 'Full Festival' : 'Daily';
+            // debugger;
             let lockerVariation_ID = $variation.querySelector('.remove_variation').getAttribute('rel');
             // find locker of variation lockerPrices
             this.lockerPrices.forEach((lockerInfo) => {
-                if (lockerInfo.lockerType === lockerOfVariation.value) {
+                // if (lockerInfo.lockerType === lockerOfVariation.value) {
+                if (lockerInfo.lockerType === lockerOfVariation) {
+                    console.log("LOCKERTYPE");
+
                     lockerInfoOfVariation = lockerInfo;
+                    console.log(lockerInfo.period, periodOfVariation);
+                    if (lockerInfo.period === periodOfVariation) {
+                        console.log("PERIOD");
+                    }
                 }
             })
 
@@ -79,6 +90,7 @@ class PriceSetter {
         priceInputs.forEach((x) => {
             let obj = {};
             obj.lockerType = x.dataset.lockertype;
+            obj.period = (x.dataset.period == 'Full Festival') ? 'Full Festival' : 'Daily';
             obj.price = x.value;
             lockerPrices.push(obj);
         })
