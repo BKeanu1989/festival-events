@@ -4,7 +4,6 @@ defined('ABSPATH') || exit;
 
 function fe_set_prices() {
     if (isset($_REQUEST)) {
-        write_log($_REQUEST);
         $data = $_REQUEST["data"];
 
         $ID = $data["ID"];
@@ -17,34 +16,15 @@ function fe_set_prices() {
         // finally workds ...
         update_post_meta($ID, '_regular_price', $price);
         update_post_meta($ID, '_price', $price);
-        write_log("ajax set prices!!!");
-        write_log($productVariation);
         die;
     }
 }
 
 
-function fe_auto_add_product_attributes_save_post( $post_id, $post, $update ) {
+function fe_set_product_atts( ) {
     if (isset($_REQUEST)) {
         $data = $_REQUEST["data"];
         $post_id = $data["ID"];
-        ## --- Checking --- ##
-    
-        if ( $post->post_type != 'product') return; // Only products
-    
-        // Exit if it's an autosave
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-            return $post_id;
-    
-        // Exit if it's an update
-        // if( $update )
-        //     return $post_id;
-    
-        // Exit if user is not allowed
-        if ( ! current_user_can( 'edit_product', $post_id ) )
-            return $post_id;
-    
-        ## --- The Settings for your product attributes --- ##
     
         $visible   = '1'; // can be: '' or '1'
         $variation = '1'; // can be: '' or '1'
@@ -92,4 +72,23 @@ function fe_auto_add_product_attributes_save_post( $post_id, $post, $update ) {
     
         $product->save(); // Save the product
     }
+}
+
+function enumerateDaysBetween($start, $end, $includeEnd) {
+    $enumeratedDays = [];
+
+    $start    = (new DateTime($start));
+    $end      = (new DateTime($end));
+    if ($includeEnd) {
+        $end->modify('+1 day');
+    }
+    $interval = DateInterval::createFromDateString('1 day');
+    $period   = new DatePeriod($start, $interval, $end);
+
+    
+    foreach ($period as $dt) {
+        $enumeratedDays[] = $dt->format("Y-m-d");
+    }
+
+    return $enumeratedDays;
 }
