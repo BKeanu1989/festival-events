@@ -6,8 +6,8 @@
     - add Full Festival
 
 ## 'first save' - not populated yet
-- [ ] add locations if not yet existent
-- [ ] add enumerated days to period if not yet existent
+- [x] add locations if not yet existent
+- [x] add enumerated days to period if not yet existent
 
 
 ## populate attributes
