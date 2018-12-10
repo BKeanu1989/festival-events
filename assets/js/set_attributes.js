@@ -6,6 +6,7 @@ class SetAttributes {
         this.$festivalStart;
         this.festivalEnd;
         this.$festivalEnd;
+        this.enumerateDays
 
         this.allLockers;
         this.$allLockers;
@@ -15,6 +16,8 @@ class SetAttributes {
     }
 
     setValues() {
+        this.enumerateDays = document.querySelector('[name="_enumerate_days"]').checked;
+
         this.$locations = document.querySelector('[name="_festival_locations"]');
         this.locations = this.$locations.value.trim().split(',');
         
@@ -39,7 +42,7 @@ class SetAttributes {
             data: {
                 'action': 'fe_set_product_atts',
                 // 'data': JSON.stringify()
-                'data': {ID: localizedVars.postID, Locations: this.locations, FestivalStart: this.festivalStart, FestivalEnd: this.festivalEnd, Lockers: this.lockers}
+                'data': {ID: localizedVars.postID, Locations: this.locations, EnumerateDays: this.enumerateDays, FestivalStart: this.festivalStart, FestivalEnd: this.festivalEnd, Lockers: this.lockers}
             },
             success: function(data) {
                 console.log(data);
@@ -51,4 +54,5 @@ class SetAttributes {
     }
 }
 
-let set_attributes = new SetAttributes();
+const SET_ATTRIBUTES = new SetAttributes();
+SET_ATTRIBUTES.ajaxCall();
