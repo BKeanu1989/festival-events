@@ -21,6 +21,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     
     // install ajax
     add_action('wp_ajax_fe_set_prices', 'fe_set_prices');
+    add_action('wp_ajax_fe_auto_add_product_atts', 'fe_auto_add_product_atts');
     fe_hook_save_custom_fields();
 }
 
@@ -66,8 +67,8 @@ function hasProductAttributes()
  */
 function woo_display_festival_times()
 {
-    global $woocommerce;
-
+    global $woocommerce, $thepostid;
+    $enumerateDays = get_post_meta($thepostid, '_enumerate_days', true);
     echo '<div class="options_group">';
 
     woocommerce_wp_text_input(
@@ -92,6 +93,13 @@ function woo_display_festival_times()
         ]
     );
 
+    woocommerce_wp_checkbox(array(
+        'id' => "_enumerate_days",
+        'label' => __('Einzelne Tage:', 'festival-events'),
+        'description' => __('Willst du neben dem Full Festival Zeitraum auch die einzelnen Tage auflisten?', 'festival-events'),
+        'value' => (!empty($enumerateDays)) ? $enumerateDays : ''
+    ));
+
     echo '</div>';
 }
 
@@ -100,6 +108,7 @@ function woo_save_festival_times($post_id)
     // global $woocommerce;
     $festivalStart = $_POST['_festival_start'];
     $festivalEnd = $_POST['_festival_end'];
+    $enumerateDays = $_POST['_enumerate_days'];
     // add validation
     //
     if (!empty($festivalStart)) {
@@ -107,6 +116,19 @@ function woo_save_festival_times($post_id)
     }
     if (!empty($festivalEnd)) {
         update_post_meta($post_id, '_festival_end', esc_attr($festivalEnd));
+    }
+
+    if (!empty($enumerateDays)) {
+        update_post_meta($post_id, '_enumerate_days', esc_attr($enumerateDays));
+    }
+
+    if ('yes' === $enumerateDays) {
+        $days = enumerateDaysBetween($festivalStart, $festivalEnd, true);
+        foreach ($days as $key => $day) {
+            if (!term_exists($day, 'pa_period')) {
+                wp_insert_term($day, 'pa_period');
+            }
+        }
     }
 }
 
@@ -313,6 +335,15 @@ function woo_display_populate()
 
 }
 
+/**
+ * 
+ * Displays input fields foreach unique locker if variations are present
+ * 
+ * @source: of truth:
+ *  - variations
+ * 
+ * 
+ */
 function woo_display_populate_price()
 {
     global $post_id, $thepostid, $wpdb;
