@@ -46,16 +46,20 @@ function fe_set_product_atts( ) {
             $visible   = '1';
             $variation = '1';
         
-        
+            $whiteListed__Period = ['Full Festival'];
+
+            if ($enumerateDays) {
+                $whiteListed__Period = array_merge($whiteListed__Period, enumerateDaysBetween($festivalStart, $festivalEnd, true));
+            }
+            
+
             global $wpdb;
             $attributes = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_name IN ('locker', 'period', 'location');" );
-        
             list($lockerAttributes, $periodAttributes, $locationAttributes) = $attributes;
-
 
             $data_attributes       = array(); // initialising (empty array)
             setDataForAttribute($data_attributes, $lockerAttributes, $lockers);
-            setDataForPeriods($data_attributes, $periodAttributes, [$festivalStart, $festivalEnd, $enumerateDays]);
+            setDataForPeriods($data_attributes, $periodAttributes, $whiteListed__Period);
             setDataForAttribute($data_attributes, $locationAttributes, $locations);
 
             $product = wc_get_product( $post_id );
@@ -149,22 +153,16 @@ function setDataForAttribute(&$data_attributes, $attribute, $whiteListed)
  * @param array $dateInfo         | array (start,end,enumerate)
  */
 
-function setDataForPeriods(&$data_attributes, $attribute, $dateInfo) {
+function setDataForPeriods(&$data_attributes, $attribute, $whiteListed = []) {
 
-    $whiteListed = [];
-    $whiteListed[] = 'Full Festival';
+    // $whiteListed[] = 'Full Festival';
     $visible = 1;
     $variation = 1;
 
-    list($festivalStart, $festivalEnd, $enumerateDays) = $dateInfo;
     $position = 1;
     $taxonomy = 'pa_'.$attribute->attribute_name;
     // $taxonomy = $attribute->attribute_name;
     $attribute_id = $attribute->attribute_id;
-    
-    if ($enumerateDays) {
-        $whiteListed = array_merge($whiteListed, enumerateDaysBetween($festivalStart, $festivalEnd, true));
-    }
 
     // Get all term Ids values for the current product attribute (array)
     $term_ids = get_terms(array('taxonomy' => $taxonomy, 'hide_empty' => false));
@@ -187,4 +185,13 @@ function setDataForPeriods(&$data_attributes, $attribute, $dateInfo) {
 
     // Add the product WC_Product_Attribute object in the data_attributes array
     $data_attributes[$taxonomy] = $product_attribute;
+}
+
+
+function fe_maybe_createTerm($taxonomy, $terms) {
+    foreach($terms AS $key => $term) {
+        if (!term_exists($term, $taxonomy)) {
+            wp_insert_term($term, $taxonomy);
+        }
+    }
 }
