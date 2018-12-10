@@ -411,7 +411,7 @@ function woo_callback_populate($post_id)
             );
             // working now with saveProductAttributes (in combination)
             // create_product_variation($parent_id, $variation_data);
-            fe_auto_add_product_attributes($post_id);
+            // fe_auto_add_product_attributes($post_id);
         }
     } catch (Exception $e) {
         error_log(print_r($e->getMessage()));
@@ -742,141 +742,141 @@ function fe_rebuild_woocommerce() {
 
 
 // not working?!?!??!
-function fe_auto_add_product_attributes( $post_id ) {
-    // if (isset($_POST['_populate_attributes'])) {
+// function fe_auto_add_product_attributes( $post_id ) {
+//     // if (isset($_POST['_populate_attributes'])) {
 
-        ## --- Checking --- ##
+//         ## --- Checking --- ##
     
-        // if ( $post->post_type != 'product') return; // Only products
+//         // if ( $post->post_type != 'product') return; // Only products
     
-        // // Exit if it's an autosave
-        // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-        //     return $post_id;
+//         // // Exit if it's an autosave
+//         // if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+//         //     return $post_id;
     
-        // // Exit if it's an update
-        // // if( $update )
-        // //     return $post_id;
+//         // // Exit if it's an update
+//         // // if( $update )
+//         // //     return $post_id;
     
-        // // Exit if user is not allowed
-        // if ( ! current_user_can( 'edit_product', $post_id ) )
-        //     return $post_id;
+//         // // Exit if user is not allowed
+//         // if ( ! current_user_can( 'edit_product', $post_id ) )
+//         //     return $post_id;
     
-        ## --- The Settings for your product attributes --- ##
+//         ## --- The Settings for your product attributes --- ##
     
-        $visible   = '1'; // can be: '' or '1'
-        $variation = '1'; // can be: '' or '1'
+//         $visible   = '1'; // can be: '' or '1'
+//         $variation = '1'; // can be: '' or '1'
     
-        ## --- The code --- ##
+//         ## --- The code --- ##
     
-        // Get all existing product attributes
-        global $wpdb;
-        $attributes = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies" );
+//         // Get all existing product attributes
+//         global $wpdb;
+//         $attributes = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies" );
     
-        $position   = 0;  // Auto incremented position value starting at '0'
-        $data       = array(); // initialising (empty array)
+//         $position   = 0;  // Auto incremented position value starting at '0'
+//         $data       = array(); // initialising (empty array)
     
-        // Loop through each exiting product attribute
-        foreach( $attributes as $attribute ){
-            // Get the correct taxonomy for product attributes
-            $taxonomy = 'pa_'.$attribute->attribute_name;
-            // $taxonomy = $attribute->attribute_name;
-            $attribute_id = $attribute->attribute_id;
+//         // Loop through each exiting product attribute
+//         foreach( $attributes as $attribute ){
+//             // Get the correct taxonomy for product attributes
+//             $taxonomy = 'pa_'.$attribute->attribute_name;
+//             // $taxonomy = $attribute->attribute_name;
+//             $attribute_id = $attribute->attribute_id;
             
-            // Get all term Ids values for the current product attribute (array)
-            $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
+//             // Get all term Ids values for the current product attribute (array)
+//             $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
     
-            // Get an empty instance of the WC_Product_Attribute object
-            $product_attribute = new WC_Product_Attribute();
+//             // Get an empty instance of the WC_Product_Attribute object
+//             $product_attribute = new WC_Product_Attribute();
     
-            // Set the related data in the WC_Product_Attribute object
-            $product_attribute->set_id( $attribute_id );
-            $product_attribute->set_name( $taxonomy );
-            $product_attribute->set_options( $term_ids );
-            $product_attribute->set_position( $position );
-            $product_attribute->set_visible( $visible );
-            $product_attribute->set_variation( $variation );
+//             // Set the related data in the WC_Product_Attribute object
+//             $product_attribute->set_id( $attribute_id );
+//             $product_attribute->set_name( $taxonomy );
+//             $product_attribute->set_options( $term_ids );
+//             $product_attribute->set_position( $position );
+//             $product_attribute->set_visible( $visible );
+//             $product_attribute->set_variation( $variation );
     
-            // Add the product WC_Product_Attribute object in the data array
-            $data[$taxonomy] = $product_attribute;
+//             // Add the product WC_Product_Attribute object in the data array
+//             $data[$taxonomy] = $product_attribute;
     
-            $position++; // Incrementing position
-        }
-        // Get an instance of the WC_Product object
-        $product = wc_get_product( $post_id );
+//             $position++; // Incrementing position
+//         }
+//         // Get an instance of the WC_Product object
+//         $product = wc_get_product( $post_id );
     
-        // Set the array of WC_Product_Attribute objects in the product
-        $product->set_attributes( $data );
+//         // Set the array of WC_Product_Attribute objects in the product
+//         $product->set_attributes( $data );
     
-        $product->save(); // Save the product
-    // }
-}
+//         $product->save(); // Save the product
+//     // }
+// }
 
-add_action( 'save_post', 'fe_auto_add_product_attributes_save_post', 50, 3 );
-function fe_auto_add_product_attributes_save_post( $post_id, $post, $update ) {
-    // if (isset($_POST['_populate_attributes'])) {
+// add_action( 'save_post', 'fe_auto_add_product_attributes_save_post', 50, 3 );
+// function fe_auto_add_product_attributes_save_post( $post_id, $post, $update ) {
+//     // if (isset($_POST['_populate_attributes'])) {
 
-        ## --- Checking --- ##
+//         ## --- Checking --- ##
     
-        if ( $post->post_type != 'product') return; // Only products
+//         if ( $post->post_type != 'product') return; // Only products
     
-        // Exit if it's an autosave
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-            return $post_id;
+//         // Exit if it's an autosave
+//         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+//             return $post_id;
     
-        // Exit if it's an update
-        // if( $update )
-        //     return $post_id;
+//         // Exit if it's an update
+//         // if( $update )
+//         //     return $post_id;
     
-        // Exit if user is not allowed
-        if ( ! current_user_can( 'edit_product', $post_id ) )
-            return $post_id;
+//         // Exit if user is not allowed
+//         if ( ! current_user_can( 'edit_product', $post_id ) )
+//             return $post_id;
     
-        ## --- The Settings for your product attributes --- ##
+//         ## --- The Settings for your product attributes --- ##
     
-        $visible   = '1'; // can be: '' or '1'
-        $variation = '1'; // can be: '' or '1'
+//         $visible   = '1'; // can be: '' or '1'
+//         $variation = '1'; // can be: '' or '1'
     
-        ## --- The code --- ##
+//         ## --- The code --- ##
     
-        // Get all existing product attributes
-        global $wpdb;
-        $attributes = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies" );
+//         // Get all existing product attributes
+//         global $wpdb;
+//         $attributes = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies" );
     
-        $position   = 0;  // Auto incremented position value starting at '0'
-        $data       = array(); // initialising (empty array)
+//         $position   = 0;  // Auto incremented position value starting at '0'
+//         $data       = array(); // initialising (empty array)
     
-        // Loop through each exiting product attribute
-        foreach( $attributes as $attribute ){
-            // Get the correct taxonomy for product attributes
-            $taxonomy = 'pa_'.$attribute->attribute_name;
-            // $taxonomy = $attribute->attribute_name;
-            $attribute_id = $attribute->attribute_id;
+//         // Loop through each exiting product attribute
+//         foreach( $attributes as $attribute ){
+//             // Get the correct taxonomy for product attributes
+//             $taxonomy = 'pa_'.$attribute->attribute_name;
+//             // $taxonomy = $attribute->attribute_name;
+//             $attribute_id = $attribute->attribute_id;
             
-            // Get all term Ids values for the current product attribute (array)
-            $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
+//             // Get all term Ids values for the current product attribute (array)
+//             $term_ids = get_terms(array('taxonomy' => $taxonomy, 'fields' => 'ids', 'hide_empty' => false));
     
-            // Get an empty instance of the WC_Product_Attribute object
-            $product_attribute = new WC_Product_Attribute();
+//             // Get an empty instance of the WC_Product_Attribute object
+//             $product_attribute = new WC_Product_Attribute();
     
-            // Set the related data in the WC_Product_Attribute object
-            $product_attribute->set_id( $attribute_id );
-            $product_attribute->set_name( $taxonomy );
-            $product_attribute->set_options( $term_ids );
-            $product_attribute->set_position( $position );
-            $product_attribute->set_visible( $visible );
-            $product_attribute->set_variation( $variation );
+//             // Set the related data in the WC_Product_Attribute object
+//             $product_attribute->set_id( $attribute_id );
+//             $product_attribute->set_name( $taxonomy );
+//             $product_attribute->set_options( $term_ids );
+//             $product_attribute->set_position( $position );
+//             $product_attribute->set_visible( $visible );
+//             $product_attribute->set_variation( $variation );
     
-            // Add the product WC_Product_Attribute object in the data array
-            $data[$taxonomy] = $product_attribute;
+//             // Add the product WC_Product_Attribute object in the data array
+//             $data[$taxonomy] = $product_attribute;
     
-            $position++; // Incrementing position
-        }
-        // Get an instance of the WC_Product object
-        $product = wc_get_product( $post_id );
+//             $position++; // Incrementing position
+//         }
+//         // Get an instance of the WC_Product object
+//         $product = wc_get_product( $post_id );
     
-        // Set the array of WC_Product_Attribute objects in the product
-        $product->set_attributes( $data );
+//         // Set the array of WC_Product_Attribute objects in the product
+//         $product->set_attributes( $data );
     
-        $product->save(); // Save the product
-    // }
-}
+//         $product->save(); // Save the product
+//     // }
+// }
