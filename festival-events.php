@@ -93,3 +93,7 @@ function fe_plugin_name_load_plugin_textdomain() {
 	load_plugin_textdomain( $domain, FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'init', 'fe_plugin_name_load_plugin_textdomain' );
+
+
+// $attribute_taxonomies = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name != '' ORDER BY attribute_name ASC;" );
+// set_transient( 'wc_attribute_taxonomies', $attribute_taxonomies );
