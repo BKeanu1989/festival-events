@@ -29,10 +29,6 @@ function fe_set_prices() {
             $locker = fe_return_first_array(array_filter($terms, function ($x) {
                 if ($x->taxonomy === 'pa_locker') return $x;
             }));
-            
-            // $location = fe_return_first_array(array_filter($terms, function ($x) {
-            //     if ($x->taxonomy === 'pa_location') return $x;
-            // }));
 
             $period = fe_return_first_array(array_filter($terms, function ($x) {
                 if ($x->taxonomy === 'pa_period') {
