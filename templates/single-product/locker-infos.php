@@ -22,7 +22,7 @@ $lockerInfo = [
 ?>
 <div class="wrapper">
     <h2 class="wrapper__title">
-        <?php _e('Information zu den Schließfach', 'festival-events'); ?>
+        <?php echo __('Information zum Schließfach', 'festival-events'); ?>
     </h2>
     <div class="card__container">
         <?php 
