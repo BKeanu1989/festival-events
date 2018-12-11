@@ -88,7 +88,7 @@ function fe_set_product_atts( ) {
         
             $whiteListed__Period = ['Full Festival'];
 
-            if ($enumerateDays) {
+            if ($enumerateDays != false && $enumerateDays !== "false") {
                 $whiteListed__Period = array_merge($whiteListed__Period, enumerateDaysBetween($festivalStart, $festivalEnd, true));
             }
 
