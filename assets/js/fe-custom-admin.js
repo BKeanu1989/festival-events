@@ -8,97 +8,49 @@ variationsWrapper = document.querySelector('#variable_product_options_inner > di
 if (triggerPopulateButton) {
     triggerPopulateButton.addEventListener('click', () => {
         console.log("populate prices!!!");
-        console.log(variationsWrapper);
     
-        let priceSetter = new PriceSetter(variationsWrapper);
-        if ((variationsWrapper.querySelectorAll('.woocommerce_variation')).length == 0) {
-            priceSetter.installObserver();
-            console.log(priceSetter.variations);
-        } else {
-            priceSetter.populatePrices();
-            console.log(priceSetter.variations);
-        }
+        let priceSetter = new PriceSetter();
+        priceSetter.populatePrices();
+        console.log(priceSetter.variations);
     })
     console.log(variationsWrapper);
 }
 
 class PriceSetter {
-    constructor(variationsWrapper) {
-        this.observerInstalled = false;
-        this.variationsWrapper = variationsWrapper;
+    constructor() {
         this.lockerPrices = this.getDomLockerPrices();
     }
     
     populatePrices(mutationsList, observer) {
-        this.variations = Array.from(this.variationsWrapper.querySelectorAll('.woocommerce_variation'));
-        this.variations.forEach($variation => {
-            let lockerInfoOfVariation;
-            console.log($variation);
-            let lockerOfVariation = $variation.querySelector('select[name^="attribute_pa_locker"]').value;
-            let periodOfVariation = ($variation.querySelector('select[name^="attribute_pa_period"]').value === 'Full Festival') ? 'Full Festival' : 'Daily';
-            // debugger;
-            let lockerVariation_ID = $variation.querySelector('.remove_variation').getAttribute('rel');
-            // find locker of variation lockerPrices
-            this.lockerPrices.forEach((lockerInfo) => {
-                // if (lockerInfo.lockerType === lockerOfVariation.value) {
-                if (lockerInfo.lockerType === lockerOfVariation) {
-                    console.log("LOCKERTYPE");
-
-                    lockerInfoOfVariation = lockerInfo;
-                    console.log(lockerInfo.period, periodOfVariation);
-                    if (lockerInfo.period === periodOfVariation) {
-                        console.log("PERIOD");
-                    }
-                }
-            })
-
-            Object.assign(lockerInfoOfVariation, {ID: lockerVariation_ID});
-
-            jQuery.ajax({
-                url: ajaxurl,
-                data: {
-                    'action': 'fe_set_prices',
-                    // 'data': JSON.stringify()
-                    'data': lockerInfoOfVariation
-                },
-                success: function(data) {
-                    console.log(data);
-                },
-                error: function(err) {
-                    console.log(err);
-                }
-            });
-
+        jQuery.ajax({
+            url: ajaxurl,
+            data: {
+                'action': 'fe_set_prices',
+                // 'data': JSON.stringify()
+                'data': {lockerPrices: this.lockerPrices, productID: localizedVars.postID}
+            },
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(err) {
+                console.log(err);
+            }
         });
-        if (this.observerInstalled) this.removeObserver();
-    }
-
-    removeObserver() {
-        this.observer.disconnect();
-    }
-    
-    installObserver() {
-        this.config = { attributes: false, childList: true, subtree: true };
-        this.observer = new MutationObserver(this.populatePrices.bind(this));
-        this.observer.observe(variationsWrapper, this.config);
-        this.observerInstalled = true;
     }
 
     getDomLockerPrices() {
-        let lockerPrices = [];
+        let lockerPrices = {};
+        lockerPrices["Full Festival"] = [];
+        lockerPrices["Daily"] = [];
         let priceInputs = Array.from(document.querySelectorAll('[type="number"][name^="_schließf"]'));
         priceInputs.forEach((x) => {
             let obj = {};
+            let period = (x.dataset.period == 'Full Festival') ? 'Full Festival' : 'Daily';
             obj.lockerType = x.dataset.lockertype;
-            obj.period = (x.dataset.period == 'Full Festival') ? 'Full Festival' : 'Daily';
             obj.price = x.value;
-            lockerPrices.push(obj);
+            obj.period = period;
+            lockerPrices[period].push(obj);
         })
         return lockerPrices;
     }
-}
-
-
-function fe_auto_add_product_atts() {
-
 }
