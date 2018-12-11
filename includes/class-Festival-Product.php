@@ -253,31 +253,31 @@ function woo_display_lockers()
 
     $locations = get_post_meta($thepostid, '_festival_locations', true);
     $lockers = get_post_meta($thepostid, '_lockers', true);
+    $lockersFormated = reformat_lockers($lockers);
 
-    if (count($lockers) == 0 || gettype($lockers) === 'string') {
-        $lockers = setupLockers($locations);
-    }
+    // if (count($lockers) == 0 || gettype($lockers) === 'string') {
+    //     $lockers = setupLockers($locations);
+    // }
     if (!empty($locations)) {
         echo '<div class="options_group">';
         echo '<h2>Schließfächer</h2>';
-        foreach ($lockers as $location => $lockersForLocation) {
-            echo "<h3>{$location}</h3>";
+        // foreach ($lockers as $location => $lockersForLocation) {
+        //     echo "<h3>{$location}</h3>";
     
-            $iteratorLockerValue = 0;
-            foreach ($lockersForLocation as $key => $value) {
-                $lockerValue = $iteratorLockerValue + 1;
-                woocommerce_wp_checkbox(array(
-                    'id' => "_lockers[{$location}][{$lockerValue}]",
-                    'label' => __($lockerDescription[$key], 'festival-events'),
-                    'description' => __('vorhanden?', 'festival-events'),
-
-                    'custom_attributes' => ['data-lockertype' => $lockerDescription[$key]],
-                    'value' => 'yes',
-                    'cbvalue' => $value,
-                ));
-                $iteratorLockerValue++;
-            }
+        $iteratorLockerValue = 0;
+        foreach ($lockersFormated as $key => $value) {
+            $lockerValue = $iteratorLockerValue + 1;
+            woocommerce_wp_checkbox(array(
+                'id' => "_lockers[{$lockerValue}]",
+                'label' => __($lockerDescription[$key], 'festival-events'),
+                'description' => __('vorhanden?', 'festival-events'),
+                'custom_attributes' => ['data-lockertype' => $lockerDescription[$key]],
+                'value' => 'yes',
+                'cbvalue' => $value,
+            ));
+            $iteratorLockerValue++;
         }
+
         echo '</div>';
     }
 }
@@ -285,7 +285,6 @@ function woo_display_lockers()
 function woo_save_lockers($post_id)
 {
     if (isset($_POST['_lockers'])) {
-        $festivalLocations = setupLocations($_POST['_festival_locations']);
         $postedLockers = $_POST['_lockers'];
 
         $arrayToSave = reformat_lockers($postedLockers, $festivalLocations);
@@ -305,16 +304,15 @@ function setupLocations($festivalLocations)
     return $festivalLocations_array;
 }
 
-function setupLockers($locations)
+function setupLockers()
 {
     $lockers = [];
-    if (!empty($locations)) {
-        $lockerOptions = ["1" => 'no', "2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
-        // for ($iterator = 1; $iterator <= count($locations); $iterator++) {
-        for ($iterator = 0; $iterator < count($locations); $iterator++) {
-            $lockers[$locations[$iterator]] = $lockerOptions;
-        }
-    }
+    $lockerOptions = ["1" => 'no', "2" => 'no', "3" => 'no', "4" => 'no', "5" => 'no', "6" => 'no'];
+    // for ($iterator = 1; $iterator <= count($locations); $iterator++) {
+    // for ($iterator = 0; $iterator < count($locations); $iterator++) {
+    //     $lockers[$locations[$iterator]] = $lockerOptions;
+    // }
+    $lockers = $lockerOptions;
     return $lockers;
 }
 
@@ -573,16 +571,14 @@ function create_product_variation($product_id, $variation_data)
  * @param   array $festivalLocations | setup lockers so a complete array can be build
  * @return  array - reformatted array
  */
-function reformat_lockers($postedLockers, $festivalLocations)
+function reformat_lockers($postedLockers)
 {
 
-    $defaultLockers = setupLockers($festivalLocations);
+    $defaultLockers = setupLockers();
     $arrayToSave = $defaultLockers;
 
     foreach ($postedLockers as $key => $value) {
-        foreach ($value as $key2 => $value2) {
-            $arrayToSave[$key][$key2] = "yes";
-        }
+        $arrayToSave[$key] = $value;
     }
     return $arrayToSave;
 }
