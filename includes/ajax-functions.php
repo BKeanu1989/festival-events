@@ -4,19 +4,40 @@ defined('ABSPATH') || exit;
 
 function fe_set_prices() {
     if (isset($_REQUEST)) {
-        
+        global $wpdb;
         $data = $_REQUEST["data"];
 
         $ID = $data["ID"];
         $price = $data["price"];
 
-        $productVariation = new WC_Product_Variation($ID);
-        $productVariation->set_price($price);
-        $productVariation->set_regular_price($price);
+        $childrenIDs = $wpdb->get_results("SELECT ID FROM {$wpdb->prefix}posts WHERE post_parent = {$ID}");
 
-        // finally workds ...
-        update_post_meta($ID, '_regular_price', $price);
-        update_post_meta($ID, '_price', $price);
+        foreach($childrenIDs AS $key => $childID) {
+            $product = new WC_Product_Variation($childID);
+            write_log($product);
+            
+            $productAttributes = $product->get_attributes();
+            $args = array(
+                'slug' => $productAttributes,
+                'meta_compare' => 'IN',
+                'hide_empty' => false
+            );
+            
+            $query = new WP_Term_Query($args);
+            
+            var_dump(array_column($query->terms, 'name'));
+            var_dump($query->terms);
+
+            
+        }
+
+        // $productVariation = new WC_Product_Variation($ID);
+        // $productVariation->set_price($price);
+        // $productVariation->set_regular_price($price);
+
+        // // finally workds ...
+        // update_post_meta($ID, '_regular_price', $price);
+        // update_post_meta($ID, '_price', $price);
         die;
     }
 }
