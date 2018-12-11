@@ -7,8 +7,8 @@ function fe_set_prices() {
         global $wpdb;
         $data = $_REQUEST["data"];
 
-        $ID = $data["ID"];
-        $price = $data["price"];
+        $ID = $data["productID"];
+        $lockerPrices = $data["lockerPrices"];
 
         $childrenIDs = $wpdb->get_results("SELECT ID FROM {$wpdb->prefix}posts WHERE post_parent = {$ID}");
 
@@ -25,19 +25,41 @@ function fe_set_prices() {
             
             $query = new WP_Term_Query($args);
             
-            var_dump(array_column($query->terms, 'name'));
-            var_dump($query->terms);
-
+            $terms = $query->terms;
+            $locker = fe_return_first_array(array_filter($terms, function ($x) {
+                if ($x->taxonomy === 'pa_locker') return $x;
+            }));
             
+            // $location = fe_return_first_array(array_filter($terms, function ($x) {
+            //     if ($x->taxonomy === 'pa_location') return $x;
+            // }));
+
+            $period = fe_return_first_array(array_filter($terms, function ($x) {
+                if ($x->taxonomy === 'pa_period') {
+                    if ($x->name !== 'Full Festival') {
+                        $x->name = 'Daily';
+                    }
+                    return $x;
+                } 
+            }));
+            $key = array_search($locker->name, array_column($lockerPrices[$period->name], 'lockerType'), true);
+            $price = null;
+            if ($key !== false) {
+                $price = $lockerPrices[$period->name][$key]["price"];
+            }
+
+            if ($price) {
+                $product->set_price($price);
+                $product->set_regular_price($price);
+        
+                // finally workds ...
+                update_post_meta($childID->ID, '_regular_price', $price);
+                update_post_meta($childID->ID, '_price', $price);
+            }
+
         }
 
         // $productVariation = new WC_Product_Variation($ID);
-        // $productVariation->set_price($price);
-        // $productVariation->set_regular_price($price);
-
-        // // finally workds ...
-        // update_post_meta($ID, '_regular_price', $price);
-        // update_post_meta($ID, '_price', $price);
         die;
     }
 }
