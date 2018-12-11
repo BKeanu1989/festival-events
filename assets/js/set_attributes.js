@@ -16,7 +16,8 @@ class SetAttributes {
     }
 
     setValues() {
-        this.enumerateDays = document.querySelector('[name="_enumerate_days"]').checked;
+        // this.enumerateDays = document.querySelector('[name="_enumerate_days"]').checked;
+        this.enumerateDays = (document.querySelector('[name="_enumerate_days"]').checked === true);
 
         this.$locations = document.querySelector('[name="_festival_locations"]');
         this.locations = this.$locations.value.trim().split(',');
