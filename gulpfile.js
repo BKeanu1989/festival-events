@@ -34,9 +34,15 @@ gulp.task('pot', function () {
         .pipe(gulp.dest('./languages/festival-events.pot'));
 });
 
-gulp.task('uglify', function() {
+gulp.task('concat-js', function() {
     return gulp.src('./assets/js/*.js')
         .pipe(concat('festival-events.js'))
+        .pipe(gulp.dest('.'))
+})
+
+gulp.task('uglify', function() {
+    return gulp.src('./dist/festival-events.js')
+        .pipe(uglify())
+        .pipe(rename('festival-events.min.js'))
         .pipe(gulp.dest('dist'))
-        
 });
