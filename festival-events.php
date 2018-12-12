@@ -42,7 +42,7 @@ function fe_admin_scripts() {
 
     global $post;
     // $localizedVars = $post->ID;
-    wp_register_script('fe-admin-script', plugins_url('assets/js/fe-custom-admin.js', __FILE__), [], false, true);
+    wp_register_script('fe-admin-script', plugins_url('dist/admin/festival-events.js', __FILE__), [], false, true);
     $localizedVars = [];
     if (!empty($post)) {
         $localizedVars = ['postID' => $post->ID];
