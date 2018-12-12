@@ -4,6 +4,13 @@ var gulp = require('gulp');
 
 var sass = require('gulp-sass');
 var wpPot = require('gulp-wp-pot');
+
+var concat = require('gulp-concat');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+var pump = require('pump');
+
+
 var sassDir = './assets/scss/**/*.scss';
 
 sass.compiler = require('node-sass');
@@ -25,4 +32,11 @@ gulp.task('pot', function () {
             package: 'StoreFront Child'
         } ))
         .pipe(gulp.dest('./languages/festival-events.pot'));
+});
+
+gulp.task('uglify', function() {
+    return gulp.src('./assets/js/*.js')
+        .pipe(concat('festival-events.js'))
+        .pipe(gulp.dest('dist'))
+        
 });
