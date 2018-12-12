@@ -10,6 +10,8 @@
     "style-loader": "^0.23.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.4.0",
@@ -21,7 +23,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sass:watch": "gulp sass:watch"
+    "sass:watch": "gulp sass:watch",
+    "babel": "./node_modules/.bin/babel ./festival-events.js --out-dir dist",
+    "min-js": "gulp concat-js && npm run babel && gulp uglify"
   },
   "author": "",
   "license": "ISC"
