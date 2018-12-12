@@ -34,15 +34,15 @@ gulp.task('pot', function () {
         .pipe(gulp.dest('./languages/festival-events.pot'));
 });
 
-gulp.task('concat-js', function() {
-    return gulp.src('./assets/js/*.js')
+gulp.task('concat-admin-js', function() {
+    return gulp.src('./assets/admin/js/*.js')
         .pipe(concat('festival-events.js'))
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest('admin'))
 })
 
 gulp.task('uglify', function() {
-    return gulp.src('./dist/festival-events.js')
+    return gulp.src('./dist/admin/festival-events.js')
         .pipe(uglify())
-        .pipe(rename('festival-events.min.js'))
-        .pipe(gulp.dest('dist'))
+        .pipe(rename('admin-festival-events.min.js'))
+        .pipe(gulp.dest('dist/.'))
 });
