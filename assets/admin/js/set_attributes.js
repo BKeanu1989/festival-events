@@ -1,3 +1,12 @@
+let setAttributeButton;
+
+if (setAttributeButton) {
+    setAttributeButton.addEventListener('click', () => {
+        const SET_ATTRIBUTES = new SetAttributes();
+        SET_ATTRIBUTES.ajaxCall();
+    })
+}
+
 class SetAttributes {
     constructor() {
         this.locations;
@@ -56,5 +65,3 @@ class SetAttributes {
     }
 }
 
-const SET_ATTRIBUTES = new SetAttributes();
-SET_ATTRIBUTES.ajaxCall();

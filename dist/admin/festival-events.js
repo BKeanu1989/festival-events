@@ -71,6 +71,15 @@ var PriceSetter = function () {
     return PriceSetter;
 }();
 
+var setAttributeButton = void 0;
+
+if (setAttributeButton) {
+    setAttributeButton.addEventListener('click', function () {
+        var SET_ATTRIBUTES = new SetAttributes();
+        SET_ATTRIBUTES.ajaxCall();
+    });
+}
+
 var SetAttributes = function () {
     function SetAttributes() {
         _classCallCheck(this, SetAttributes);
@@ -140,6 +149,3 @@ var SetAttributes = function () {
 
     return SetAttributes;
 }();
-
-var SET_ATTRIBUTES = new SetAttributes();
-SET_ATTRIBUTES.ajaxCall();
