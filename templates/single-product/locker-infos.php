@@ -6,8 +6,6 @@
 defined( 'ABSPATH' ) || exit;
 
 global $lockerDescription, $withOptional, $product;
-global $variation;
-global $lockers;
 
 $lockers = array_map('trim', explode(',',$product->get_attribute('pa_locker')));
 
