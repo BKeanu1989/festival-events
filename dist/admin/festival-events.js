@@ -43,6 +43,7 @@ var PriceSetter = function () {
                 },
                 success: function success(data) {
                     console.log(data);
+                    location.reload(true);
                 },
                 error: function error(err) {
                     console.log(err);
@@ -72,6 +73,7 @@ var PriceSetter = function () {
 }();
 
 var setAttributeButton = void 0;
+setAttributeButton = document.querySelector('#trigger_add_variations');
 
 if (setAttributeButton) {
     setAttributeButton.addEventListener('click', function () {

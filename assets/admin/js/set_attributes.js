@@ -1,4 +1,5 @@
 let setAttributeButton;
+setAttributeButton = document.querySelector('#trigger_add_variations');
 
 if (setAttributeButton) {
     setAttributeButton.addEventListener('click', () => {

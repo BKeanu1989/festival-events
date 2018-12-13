@@ -31,6 +31,7 @@ class PriceSetter {
             },
             success: function(data) {
                 console.log(data);
+                location.reload(true);
             },
             error: function(err) {
                 console.log(err);
@@ -55,6 +56,7 @@ class PriceSetter {
     }
 }
 let setAttributeButton;
+setAttributeButton = document.querySelector('#trigger_add_variations');
 
 if (setAttributeButton) {
     setAttributeButton.addEventListener('click', () => {

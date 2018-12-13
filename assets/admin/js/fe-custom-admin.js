@@ -31,6 +31,7 @@ class PriceSetter {
             },
             success: function(data) {
                 console.log(data);
+                location.reload(true);
             },
             error: function(err) {
                 console.log(err);
