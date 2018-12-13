@@ -5,7 +5,7 @@ Plugin URI: https://
 Description: Festival Events via Woocommerce
 Version: 0.1.0
 Author: Kevin Fechner
-Author URI: http://health-check-team.example.com
+Author URI: https://complete-webolutions.com
 Text Domain: festival-events
 Domain Path: /languages
 */
