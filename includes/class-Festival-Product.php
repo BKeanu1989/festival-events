@@ -580,8 +580,10 @@ function reformat_lockers($postedLockers)
     $defaultLockers = setupLockers();
     $arrayToSave = $defaultLockers;
 
-    foreach ($postedLockers as $key => $value) {
-        $arrayToSave[$key] = $value;
+    if (!empty($postedLockers)) {
+        foreach ($postedLockers as $key => $value) {
+            $arrayToSave[$key] = $value;
+        }
     }
     return $arrayToSave;
 }
