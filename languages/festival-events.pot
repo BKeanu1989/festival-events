@@ -13,55 +13,71 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: includes/class-Festival-Product.php:73
+#: includes/class-Festival-Product.php:79
 msgid "Festivalstart:"
 msgstr ""
 
-#: includes/class-Festival-Product.php:76
+#: includes/class-Festival-Product.php:82
 msgid "Trage hier das Datum vom Start des Festivals ein."
 msgstr ""
 
-#: includes/class-Festival-Product.php:84
+#: includes/class-Festival-Product.php:90
 msgid "Festivalende:"
 msgstr ""
 
-#: includes/class-Festival-Product.php:87
+#: includes/class-Festival-Product.php:93
 msgid "Trage hier das Datum vom Ende des Festivals ein."
 msgstr ""
 
-#: includes/class-Festival-Product.php:124, templates/single-product/opening-items-and-locations.php:30
+#: includes/class-Festival-Product.php:101
+msgid "Einzelne Tage:"
+msgstr ""
+
+#: includes/class-Festival-Product.php:102
+msgid "Willst du neben dem Full Festival Zeitraum auch die einzelnen Tage auflisten?"
+msgstr ""
+
+#: includes/class-Festival-Product.php:153, templates/single-product/opening-items-and-locations.php:30
 msgid "Standorte:"
 msgstr ""
 
-#: includes/class-Festival-Product.php:127
+#: includes/class-Festival-Product.php:156
 msgid "Trage hier Kommasepariert die Standorte ein."
 msgstr ""
 
-#: includes/class-Festival-Product.php:143
+#: includes/class-Festival-Product.php:172
 msgid "Banner Text:"
 msgstr ""
 
-#: includes/class-Festival-Product.php:192, includes/class-Festival-Product.php:236
+#: includes/class-Festival-Product.php:227, includes/class-Festival-Product.php:272
 msgstr ""
 
-#: includes/class-Festival-Product.php:237
+#: includes/class-Festival-Product.php:273
 msgid "vorhanden?"
 msgstr ""
 
-#: includes/class-Festival-Product.php:295
-msgid "Varianten erstellen?"
+#: includes/class-Festival-Product.php:339
+msgid "Varianten erstellen"
 msgstr ""
 
-#: includes/class-Festival-Product.php:296
-msgid "Willst du die verschiedenen Varianten erstellen?"
+#: includes/class-Festival-Product.php:389
+msgid "Preis für "
 msgstr ""
 
-#: includes/fe-template-functions.php:151
-msgid "Dieses Produkt ist leider nicht mehr erhältlich."
+#: templates/cart/user-infos.php:14
+msgid "Persönliche Daten für das/die Schließfächer"
+msgstr ""
+
+#: templates/cart/user-infos.php:20
+msgid "Name"
+msgstr ""
+
+#: templates/cart/user-infos.php:20
+msgid "erforderlich"
 msgstr ""
 
 #: templates/single-product/locker-infos.php:25
-msgid "Information zu den Schließfach"
+msgid "Information zum Schließfach"
 msgstr ""
 
 #: templates/single-product/opening-items-and-locations.php:21
