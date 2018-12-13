@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Festival Events\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-01 17:14+0000\n"
-"PO-Revision-Date: 2018-12-02 12:37+0000\n"
+"PO-Revision-Date: 2018-12-13 08:54+0000\n"
 "Language-Team: English (United States)\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
@@ -66,7 +66,7 @@ msgstr "Locations & Opening Times"
 #: includes/class-Festival-Product.php:124
 #: templates/single-product/opening-items-and-locations.php:30
 msgid "Standorte:"
-msgstr ""
+msgstr "Locations:"
 
 #: includes/class-Festival-Product.php:87
 msgid "Trage hier das Datum vom Ende des Festivals ein."
@@ -98,7 +98,7 @@ msgstr ""
 
 #: templates/single-product/opening-items-and-locations.php:38
 msgid "Öffnungszeiten"
-msgstr ""
+msgstr "Opening times"
 
 msgid "New message"
 msgstr ""
