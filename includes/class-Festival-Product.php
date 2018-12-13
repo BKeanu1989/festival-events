@@ -318,7 +318,17 @@ function setupLockers()
 
 function _woo_display_populate_wrapper_begin()
 {
-    echo '<div class="options_group">';
+    global $post, $post_id, $wpdb;
+    $class = '';
+    $translations = $wpdb->get_results("SELECT {$wpdb->prefix}term_taxonomy.taxonomy, {$wpdb->prefix}term_taxonomy.description FROM {$wpdb->prefix}term_relationships 
+    JOIN {$wpdb->prefix}term_taxonomy ON {$wpdb->prefix}term_relationships.term_taxonomy_id = {$wpdb->prefix}term_taxonomy.term_id AND {$wpdb->prefix}term_taxonomy.taxonomy = 'post_translations'
+        WHERE {$wpdb->prefix}term_relationships.object_id = {$post_id}");
+
+    $translationLanguages = maybe_unserialize(fe_return_first_array($translations)->description);
+    if ($translationLanguages['de'] !== $post_id) {
+        $class = "foreign-language";
+    }
+    echo '<div class="options_group '.$class.'">';
 }
 
 function woo_display_populate()
@@ -657,8 +667,8 @@ function displayAllDataInTab()
     woo_display_locations();
     woo_display_festival_times();
     woo_display_opening_times();
-    woo_display_lockers();
     _woo_display_populate_wrapper_begin();
+    woo_display_lockers();
     woo_display_populate();
     woo_display_populate_price();
     _woo_display_populate_wrapper_end();
