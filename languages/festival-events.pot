@@ -76,7 +76,7 @@ msgstr ""
 msgid "erforderlich"
 msgstr ""
 
-#: templates/single-product/locker-infos.php:25
+#: templates/single-product/locker-infos.php:24
 msgid "Information zum Schließfach"
 msgstr ""
 
