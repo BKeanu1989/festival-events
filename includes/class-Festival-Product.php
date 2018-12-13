@@ -390,7 +390,7 @@ function woo_display_populate_price()
                     'data_type' => 'decimal',
                     'custom_attributes' => ['data-lockertype' => $variation, 'step' => '0.01', 'min' => '0.01', 'data-period' => $period],
                     'type' => 'number',
-                    'value' => '0.00'
+                    'value' => '0.01'
                 ]);
             }
         }
