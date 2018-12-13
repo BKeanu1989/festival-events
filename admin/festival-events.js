@@ -1,3 +1,8 @@
+let buttons;
+
+buttons = Array.from(document.querySelectorAll('.foreign-language button'));
+
+buttons.forEach((x) => x.disabled = true);
 let prices, variationsWrapper, variationsTab, triggerPopulateButton;
 prices = Array.from(document.querySelectorAll('[name^="variable_regular_price"]'));
 variationsTab = document.querySelector('.variations_tab');

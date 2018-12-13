@@ -4,6 +4,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var buttons = void 0;
+
+buttons = Array.from(document.querySelectorAll('.foreign-language button'));
+
+buttons.forEach(function (x) {
+    return x.disabled = true;
+});
 var prices = void 0,
     variationsWrapper = void 0,
     variationsTab = void 0,
