@@ -330,11 +330,14 @@ function woo_display_populate()
 
         // echo '<div class="options_group">';
 
-        woocommerce_wp_checkbox(array(
-            'id' => "_populate_attributes",
-            'label' => __('Varianten erstellen?', 'festival-events'),
-            'description' => __('Willst du die verschiedenen Varianten erstellen?', 'festival-events'),
-        ));
+        // woocommerce_wp_checkbox(array(
+        //     'id' => "_populate_attributes",
+        //     'label' => __('Varianten erstellen?', 'festival-events'),
+        //     'description' => __('Willst du die verschiedenen Varianten erstellen?', 'festival-events'),
+        // ));
+
+        echo '<button id="trigger_add_variations" type="button" class="button is-primary">'. __('Varianten erstellen', 'festival-events') .'</button>';
+
 
         // echo '</div>';
     } else {
