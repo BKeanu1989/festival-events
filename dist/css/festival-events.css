@@ -83,3 +83,7 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
   display: flex; }
   .single-product-form-wrapper > * {
     flex: 1; }
+
+.foreign-language {
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0.4; }
