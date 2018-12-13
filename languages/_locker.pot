@@ -1,0 +1,15 @@
+#: templates/single-product/locker-infos.php:14
+msgid "Außenmaß: 18cm x 12cm x 35cm (BxHxT), Innenmaß: 25cm x 14cm x 35 cm (BxHxT)"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:14
+msgid "passend für Wertsachen, kleine Tasche, kleine elektronische Geräte"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:14
+msgid "Steckdose max. 15 Watt"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:14
+msgid "Zum Laden von Handy, Kamera, Powerbank"
+msgstr ""
