@@ -103,3 +103,14 @@ add_action( 'init', 'fe_plugin_name_load_plugin_textdomain' );
 
 // $attribute_taxonomies = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name != '' ORDER BY attribute_name ASC;" );
 // set_transient( 'wc_attribute_taxonomies', $attribute_taxonomies );
+
+function fe_plugin_activation() {
+    // make sure wc attribute taxonomies are installed
+    global $wpdb;
+    // TODO: could be dangerous if database rows are switched
+    $attributes = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_name IN ('locker', 'period', 'location');" );
+    list($lockerAttributes, $periodAttributes, $locationAttributes) = $attributes;
+    // var_dump($wc_attribute_taxonomies);
+}
+
+register_activation_hook(__FILE__, 'fe_plugin_activation');

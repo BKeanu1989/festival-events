@@ -97,6 +97,7 @@ function fe_set_product_atts( ) {
             fe_maybe_createTerm('pa_location', $locations);
 
             global $wpdb;
+            // TODO: could be dangerous if database rows are switched
             $attributes = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_name IN ('locker', 'period', 'location');" );
             list($lockerAttributes, $periodAttributes, $locationAttributes) = $attributes;
 
