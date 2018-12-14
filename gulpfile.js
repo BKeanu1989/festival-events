@@ -40,9 +40,23 @@ gulp.task('concat-admin-js', function() {
         .pipe(gulp.dest('admin'))
 })
 
-gulp.task('uglify', function() {
+gulp.task('concat-frontend-js', function() {
+    return gulp.src('./assets/client/js/*.js')
+        .pipe(concat('festival-events-frontend.js'))
+        .pipe(gulp.dest('client'))
+})
+
+gulp.task('uglify-admin', function() {
     return gulp.src('./dist/admin/festival-events.js')
         .pipe(uglify())
         .pipe(rename('admin-festival-events.min.js'))
         .pipe(gulp.dest('dist/.'))
 });
+
+gulp.task('uglify-frontend', function() {
+    return gulp.src('./dist/client/festival-events-frontend.js')
+        .pipe(uglify())
+        .pipe(rename('festival-events-frontend.min.js'))
+        .pipe(gulp.dest('dist/.'))
+});
+
