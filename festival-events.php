@@ -33,7 +33,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
     // add_filter( 'product_type_selector', 'wcpt_add_gift_card_type' );
     // add_filter( 'woocommerce_product_data_tabs', 'gift_card_tab' );
-    add_action( 'wp_enqueue_scripts', 'fe_add_styles');
+    add_action( 'wp_enqueue_scripts', 'frontend_scripts');
     add_action( 'admin_enqueue_scripts', 'fe_admin_scripts');
     
 }
@@ -54,11 +54,13 @@ function fe_admin_scripts() {
     // wp_enqueue_style('fe-bulma', 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css');
 }
 
-function fe_add_styles() {
+function frontend_scripts() {
     // if (is_product()) {
         wp_enqueue_style('festival-events', plugins_url('dist/css/festival-events.css', __FILE__), [], false, 'all');
         // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
         wp_enqueue_style('font-awesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css');
+        wp_register_script('festival-events-frontend', plugins_url('dist/festival-events-frontend.min.js', __FILE__), [], false, true);
+        wp_enqueue_script('festival-events-frontend');
     // }
 
 }
