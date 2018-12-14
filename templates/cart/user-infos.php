@@ -21,29 +21,29 @@ foreach($items AS $key => $item) {
         }
 
         for($i = 0; $i < $quantity; $i++) {
-            echo '<p class="form-row form-row-wide" data-priority="1">'. ($i + 1) .'</p>';
-            echo '<p class="form-row form-row-wide validate-required" data-priority="2">';
+            echo '<p class="form-row form-row-wide" data-priority="5">'. ($i + 1) .'</p>';
+            echo '<p class="form-row form-row-wide validate-required" data-priority="5">';
                 echo '<label for="'.$key.'[first_name]['.$i.']">' . __('Vorname', 'festival-events') . ' <abbr class="required" title="'.__('erforderlich', 'festival-events').'">*</abbr></label>';
                 echo '<span class="woocommerce-input-wrapper">';
                     echo '<input type="text" class="input-text" id="'.$key.'[first_name]['.$i.']" name="'.$key.'[first_name]['.$i.']" required>';
                 echo '</span>';
             echo '</p>';
 
-            echo '<p class="form-row form-row-wide validate-required" data-priority="3">';
+            echo '<p class="form-row form-row-wide validate-required" data-priority="5">';
             echo '<label for="'.$key.'[last_name]['.$i.']">' . __('Nachname', 'festival-events') . ' <abbr class="required" title="'.__('erforderlich', 'festival-events').'">*</abbr></label>';
             echo '<span class="woocommerce-input-wrapper">';
                 echo '<input type="text" class="input-text" id="'.$key.'[last_name]['.$i.']" name="'.$key.'[last_name]['.$i.']" required>';
             echo '</span>';
             echo '</p>';
 
-            echo '<p class="form-row form-row-wide validate-required" data-priority="4">';
+            echo '<p class="form-row form-row-wide validate-required" data-priority="5">';
             echo '<label for="'.$key.'[birthdate]['.$i.']">' . __('Geburtstag', 'festival-events') . ' <abbr class="required" title="'.__('erforderlich', 'festival-events').'">*</abbr></label>';
             echo '<span class="woocommerce-input-wrapper">';
                 echo '<input type="date" class="input-text" id="'.$key.'[birthdate]['.$i.']" name="'.$key.'[birthdate]['.$i.']" placeholder="01.01.1990" required>';
             echo '</span>';
             echo '</p>';
             if ($i === 0 && $quantity > 1) {
-                echo '<p class="form-row form-row-wide" data-priority="5"><button class="button" id="populate_data_for_other_lockers">'.__('Daten für weitere Schließfächer übernehmen').'</button></p>';
+                echo '<p class="form-row form-row-wide" data-priority="5"><button type="button" class="button" id="populate_data_for_other_lockers">'.__('Daten für weitere Schließfächer übernehmen').'</button></p>';
             }
         }
         echo '</div>';
