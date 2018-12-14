@@ -124,7 +124,7 @@ register_activation_hook(__FILE__, 'fe_plugin_activation');
 add_filter( 'woocommerce_checkout_fields' , 'fe_add_email_verification_field_checkout' );
 function fe_add_email_verification_field_checkout( $fields ) {
     $fields['billing']['billing_email']['class'] = array('form-row-first');
-    $fields['billing']['billing_em_ver'] = array(
+    $fields['billing']['billing_email_confirm'] = array(
         'label' => __('Bestätige deine Email Adresse', 'festival-events'),
         'required' => true,
         'class' => array('form-row-last'),
@@ -139,7 +139,7 @@ function fe_add_email_verification_field_checkout( $fields ) {
 add_action('woocommerce_checkout_process', 'fe_matching_email_addresses');
 function fe_matching_email_addresses() { 
     $email1 = $_POST['billing_email'];
-    $email2 = $_POST['billing_em_ver'];
+    $email2 = $_POST['billing_email_confirm'];
     if ( $email2 !== $email1 ) {
         wc_add_notice( __( 'Deine Email Adressen stimmen nicht überein.', 'festival-events' ), 'error' );
     }
