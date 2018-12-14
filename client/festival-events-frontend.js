@@ -8,7 +8,6 @@ if (triggerPopulateUserDataButton) {
     })
 }
 
-
 class PopulateUserData {
     constructor() {
         this._firstNames;
