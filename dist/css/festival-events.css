@@ -87,3 +87,9 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
 .foreign-language {
   background-color: rgba(0, 0, 0, 0.4);
   opacity: 0.4; }
+
+.form-row.inline span > * {
+  display: inline; }
+
+.form-row.inline span label {
+  margin-right: 10px; }

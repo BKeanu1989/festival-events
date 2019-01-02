@@ -39,3 +39,15 @@ body.woocommerce {
     background-color: rgba(0,0,0,0.4);
     opacity: 0.4;
 }
+
+.form-row.inline{
+    span{
+        >*{
+            display: inline;
+        }
+        // label{
+        label:not(:last-of-type){
+            margin-right: 10px;
+        }
+    }
+}
