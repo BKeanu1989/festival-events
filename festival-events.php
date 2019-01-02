@@ -163,11 +163,51 @@ function fe_add_birthday_field_checkout( $fields ) {
     return $fields;
 }
 
-
-add_action('woocommerce_checkout_process', 'fe_validate_bday');
+add_action( 'woocommerce_checkout_process', 'fe_validate_bday');
 function fe_validate_bday() { 
     $bday = $_POST['billing_birthday'];
     if ( empty($bday) ) {
         wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
     }
+}
+
+/**
+ * 
+ */
+
+add_filter( 'woocommerce_checkout_fields', 'fe_add_are_you_renter');
+function fe_add_are_you_renter( $fields ) {
+    $fields['billing']['renter'] = array(
+        'label' => __('Bist du Mieter des Schließfachs?', 'festival-events'),
+        'required' => true,
+        'class' => ['inline'],
+        'clear' => true,
+        'priority' => 1,
+        'type' => 'radio',
+        'options' => [
+            "yes" => __('Ja', 'festival-events'),
+            "no" => __('Nein', 'festival-events')
+        ]
+    );
+
+    return $fields;
+}
+
+
+add_filter( 'woocommerce_checkout_fields', 'fe_add_not_renter_fields');
+function fe_add_not_renter_fields( $fields ) {
+    // test
+
+    global $woocommerce;
+    $items = $woocommerce->cart->get_cart();
+
+    foreach($items AS $key => $item) {
+        $quantity = $item['quantity'];
+        $variation_id = $item['variation_id'];
+
+        for($y = 0; $y < $quantity; $y++) {
+
+        }
+    }
+    return $fields;
 }
