@@ -137,12 +137,37 @@ function fe_add_email_verification_field_checkout( $fields ) {
     return $fields;
 }
 
-
 add_action('woocommerce_checkout_process', 'fe_matching_email_addresses');
 function fe_matching_email_addresses() { 
     $email1 = $_POST['billing_email'];
     $email2 = $_POST['billing_email_confirm'];
     if ( $email2 !== $email1 ) {
         wc_add_notice( __( 'Deine Email Adressen stimmen nicht überein.', 'festival-events' ), 'error' );
+    }
+}
+
+/**
+ * Add Bday field
+ */
+add_filter( 'woocommerce_checkout_fields', 'fe_add_birthday_field_checkout');
+function fe_add_birthday_field_checkout( $fields ) {
+
+    $fields['billing']['billing_birthday'] = array(
+        'label' => __('Geburtstag', 'festival-events'),
+        'required' => true,
+        'class' => [],
+        'clear' => true,
+        'priority' => 25,
+        'type' => 'date'
+    );
+    return $fields;
+}
+
+
+add_action('woocommerce_checkout_process', 'fe_validate_bday');
+function fe_validate_bday() { 
+    $bday = $_POST['billing_birthday'];
+    if ( empty($bday) ) {
+        wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
     }
 }
