@@ -41,3 +41,11 @@ if (! function_exists('fe_return_first_array')) {
         return $array[$keys[0]];
     }
 }
+
+function fe_slugify_locker($name) {
+    $name = strtolower($name);
+    $needleStack_Array = [" ","high-voltage"];
+    $replaceStack_Array = ["","-hv"];
+    $slugified_locker = str_replace($needleStack_Array, $replaceStack_Array, $name);
+    return $slugified_locker;
+}
