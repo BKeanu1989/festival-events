@@ -60,6 +60,8 @@ function frontend_scripts() {
         // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
         wp_enqueue_style('font-awesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css');
         wp_register_script('festival-events-frontend', plugins_url('dist/festival-events-frontend.min.js', __FILE__), [], false, true);
+        $currentLanguage = pll_current_language("slug");
+        wp_localize_script('festival-events-frontend', 'currentLanguage', $currentLanguage);
         wp_enqueue_script('festival-events-frontend');
     // }
 
