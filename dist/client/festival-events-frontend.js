@@ -4,6 +4,38 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var chooseLockerButtons = void 0,
+    lockerSelect = void 0;
+
+chooseLockerButtons = Array.from(document.querySelectorAll('button.chooseLocker'));
+lockerSelect = document.querySelector('select#pa_locker');
+if (chooseLockerButtons) {
+    chooseLockerButtons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            var identifier = event.target.dataset.identifier + '-' + currentLanguage;
+            var options = Array.from(lockerSelect.options);
+            var chosen = options.filter(function (x) {
+                if (x.value === identifier) {
+                    return x;
+                }
+            });
+            chosen = chosen[0];
+            lockerSelect.value = chosen.value;
+        });
+    });
+}
+var $confirmEmail = void 0;
+
+$confirmEmail = document.querySelector('#billing_email_confirm');
+
+if ($confirmEmail) {
+    $confirmEmail.addEventListener('keydown', function (event) {
+        if ((event.metaKey || event.ctrlKey) && event.keyCode == 86) {
+            event.preventDefault();
+            console.log("CEO doesn't want this to happen");
+        }
+    });
+}
 var triggerPopulateUserDataButton = void 0;
 
 triggerPopulateUserDataButton = document.querySelector('#populate_data_for_other_lockers');

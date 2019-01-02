@@ -1,3 +1,34 @@
+let chooseLockerButtons, lockerSelect;
+
+chooseLockerButtons = Array.from(document.querySelectorAll('button.chooseLocker'));
+lockerSelect = document.querySelector('select#pa_locker');
+if (chooseLockerButtons) {
+    chooseLockerButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+            let identifier = event.target.dataset.identifier + '-' + currentLanguage;
+            let options = Array.from(lockerSelect.options);
+            let chosen = options.filter((x) => {
+                if (x.value === identifier) {
+                    return x;
+                }
+            })
+            chosen = chosen[0];
+            lockerSelect.value = chosen.value;
+        })
+    });
+}
+let $confirmEmail;
+
+$confirmEmail = document.querySelector('#billing_email_confirm');
+
+if ($confirmEmail) {
+    $confirmEmail.addEventListener('keydown', function(event) {
+        if ((event.metaKey || event.ctrlKey) && event.keyCode == 86) {
+            event.preventDefault();
+            console.log("CEO doesn't want this to happen");
+        }
+    })
+}
 let triggerPopulateUserDataButton;
 
 triggerPopulateUserDataButton = document.querySelector('#populate_data_for_other_lockers');
@@ -7,6 +38,7 @@ if (triggerPopulateUserDataButton) {
         const populateUserData = new PopulateUserData();
     })
 }
+
 
 class PopulateUserData {
     constructor() {
