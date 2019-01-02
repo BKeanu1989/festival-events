@@ -42,6 +42,7 @@ $lockerInfo = [
                         ?>
                     </div>
                     <div class="card__footer">
+                        <button role="button" class="button chooseLocker" data-identifier="<?php echo $identifier; ?>"><?php echo __('Auswählen', 'festival-events'); ?></button>
                     </div>
                 </div>
             <?php } ?>
