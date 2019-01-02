@@ -1,7 +1,9 @@
-let chooseLockerButtons, lockerSelect;
+let chooseLockerButtons, lockerSelect, productForm;
 
 chooseLockerButtons = Array.from(document.querySelectorAll('button.chooseLocker'));
 lockerSelect = document.querySelector('select#pa_locker');
+productForm = document.querySelector('form.cart.variations_form');
+
 if (chooseLockerButtons) {
     chooseLockerButtons.forEach((button) => {
         button.addEventListener("click", (event) => {
@@ -14,6 +16,7 @@ if (chooseLockerButtons) {
             })
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
+            productForm.scrollIntoView({behavior: 'smooth'});
         })
     });
 }

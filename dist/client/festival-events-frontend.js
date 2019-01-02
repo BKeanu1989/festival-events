@@ -5,10 +5,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var chooseLockerButtons = void 0,
-    lockerSelect = void 0;
+    lockerSelect = void 0,
+    productForm = void 0;
 
 chooseLockerButtons = Array.from(document.querySelectorAll('button.chooseLocker'));
 lockerSelect = document.querySelector('select#pa_locker');
+productForm = document.querySelector('form.cart.variations_form');
+
 if (chooseLockerButtons) {
     chooseLockerButtons.forEach(function (button) {
         button.addEventListener("click", function (event) {
@@ -21,6 +24,7 @@ if (chooseLockerButtons) {
             });
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
+            productForm.scrollIntoView({ behavior: 'smooth' });
         });
     });
 }
