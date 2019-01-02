@@ -206,7 +206,27 @@ function fe_add_not_renter_fields( $fields ) {
         $variation_id = $item['variation_id'];
 
         for($y = 0; $y < $quantity; $y++) {
-
+            $fields['billing']['firstname_renter-' . $y] = array(
+                'label' => __('Vorname des Mieters', 'festival-events'),
+                'required' => true,
+                'priority' => $y + 2,
+                'type' => 'text',
+                'class' => ['hide_if_yes', 'hide_if_default']
+            );
+            $fields['billing']['lastname_renter-' . $y] = array(
+                'label' => __('Nachname des Mieters', 'festival-events'),
+                'required' => true,
+                'priority' => $y + 2,
+                'type' => 'text',
+                'class' => ['hide_if_yes', 'hide_if_default']
+            );
+            $fields['billing']['birthday_renter-' . $y] = array(
+                'label' => __('Geburtstag des Mieters', 'festival-events'),
+                'required' => true,
+                'priority' => $y + 2,
+                'type' => 'text',
+                'class' => ['hide_if_yes', 'hide_if_default']
+            );
         }
     }
     return $fields;
