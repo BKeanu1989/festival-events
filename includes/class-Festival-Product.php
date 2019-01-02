@@ -260,6 +260,7 @@ function woo_display_lockers()
     // }
     if (!empty($locations)) {
         echo '<div class="options_group">';
+        echo "<h2>".__('Hier können die Varianten erstellt werden: ', 'festival-events')."</h2>";
         echo '<h2>Schließfächer</h2>';
         // foreach ($lockers as $location => $lockersForLocation) {
         //     echo "<h3>{$location}</h3>";
@@ -315,7 +316,9 @@ function setupLockers()
     $lockers = $lockerOptions;
     return $lockers;
 }
-
+/**
+ * foreign-language class to hint that foreign language settings cant be set. 
+ */
 function _woo_display_populate_wrapper_begin()
 {
     global $post, $post_id, $wpdb;
