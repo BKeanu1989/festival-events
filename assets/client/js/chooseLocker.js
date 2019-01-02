@@ -16,6 +16,7 @@ if (chooseLockerButtons) {
             })
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
+            // TODO: force update of form (price) -> if everything is set
             productForm.scrollIntoView({behavior: 'smooth'});
         })
     });
