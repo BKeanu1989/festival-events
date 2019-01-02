@@ -110,6 +110,7 @@ class SetAttributes {
 
     ajaxCall() {
         console.log("POSTID", localizedVars.postID);
+        document.body.style.cursor = 'wait';
         jQuery.ajax({
             url: ajaxurl,
             data: {
