@@ -266,33 +266,18 @@ function fe_populate_button() {
 
 }
 
-// add_action( 'woocommerce_checkout_process', 'fe_test');
-// not working
-// add_action( 'woocommerce_checkout_update_order_meta', 'fe_test');
-
-// add_action( 'woocommerce_saved_order_items', 'fe_test');
-
-// not working
-// add_action( 'woocommerce_checkout_order_processed', 'fe_test', 10, 2);
-// function fe_test( $order_id, $items ) {
-//     global $post, $ID, $post_id;
-
-//     write_log("should be saved upon order creation");
-//     write_log("post");
-//     write_log($post);
-//     write_log("ID");
-//     write_log($ID);
-//     write_log("post_id");
-//     write_log($post_id);
-// }
+// save custom values here -- dont event need to ...
+add_action ('woocommerce_checkout_create_order', 'fe_test_order_new', 10, 2);
+function fe_test_order_new( $order, $data ) {
+    // works so far - $_POST available
+    // write_log($order);
+    // write_log($data);
+}
 
 
-add_action ('woocommerce_checkout_order_processed', 'fe_test_order', 10, 3);
-function fe_test_order( $order_id, $posted_data, $order ) {
-    write_log(" iam processed");
-    write_log("posted data");
-    write_log($posted_data);
-// works
-    update_post_meta($order_id, 'test_test', 'HMMMM');
-    
+// validate custom values here!!!
+add_action( 'woocommerce_checkout_process' , 'fe_custom_validation');
+function fe_custom_validation() {
+    write_log($_POST);
+    wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
 }
