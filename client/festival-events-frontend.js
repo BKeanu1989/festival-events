@@ -60,7 +60,9 @@ if (form_checkout) {
 
             are_you_renter_container.scrollIntoView({behavior: 'smooth'});
             // blinking is set in css
-            are_you_renter_container.classList.add('blink');
+            setTimeout(() => {
+                are_you_renter_container.classList.add('blink');
+            }, 500);
             return false;
         }
         return true;
