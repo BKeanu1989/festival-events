@@ -91,5 +91,8 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
 .form-row.inline span > * {
   display: inline; }
 
-.form-row.inline span label {
+.form-row.inline span label:not(:last-of-type) {
   margin-right: 10px; }
+
+.form-row.hide_if_yes, .form-row .hide_if_default {
+  display: none; }

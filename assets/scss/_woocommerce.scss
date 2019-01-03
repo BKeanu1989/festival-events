@@ -40,14 +40,20 @@ body.woocommerce {
     opacity: 0.4;
 }
 
-.form-row.inline{
-    span{
-        >*{
-            display: inline;
-        }
-        // label{
-        label:not(:last-of-type){
-            margin-right: 10px;
+.form-row{
+    &.inline{
+        span{
+            >*{
+                display: inline;
+            }
+            // label{
+            label:not(:last-of-type){
+                margin-right: 10px;
+            }
         }
     }
+    &.hide_if_yes,.hide_if_default{
+        display: none;
+    }
 }
+
