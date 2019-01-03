@@ -208,28 +208,36 @@ function fe_add_not_renter_fields( $fields ) {
         for($y = 0; $y < $quantity; $y++) {
             $fields['billing']['firstname_renter-' . $y] = array(
                 'label' => __('Vorname des Mieters', 'festival-events'),
-                'required' => true,
+                'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
                 'type' => 'text',
-                'class' => ['hide_if_yes', 'hide_if_default']
+                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
             );
             $fields['billing']['lastname_renter-' . $y] = array(
                 'label' => __('Nachname des Mieters', 'festival-events'),
-                'required' => true,
+                'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
                 'type' => 'text',
-                'class' => ['hide_if_yes', 'hide_if_default']
+                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
             );
             $fields['billing']['birthday_renter-' . $y] = array(
                 'label' => __('Geburtstag des Mieters', 'festival-events'),
-                'required' => true,
+                'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
                 'type' => 'text',
-                'class' => ['hide_if_yes', 'hide_if_default']
+                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
             );
         }
     }
 
     // TODO: add populate button
     return $fields;
+}
+
+add_action( 'woocommerce_checkout_billing', 'my_checkout_billing' );
+function my_checkout_billing() {
+    echo '<p>woocommerce_checkout_billing!</p>';
+    // works
+    global $woocommerce;
+    $items = $woocommerce->cart->get_cart();
 }
