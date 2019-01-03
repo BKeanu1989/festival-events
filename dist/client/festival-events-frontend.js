@@ -5,13 +5,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var are_you_renter = void 0;
-
+var are_you_renter_set = false;
+var form_checkout = void 0;
 are_you_renter = Array.from(document.querySelectorAll('input[type="radio"]'));
-
 if (are_you_renter) {
     are_you_renter.forEach(function (radioButton) {
         radioButton.addEventListener('change', function () {
             console.log("changed");
+            are_you_renter_set = true;
             var value = radioButton.value;
             if (value === 'yes') {
                 // do nothing xD
@@ -27,11 +28,37 @@ if (are_you_renter) {
                 var hiddenFields = Array.from(document.querySelectorAll('.hide_if_yes.hide_if_default'));
 
                 hiddenFields.forEach(function (x) {
+                    var span = x.querySelector('span.optional');
+                    if (span) {
+                        var parent = span.parentNode;
+                        // the following is only done for appearance - no functionality is added
+                        var abbr = document.createElement('abbr');
+                        abbr.classList.add('required');
+                        // TODO: screen reader foreign languages...
+                        abbr.setAttribute('title', 'erforderlich');
+                        var abbr_content = document.createTextNode('*');
+                        abbr.appendChild(abbr_content);
+                        parent.replaceChild(abbr, span);
+                    }
+
                     x.classList.remove('hide_if_yes');
                     x.classList.remove('hide_if_default');
                 });
             }
         });
+    });
+}
+
+form_checkout = document.querySelector('form[name="checkout"]');
+if (form_checkout) {
+    jQuery('form.checkout').on('checkout_place_order', function () {
+        if (!are_you_renter_set) {
+            console.log("stop form submit");
+            are_you_renter[0].scrollIntoView({ behavior: 'smooth' });
+            // TODO: let it blink
+            return false;
+        }
+        return true;
     });
 }
 var chooseLockerButtons = void 0,
