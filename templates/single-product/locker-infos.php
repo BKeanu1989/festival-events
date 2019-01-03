@@ -23,8 +23,6 @@ $lockerInfo = [
     </h2>
     <div class="card__container">
         <?php 
-            //TODO: slugify value
-            // M High Voltage -> m-hv etc
             foreach($lockers as $key => $value) { 
                     $identifier = fe_slugify_locker($value);
                 ?>
