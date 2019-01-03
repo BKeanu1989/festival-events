@@ -175,23 +175,23 @@ function fe_validate_bday() {
  * 
  */
 
-add_filter( 'woocommerce_checkout_fields', 'fe_add_are_you_renter');
-function fe_add_are_you_renter( $fields ) {
-    $fields['billing']['renter'] = array(
-        'label' => __('Bist du Mieter des Schließfachs?', 'festival-events'),
-        'required' => true,
-        'class' => ['inline'],
-        'clear' => true,
-        'priority' => 1,
-        'type' => 'radio',
-        'options' => [
-            "yes" => __('Ja', 'festival-events'),
-            "no" => __('Nein', 'festival-events')
-        ]
-    );
+// add_filter( 'woocommerce_checkout_fields', 'fe_add_are_you_renter');
+// function fe_add_are_you_renter( $fields ) {
+//     $fields['billing']['renter'] = array(
+//         'label' => __('Bist du Mieter des Schließfachs?', 'festival-events'),
+//         'required' => true,
+//         'class' => ['inline'],
+//         'clear' => true,
+//         'priority' => 1,
+//         'type' => 'radio',
+//         'options' => [
+//             "yes" => __('Ja', 'festival-events'),
+//             "no" => __('Nein', 'festival-events')
+//         ]
+//     );
 
-    return $fields;
-}
+//     return $fields;
+// }
 
 
 add_filter( 'woocommerce_checkout_fields', 'fe_add_not_renter_fields');
@@ -240,4 +240,16 @@ function my_checkout_billing() {
     // works
     global $woocommerce;
     $items = $woocommerce->cart->get_cart();
+    echo "
+    <p class='form-row inline validate-required' id='renter_field' data-priority='1'>
+        <label for='yes' class=''>Bist du Mieter des Schließfachs?&nbsp;
+            <abbr class='required' title='erforderlich'>*</abbr>
+        </label>
+        <span class='woocommerce-input-wrapper'>
+            <input type='radio' class='input-radio ' value='yes' name='renter' id='renter_yes'>
+                <label for='renter_yes' class='radio '>Ja</label>
+            <input type='radio' class='input-radio ' value='no' name='renter' id='renter_no'>
+                <label for='renter_no' class='radio '>Nein</label>
+        </span>
+    </p>";
 }
