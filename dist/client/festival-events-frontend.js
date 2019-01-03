@@ -4,6 +4,36 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var are_you_renter = void 0;
+
+are_you_renter = Array.from(document.querySelectorAll('input[type="radio"]'));
+
+if (are_you_renter) {
+    are_you_renter.forEach(function (radioButton) {
+        radioButton.addEventListener('change', function () {
+            console.log("changed");
+            var value = radioButton.value;
+            if (value === 'yes') {
+                // do nothing xD
+                var visibleFields = Array.from(document.querySelectorAll('.extra_person_field:not(.hide_if_yes)'));
+
+                visibleFields.forEach(function (x) {
+                    x.classList.add('hide_if_yes');
+                    x.classList.add('hide_if_default');
+                });
+            }
+            if (value === 'no') {
+                // toggle class hide_if_yes hide_if_default
+                var hiddenFields = Array.from(document.querySelectorAll('.hide_if_yes.hide_if_default'));
+
+                hiddenFields.forEach(function (x) {
+                    x.classList.remove('hide_if_yes');
+                    x.classList.remove('hide_if_default');
+                });
+            }
+        });
+    });
+}
 var chooseLockerButtons = void 0,
     lockerSelect = void 0,
     productForm = void 0;
@@ -24,6 +54,7 @@ if (chooseLockerButtons) {
             });
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
+            // TODO: force update of form (price) -> if everything is set
             productForm.scrollIntoView({ behavior: 'smooth' });
         });
     });
