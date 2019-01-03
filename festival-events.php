@@ -137,7 +137,7 @@ function fe_add_email_verification_field_checkout( $fields ) {
     return $fields;
 }
 
-add_action('woocommerce_checkout_process', 'fe_matching_email_addresses');
+add_action( 'woocommerce_checkout_process', 'fe_matching_email_addresses');
 function fe_matching_email_addresses() { 
     $email1 = $_POST['billing_email'];
     $email2 = $_POST['billing_email_confirm'];
@@ -196,8 +196,6 @@ function fe_validate_bday() {
 
 add_filter( 'woocommerce_checkout_fields', 'fe_add_not_renter_fields');
 function fe_add_not_renter_fields( $fields ) {
-    // test
-
     global $woocommerce;
     $items = $woocommerce->cart->get_cart();
 
@@ -206,26 +204,32 @@ function fe_add_not_renter_fields( $fields ) {
         $variation_id = $item['variation_id'];
 
         for($y = 0; $y < $quantity; $y++) {
-            $fields['billing']['firstname_renter-' . $y] = array(
+            $fields['billing']['firstname_renter_' . $y] = array(
                 'label' => __('Vorname des Mieters', 'festival-events'),
                 'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
                 'type' => 'text',
+                'clear' => true,
+
                 'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
             );
-            $fields['billing']['lastname_renter-' . $y] = array(
+            $fields['billing']['lastname_renter_' . $y] = array(
                 'label' => __('Nachname des Mieters', 'festival-events'),
                 'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
                 'type' => 'text',
+                'clear' => true,
+
                 'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
             );
-            $fields['billing']['birthday_renter-' . $y] = array(
+            $fields['billing']['birthday_renter_' . $y] = array(
                 'label' => __('Geburtstag des Mieters', 'festival-events'),
                 'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
-                'type' => 'text',
-                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
+                'type' => 'date',
+                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field'],
+                'clear' => true,
+
             );
         }
     }
@@ -234,15 +238,18 @@ function fe_add_not_renter_fields( $fields ) {
     return $fields;
 }
 
-add_action( 'woocommerce_checkout_billing', 'my_checkout_billing' );
-function my_checkout_billing() {
-    echo '<p>woocommerce_checkout_billing!</p>';
+/**
+ * Source of truth: for 'locker person'
+ */
+add_action( 'woocommerce_checkout_billing', 'fe_are_you_renter' );
+function fe_are_you_renter() {
     // works
     global $woocommerce;
     $items = $woocommerce->cart->get_cart();
+    $are_you_renter = __('Bist du Mieter des Schließfachs?', 'festival-events');
     echo "
     <p class='form-row inline validate-required' id='renter_field' data-priority='1'>
-        <label for='yes' class=''>Bist du Mieter des Schließfachs?&nbsp;
+        <label for='yes' class=''>{$are_you_renter}
             <abbr class='required' title='erforderlich'>*</abbr>
         </label>
         <span class='woocommerce-input-wrapper'>
@@ -252,4 +259,40 @@ function my_checkout_billing() {
                 <label for='renter_no' class='radio '>Nein</label>
         </span>
     </p>";
+}
+
+add_action ( 'woocommerce_checkout_billing', 'fe_populate_button');
+function fe_populate_button() {
+
+}
+
+// add_action( 'woocommerce_checkout_process', 'fe_test');
+// not working
+// add_action( 'woocommerce_checkout_update_order_meta', 'fe_test');
+
+// add_action( 'woocommerce_saved_order_items', 'fe_test');
+
+// not working
+// add_action( 'woocommerce_checkout_order_processed', 'fe_test', 10, 2);
+// function fe_test( $order_id, $items ) {
+//     global $post, $ID, $post_id;
+
+//     write_log("should be saved upon order creation");
+//     write_log("post");
+//     write_log($post);
+//     write_log("ID");
+//     write_log($ID);
+//     write_log("post_id");
+//     write_log($post_id);
+// }
+
+
+add_action ('woocommerce_checkout_order_processed', 'fe_test_order', 10, 3);
+function fe_test_order( $order_id, $posted_data, $order ) {
+    write_log(" iam processed");
+    write_log("posted data");
+    write_log($posted_data);
+// works
+    update_post_meta($order_id, 'test_test', 'HMMMM');
+    
 }
