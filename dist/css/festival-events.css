@@ -95,17 +95,29 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
   margin-right: 10px; }
 
 .form-row.hide_if_yes, .form-row .hide_if_default {
-  display: none; }
+  display: none;
+  opacity: 0; }
 
 .blink {
   animation-duration: 1s;
   animation-name: blink;
   animation-fill-mode: forwards; }
 
+.fadeIn {
+  animation-duration: 1s;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards; }
+
 @keyframes blink {
   0% {
     opacity: 1; }
   50% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@keyframes fadeIn {
+  0% {
     opacity: 0; }
   100% {
     opacity: 1; } }

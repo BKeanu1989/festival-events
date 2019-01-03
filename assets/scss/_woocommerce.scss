@@ -54,6 +54,7 @@ body.woocommerce {
     }
     &.hide_if_yes,.hide_if_default{
         display: none;
+        opacity: 0;
     }
 }
 
@@ -63,12 +64,28 @@ body.woocommerce {
     animation-fill-mode: forwards;
 }
 
+.fadeIn {
+    animation-duration: 1s;
+    animation-name: fadeIn;
+    animation-fill-mode: forwards;
+}
+
 @keyframes blink {
     0%{
         opacity: 1;
     }
 
     50%{
+        opacity: 0;
+    }
+
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0%{
         opacity: 0;
     }
 
