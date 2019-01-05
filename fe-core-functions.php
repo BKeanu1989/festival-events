@@ -49,3 +49,59 @@ function fe_slugify_locker($name) {
     $slugified_locker = str_replace($needleStack_Array, $replaceStack_Array, $name);
     return $slugified_locker;
 }
+
+function fe_groupPersonData($postedData, $extra_person = true) {
+    $array = [];
+    if ($extra_person) {
+        $countPersons = count($postedData['extra_person-first_name']);
+        for($i = 0; $i < $countPersons; $i++) {
+            $personData = [];
+            
+            $firstname = $postedData['extra_person-first_name'][$i];
+            $lastname = $postedData['extra_person-last_name'][$i];
+            $bday = $postedData['extra_person-birthday'][$i];
+    
+            $personData["first_name"] = $firstname;
+            $personData["last_name"] = $lastname;
+            $personData["birthday"] = $bday;
+            $array[] = $personData;
+        }
+    }
+    if ($extra_person === false) {
+        $personData = [];
+
+        $firstname = $postedData['_billing_first_name'];
+        $lastname = $postedData['_billing_last_name'];
+        $bday = $postedData['_billing_birthday'];
+
+        $personData["first_name"] = $firstname;
+        $personData["last_name"] = $lastname;
+        $personData["birthday"] = $bday;
+
+        $array[] = $personData;
+    }
+    return $array;
+}
+
+function fe_validate_person_data($allPersonData) {
+    for($i = 0; $i < count($allPersonData); $i++) {
+        
+        $personData = $allPersonData[$i];
+
+        $firstname = $personData["first_name"];
+        $lastname = $personData["last_name"];
+        $bday = $personData["birthday"];
+
+        if (empty($firstname)) {
+            wc_add_notice( __( 'Der Vorname darf nicht leer sein.', 'festival-events' ), 'error' );
+        }
+
+        if (empty($lastname)) {
+            wc_add_notice( __( 'Der Nachname darf nicht leer sein.', 'festival-events' ), 'error' );
+        }
+
+        if (empty($bday)) {
+            wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
+        }
+    }
+}
