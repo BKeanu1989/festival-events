@@ -102,7 +102,7 @@ function fe_validate_bday() {
 // }
 
 
-add_filter( 'woocommerce_checkout_fields', 'fe_add_not_renter_fields');
+add_filter( 'woocommerce_checkout_billing', 'fe_add_not_renter_fields');
 function fe_add_not_renter_fields( $fields ) {
     global $woocommerce;
     $items = $woocommerce->cart->get_cart();
@@ -112,7 +112,7 @@ function fe_add_not_renter_fields( $fields ) {
         $variation_id = $item['variation_id'];
 
         for($y = 0; $y < $quantity; $y++) {
-            $fields['billing']['firstname_renter_' . $y] = array(
+            $fields['billing'][$y]['firstname_renter'] = array(
                 'label' => __('Vorname des Mieters', 'festival-events'),
                 'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
@@ -121,7 +121,7 @@ function fe_add_not_renter_fields( $fields ) {
 
                 'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
             );
-            $fields['billing']['lastname_renter_' . $y] = array(
+            $fields['billing'][$y]['lastname_renter_'] = array(
                 'label' => __('Nachname des Mieters', 'festival-events'),
                 'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
@@ -130,7 +130,7 @@ function fe_add_not_renter_fields( $fields ) {
 
                 'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
             );
-            $fields['billing']['birthday_renter_' . $y] = array(
+            $fields['billing'][$y]['birthday_renter_'] = array(
                 'label' => __('Geburtstag des Mieters', 'festival-events'),
                 'required' => false, // client side and only validate if are you renter is no
                 'priority' => $y + 2,
@@ -157,10 +157,11 @@ function fe_are_you_renter() {
     $are_you_renter = __('Bist du Mieter des Schließfachs?', 'festival-events');
     $yes = __('Ja', 'festival-events');
     $no = __('Nein', 'festival-events');
+    $required = __('erforderlich', 'festival-events');
     echo "
     <p class='form-row inline validate-required' id='renter_field' data-priority='1'>
         <label for='yes' class=''>{$are_you_renter}
-            <abbr class='required' title='erforderlich'>*</abbr>
+            <abbr class='required' title='{$required}'>*</abbr>
         </label>
         <span class='woocommerce-input-wrapper'>
             <input type='radio' class='input-radio ' value='yes' name='renter' id='renter_yes'>
