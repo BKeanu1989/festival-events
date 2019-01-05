@@ -183,47 +183,23 @@ function fe_populate_button() {
 
 }
 
-// save custom values here -- dont even need to ...
-add_action ('woocommerce_checkout_order_processed', 'fe_test_order_new', 10, 3);
-function fe_test_order_new( $order_id, $posted_data, $order ) {
-    // works so far - $_POST available
-    write_log($order_id);
-    write_log($posted_data);
-    write_log($order);
-    // this works finally
-    $worked = update_post_meta($order_id, 'order_processed_test', $_POST['extra_person-first_name'][0]);
-    write_log("update post meta");
-    write_log($worked);
+add_action ('woocommerce_checkout_order_processed', 'fe_save_custom_fields', 10, 3);
+function fe_save_custom_fields( $order_id, $posted_data, $order ) {
+    $groupedPersonData = fe_groupPersonData($_POST);
+    // TODO: push locker info
+    update_post_meta($order_id, 'locker_person_data', $groupedPersonData);
 
 }
 
 
 // validate custom values here!!!
-add_action( 'woocommerce_checkout_process' , 'fe_custom_validation');
-function fe_custom_validation() {
+add_action( 'woocommerce_checkout_process' , 'fe_validate_custom_fields');
+function fe_validate_custom_fields() {
     // write_log($_POST);
 
     if ($_POST['renter'] === 'no') {
         // validate each extra person field
-        $groupedData = groupPersonData($_POST);
+        $groupedData = fe_groupPersonData($_POST);
+        fe_validate_person_data($groupedData);
     }
-    // wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
-}
-
-function groupPersonData($postedData) {
-    $countPersons = count($postedData['extra_person-first_name']);
-    $array = [];
-    for($i = 0; $i < $countPersons; $i++) {
-        $personData = [];
-        
-        $firstname = $postedData['extra_person-first_name'][$i];
-        $lastname = $postedData['extra_person-last_name'][$i];
-        $bday = $postedData['extra_person-birthday'][$i];
-
-        $personData["first_name"] = $firstname;
-        $personData["last_name"] = $lastname;
-        $personData["birthday"] = $bday;
-        $array[] = $personData;
-    }
-    return $array;
 }
