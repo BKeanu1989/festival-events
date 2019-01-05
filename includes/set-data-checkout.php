@@ -101,51 +101,6 @@ function fe_validate_bday() {
 //     return $fields;
 // }
 
-
-add_filter( 'woocommerce_checkout_billing', 'fe_add_not_renter_fields');
-function fe_add_not_renter_fields( $fields ) {
-    global $woocommerce;
-    $items = $woocommerce->cart->get_cart();
-
-    foreach($items AS $key => $item) {
-        $quantity = $item['quantity'];
-        $variation_id = $item['variation_id'];
-
-        for($y = 0; $y < $quantity; $y++) {
-            $fields['billing'][$y]['firstname_renter'] = array(
-                'label' => __('Vorname des Mieters', 'festival-events'),
-                'required' => false, // client side and only validate if are you renter is no
-                'priority' => $y + 2,
-                'type' => 'text',
-                'clear' => true,
-
-                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
-            );
-            $fields['billing'][$y]['lastname_renter_'] = array(
-                'label' => __('Nachname des Mieters', 'festival-events'),
-                'required' => false, // client side and only validate if are you renter is no
-                'priority' => $y + 2,
-                'type' => 'text',
-                'clear' => true,
-
-                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
-            );
-            $fields['billing'][$y]['birthday_renter_'] = array(
-                'label' => __('Geburtstag des Mieters', 'festival-events'),
-                'required' => false, // client side and only validate if are you renter is no
-                'priority' => $y + 2,
-                'type' => 'date',
-                'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field'],
-                'clear' => true,
-
-            );
-        }
-    }
-
-    // TODO: add populate button
-    return $fields;
-}
-
 /**
  * Source of truth: for 'locker person'
  */
@@ -172,23 +127,103 @@ function fe_are_you_renter() {
     </p>";
 }
 
+add_filter( 'woocommerce_checkout_billing', 'fe_add_not_renter_fields');
+function fe_add_not_renter_fields(  ) {
+    global $woocommerce;
+    $items = $woocommerce->cart->get_cart();
+
+    foreach($items AS $key => $item) {
+        $quantity = $item['quantity'];
+        $variation_id = $item['variation_id'];
+
+        // for($y = 0; $y < $quantity; $y++) {
+        //     ['billing'][$y]['firstname_renter'] = array(
+        //         'label' => __('Vorname des Mieters', 'festival-events'),
+        //         'required' => false, // client side and only validate if are you renter is no
+        //         'priority' => $y + 2,
+        //         'type' => 'text',
+        //         'clear' => true,
+
+        //         'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
+        //     );
+        //     ['billing'][$y]['lastname_renter_'] = array(
+        //         'label' => __('Nachname des Mieters', 'festival-events'),
+        //         'required' => false, // client side and only validate if are you renter is no
+        //         'priority' => $y + 2,
+        //         'type' => 'text',
+        //         'clear' => true,
+
+        //         'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
+        //     );
+        //     ['billing'][$y]['birthday_renter_'] = array(
+        //         'label' => __('Geburtstag des Mieters', 'festival-events'),
+        //         'required' => false, // client side and only validate if are you renter is no
+        //         'priority' => $y + 2,
+        //         'type' => 'date',
+        //         'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field'],
+        //         'clear' => true,
+
+        //     );
+        // }
+        for($y = 0; $y < $quantity; $y++) {
+
+            echo "
+                <input type='text' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$y]'>
+                <input type='text' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$y]'>
+                <input type='date' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-birthday[$y]'>
+            ";
+        }
+    }
+
+    // TODO: add populate button
+}
+
 add_action ( 'woocommerce_checkout_billing', 'fe_populate_button');
 function fe_populate_button() {
 
 }
 
-// save custom values here -- dont event need to ...
-add_action ('woocommerce_checkout_create_order', 'fe_test_order_new', 10, 2);
-function fe_test_order_new( $order, $data ) {
+// save custom values here -- dont even need to ...
+add_action ('woocommerce_checkout_order_processed', 'fe_test_order_new', 10, 3);
+function fe_test_order_new( $order_id, $posted_data, $order ) {
     // works so far - $_POST available
-    // write_log($order);
-    // write_log($data);
+    write_log($order_id);
+    write_log($posted_data);
+    write_log($order);
+    // this works finally
+    $worked = update_post_meta($order_id, 'order_processed_test', $_POST['extra_person-first_name'][0]);
+    write_log("update post meta");
+    write_log($worked);
+
 }
 
 
 // validate custom values here!!!
 add_action( 'woocommerce_checkout_process' , 'fe_custom_validation');
 function fe_custom_validation() {
-    write_log($_POST);
+    // write_log($_POST);
+
+    if ($_POST['renter'] === 'no') {
+        // validate each extra person field
+        $groupedData = groupPersonData($_POST);
+    }
     // wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
+}
+
+function groupPersonData($postedData) {
+    $countPersons = count($postedData['extra_person-first_name']);
+    $array = [];
+    for($i = 0; $i < $countPersons; $i++) {
+        $personData = [];
+        
+        $firstname = $postedData['extra_person-first_name'][$i];
+        $lastname = $postedData['extra_person-last_name'][$i];
+        $bday = $postedData['extra_person-birthday'][$i];
+
+        $personData["first_name"] = $firstname;
+        $personData["last_name"] = $lastname;
+        $personData["birthday"] = $bday;
+        $array[] = $personData;
+    }
+    return $array;
 }
