@@ -59,12 +59,12 @@ function fe_groupPersonData($postedData, $extra_person = true) {
             
             $firstname = $postedData['extra_person-first_name'][$i];
             $lastname = $postedData['extra_person-last_name'][$i];
-            $bday = $postedData['extra_person-birthday'][$i];
+            $bday = $postedData['extra_person-birthdate'][$i];
             $product_name = $postedData['extra_person-product_name'][$i];
     
             $personData["first_name"] = $firstname;
             $personData["last_name"] = $lastname;
-            $personData["birthday"] = $bday;
+            $personData["birthdate"] = $bday;
             $personData["product_name"] = $product_name;
             $array[] = $personData;
         }
@@ -74,12 +74,12 @@ function fe_groupPersonData($postedData, $extra_person = true) {
 
         $firstname = $postedData['_billing_first_name'];
         $lastname = $postedData['_billing_last_name'];
-        $bday = $postedData['_billing_birthday'];
+        $bday = $postedData['_billing_birthdate'];
         $product_name = $postedData['extra_person-product_name'][0];
 
         $personData["first_name"] = $firstname;
         $personData["last_name"] = $lastname;
-        $personData["birthday"] = $bday;
+        $personData["birthdate"] = $bday;
         $personData["product_name"] = $product_name;
 
         $array[] = $personData;
@@ -94,7 +94,7 @@ function fe_validate_person_data($allPersonData) {
 
         $firstname = $personData["first_name"];
         $lastname = $personData["last_name"];
-        $bday = $personData["birthday"];
+        $bday = $personData["birthdate"];
 
         if (empty($firstname)) {
             wc_add_notice( __( 'Der Vorname darf nicht leer sein.', 'festival-events' ), 'error' );
