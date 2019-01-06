@@ -60,10 +60,12 @@ function fe_groupPersonData($postedData, $extra_person = true) {
             $firstname = $postedData['extra_person-first_name'][$i];
             $lastname = $postedData['extra_person-last_name'][$i];
             $bday = $postedData['extra_person-birthday'][$i];
+            $product_name = $postedData['extra_person-product_name'][$i];
     
             $personData["first_name"] = $firstname;
             $personData["last_name"] = $lastname;
             $personData["birthday"] = $bday;
+            $personData["product_name"] = $product_name;
             $array[] = $personData;
         }
     }
@@ -73,10 +75,12 @@ function fe_groupPersonData($postedData, $extra_person = true) {
         $firstname = $postedData['_billing_first_name'];
         $lastname = $postedData['_billing_last_name'];
         $bday = $postedData['_billing_birthday'];
+        $product_name = $postedData['extra_person-product_name'][0];
 
         $personData["first_name"] = $firstname;
         $personData["last_name"] = $lastname;
         $personData["birthday"] = $bday;
+        $personData["product_name"] = $product_name;
 
         $array[] = $personData;
     }
