@@ -135,7 +135,8 @@ function fe_add_not_renter_fields(  ) {
     foreach($items AS $key => $item) {
         $quantity = $item['quantity'];
         $variation_id = $item['variation_id'];
-
+        $_product = wc_get_product($variation_id);
+        $product_name = $_product->get_title();
         // for($y = 0; $y < $quantity; $y++) {
         //     ['billing'][$y]['firstname_renter'] = array(
         //         'label' => __('Vorname des Mieters', 'festival-events'),
@@ -168,6 +169,7 @@ function fe_add_not_renter_fields(  ) {
         for($y = 0; $y < $quantity; $y++) {
 
             echo "
+                <input type='hidden' name='extra_person-product_name[$y]' value='$product_name'>
                 <input type='text' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$y]'>
                 <input type='text' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$y]'>
                 <input type='date' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-birthday[$y]'>
