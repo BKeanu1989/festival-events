@@ -57,10 +57,10 @@ function fe_matching_email_addresses() {
 /**
  * Add Bday field
  */
-add_filter( 'woocommerce_checkout_fields', 'fe_add_birthday_field_checkout');
-function fe_add_birthday_field_checkout( $fields ) {
+add_filter( 'woocommerce_checkout_fields', 'fe_add_birthdate_field_checkout');
+function fe_add_birthdate_field_checkout( $fields ) {
 
-    $fields['billing']['billing_birthday'] = array(
+    $fields['billing']['billing_birthdate'] = array(
         'label' => __('Geburtstag', 'festival-events'),
         'required' => true,
         'class' => [],
@@ -73,7 +73,7 @@ function fe_add_birthday_field_checkout( $fields ) {
 
 add_action( 'woocommerce_checkout_process', 'fe_validate_bday');
 function fe_validate_bday() { 
-    $bday = $_POST['billing_birthday'];
+    $bday = $_POST['billing_birthdate'];
     if ( empty($bday) ) {
         wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
     }
@@ -127,6 +127,17 @@ function fe_are_you_renter() {
     </p>";
 }
 
+// FIXME: client side js
+add_action ( 'woocommerce_checkout_billing', 'fe_locker_person_description');
+function fe_locker_person_description() {
+    $locker_person_description = __("Nachfolgend werden die einzelnen Schließfächer aufgelistet, sodass du ... personendaten eintragen kannst.", 'festival-events');
+    echo "
+        <div class='extra_person_field hide_if_default'>
+            <p>$locker_person_description</p>
+        </div>
+    ";
+}
+
 add_filter( 'woocommerce_checkout_billing', 'fe_add_not_renter_fields');
 function fe_add_not_renter_fields(  ) {
     global $woocommerce;
@@ -137,52 +148,28 @@ function fe_add_not_renter_fields(  ) {
         $variation_id = $item['variation_id'];
         $_product = wc_get_product($variation_id);
         $product_name = $_product->get_title();
-        // for($y = 0; $y < $quantity; $y++) {
-        //     ['billing'][$y]['firstname_renter'] = array(
-        //         'label' => __('Vorname des Mieters', 'festival-events'),
-        //         'required' => false, // client side and only validate if are you renter is no
-        //         'priority' => $y + 2,
-        //         'type' => 'text',
-        //         'clear' => true,
-
-        //         'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
-        //     );
-        //     ['billing'][$y]['lastname_renter_'] = array(
-        //         'label' => __('Nachname des Mieters', 'festival-events'),
-        //         'required' => false, // client side and only validate if are you renter is no
-        //         'priority' => $y + 2,
-        //         'type' => 'text',
-        //         'clear' => true,
-
-        //         'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field']
-        //     );
-        //     ['billing'][$y]['birthday_renter_'] = array(
-        //         'label' => __('Geburtstag des Mieters', 'festival-events'),
-        //         'required' => false, // client side and only validate if are you renter is no
-        //         'priority' => $y + 2,
-        //         'type' => 'date',
-        //         'class' => ['hide_if_yes', 'hide_if_default', 'extra_person_field'],
-        //         'clear' => true,
-
-        //     );
-        // }
         for($y = 0; $y < $quantity; $y++) {
-
+            // FIXME: button role - dont submit ... not role button?!?!?
+            if ($quantity > 1) {
+                if ($y === 1) {
+                    echo "
+                        <div class='hide_if_default hide_if_yes'>
+                            <button role='button' type='button' id='populate_data_for_other_lockers'>populate user data</button>
+                        </div>
+                    ";
+                }
+            }
             echo "
-                <input type='hidden' name='extra_person-product_name[$y]' value='$product_name'>
-                <input type='text' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$y]'>
-                <input type='text' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$y]'>
-                <input type='date' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-birthday[$y]'>
+                <div class='single_product_wrapper hide_if_yes hide_if_default extra_person_field'>
+                    <p class='product_name'>$product_name</p>
+                    <input type='hidden' name='extra_person-product_name[$y]' value='$product_name'>
+                    <input type='text' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$y]'>
+                    <input type='text' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$y]'>
+                    <input type='date' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-birthdate[$y]'>
+                </div>
             ";
         }
     }
-
-    // TODO: add populate button
-}
-
-add_action ( 'woocommerce_checkout_billing', 'fe_populate_button');
-function fe_populate_button() {
-
 }
 
 add_action ('woocommerce_checkout_order_processed', 'fe_save_custom_fields', 10, 3);
