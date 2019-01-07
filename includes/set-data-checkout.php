@@ -133,7 +133,7 @@ add_action ( 'woocommerce_checkout_billing', 'fe_locker_person_description');
 function fe_locker_person_description() {
     $locker_person_description = __("Nachfolgend werden die einzelnen Schließfächer aufgelistet, sodass du ... personendaten eintragen kannst.", 'festival-events');
     echo "
-        <div class='extra_person_field hide_if_default'>
+        <div class='extra_person_field hide_if_default hide_if_yes'>
             <p>$locker_person_description</p>
         </div>
     ";
@@ -157,7 +157,7 @@ function fe_add_not_renter_fields(  ) {
             if ($quantity > 1) {
                 if ($y === 1) {
                     echo "
-                        <div class='hide_if_default hide_if_yes'>
+                        <div class='hide_if_default hide_if_yes extra_person_field'>
                             <button role='button' type='button' id='populate_data_for_other_lockers'>populate user data</button>
                         </div>
                     ";
