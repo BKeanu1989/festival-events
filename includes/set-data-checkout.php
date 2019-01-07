@@ -143,6 +143,10 @@ add_filter( 'woocommerce_checkout_billing', 'fe_add_not_renter_fields');
 function fe_add_not_renter_fields(  ) {
     global $woocommerce;
     $items = $woocommerce->cart->get_cart();
+    $first_name_string = __('Vorname', 'festival-events');
+    $last_name_string = __('Nachname', 'festival-events');
+    $birthdate_string = __('Geburtstag', 'festival-events');
+    $required = __('erforderlich', 'festival-events');
 
     foreach($items AS $key => $item) {
         $quantity = $item['quantity'];
@@ -150,7 +154,6 @@ function fe_add_not_renter_fields(  ) {
         $_product = wc_get_product($variation_id);
         $product_name = $_product->get_title();
         for($y = 0; $y < $quantity; $y++) {
-            // FIXME: button role - dont submit ... not role button?!?!?
             if ($quantity > 1) {
                 if ($y === 1) {
                     echo "
@@ -160,13 +163,32 @@ function fe_add_not_renter_fields(  ) {
                     ";
                 }
             }
+            //FIXME: multiple products
+
             echo "
-                <div class='single_product_wrapper hide_if_yes hide_if_default extra_person_field'>
+                <div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field'>
                     <p class='product_name'>$product_name</p>
                     <input type='hidden' name='extra_person-product_name[$y]' value='$product_name'>
-                    <input type='text' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$y]'>
-                    <input type='text' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$y]'>
-                    <input type='date' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-birthdate[$y]'>
+                    <div class='extra_person__wrapper--input-wrapper'>
+                        <div class='extra_person__wrapper--input-wrapper--group'>
+                            <label for='extra_person-first_name[$y]' class=''>{$first_name_string}
+                                <abbr class='required' title='{$required}'>*</abbr>
+                            </label>
+                            <input type='text' id='extra_person-first_name[$y]' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$y]'>
+                        </div>
+                        <div class='extra_person__wrapper--input-wrapper--group'>
+                            <label for='extra_person-last_name[$y]' class=''>{$last_name_string}
+                                <abbr class='required' title='{$required}'>*</abbr>
+                            </label>
+                            <input type='text' id='extra_person-last_name[$y]' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$y]'>
+                        </div>
+                        <div class='extra_person__wrapper--input-wrapper--group'>
+                            <label for='extra_person-birthdate[$y]' class=''>{$birthdate_string}
+                                <abbr class='required' title='{$required}'>*</abbr>
+                            </label>
+                            <input type='date' id='extra_person-birthdate[$y]' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field input-text' name='extra_person-birthdate[$y]'>
+                        </div>
+                    </div>
                 </div>
             ";
         }
