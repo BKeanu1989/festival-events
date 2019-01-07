@@ -121,3 +121,13 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
     opacity: 0; }
   100% {
     opacity: 1; } }
+
+.extra_person__wrapper--input-wrapper {
+  display: flex;
+  justify-content: space-between; }
+  .extra_person__wrapper--input-wrapper--group {
+    display: flex;
+    flex-direction: column;
+    flex: 1 100%; }
+    .extra_person__wrapper--input-wrapper--group:not(:last-of-type) {
+      margin-right: 3em; }

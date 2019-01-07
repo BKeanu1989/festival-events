@@ -94,3 +94,20 @@ body.woocommerce {
         opacity: 1;
     }
 }
+
+.extra_person__wrapper{
+    &--input-wrapper{
+        display: flex;
+        justify-content: space-between;
+
+        &--group{
+            display: flex;
+            flex-direction: column;
+            flex: 1 100%;
+
+            &:not(:last-of-type){
+                margin-right: 3em;
+            }
+        }
+    }
+}
