@@ -134,7 +134,7 @@ function fe_locker_person_description() {
     $locker_person_description = __("Nachfolgend werden die einzelnen Schließfächer aufgelistet, sodass du ... personendaten eintragen kannst.", 'festival-events');
     echo "
         <div class='extra_person_field hide_if_default hide_if_yes'>
-            <p>$locker_person_description</p>
+            <p><i class='fa fa-info-circle' aria-hidden='true'></i>$locker_person_description</p>
         </div>
     ";
 }
@@ -167,26 +167,26 @@ function fe_add_not_renter_fields(  ) {
 
             echo "
                 <div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field'>
-                    <p class='product_name'>$product_name</p>
+                    <p class='product_name'>1x $product_name</p>
                     <input type='hidden' name='extra_person-product_name[$y]' value='$product_name'>
                     <div class='extra_person__wrapper--input-wrapper'>
                         <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-first_name[$y]' class=''>{$first_name_string}
+                            <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
                                 <abbr class='required' title='{$required}'>*</abbr>
                             </label>
-                            <input type='text' id='extra_person-first_name[$y]' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$y]'>
+                            <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
                         </div>
                         <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-last_name[$y]' class=''>{$last_name_string}
+                            <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
                                 <abbr class='required' title='{$required}'>*</abbr>
                             </label>
-                            <input type='text' id='extra_person-last_name[$y]' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$y]'>
+                            <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
                         </div>
                         <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-birthdate[$y]' class=''>{$birthdate_string}
+                            <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
                                 <abbr class='required' title='{$required}'>*</abbr>
                             </label>
-                            <input type='date' id='extra_person-birthdate[$y]' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field input-text' name='extra_person-birthdate[$y]'>
+                            <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
                         </div>
                     </div>
                 </div>
@@ -208,7 +208,6 @@ function fe_save_custom_fields( $order_id, $posted_data, $order ) {
 add_action( 'woocommerce_checkout_process' , 'fe_validate_custom_fields');
 function fe_validate_custom_fields() {
     // write_log($_POST);
-
     if ($_POST['renter'] === 'no') {
         // validate each extra person field
         $groupedData = fe_groupPersonData($_POST);
