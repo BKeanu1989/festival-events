@@ -68,3 +68,5 @@ if (form_checkout) {
         return true;
     });
 }
+
+//TODO: client side validation of extra fields
