@@ -168,7 +168,7 @@ function fe_add_not_renter_fields(  ) {
             echo "
                 <div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field'>
                     <p class='product_name'>1x $product_name</p>
-                    <input type='hidden' name='extra_person-product_name[$y]' value='$product_name'>
+                    <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
                     <div class='extra_person__wrapper--input-wrapper'>
                         <div class='extra_person__wrapper--input-wrapper--group'>
                             <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
