@@ -153,44 +153,46 @@ function fe_add_not_renter_fields(  ) {
         $variation_id = $item['variation_id'];
         $_product = wc_get_product($variation_id);
         $product_name = $_product->get_title();
+
+        
         for($y = 0; $y < $quantity; $y++) {
             if ($quantity > 1) {
                 if ($y === 1) {
                     echo "
-                        <div class='hide_if_default hide_if_yes extra_person_field'>
-                            <button role='button' type='button' id='populate_data_for_other_lockers'>populate user data</button>
-                        </div>
+                    <div class='hide_if_default hide_if_yes extra_person_field'>
+                    <button role='button' type='button' id='populate_data_for_other_lockers'>populate user data</button>
+                    </div>
                     ";
                 }
             }
-            //FIXME: multiple products
 
-            echo "
-                <div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field'>
-                    <p class='product_name'>1x $product_name</p>
-                    <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
-                    <div class='extra_person__wrapper--input-wrapper'>
-                        <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
-                                <abbr class='required' title='{$required}'>*</abbr>
-                            </label>
-                            <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
+            echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field'>";
+                echo "<p class='product_name'>1x $product_name</p>";
+                echo wc_get_formatted_cart_item_data( $item ); // PHPCS: XSS ok.
+                echo "
+                        <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
+                        <div class='extra_person__wrapper--input-wrapper'>
+                            <div class='extra_person__wrapper--input-wrapper--group'>
+                                <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
+                                    <abbr class='required' title='{$required}'>*</abbr>
+                                </label>
+                                <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
+                            </div>
+                            <div class='extra_person__wrapper--input-wrapper--group'>
+                                <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
+                                    <abbr class='required' title='{$required}'>*</abbr>
+                                </label>
+                                <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
+                            </div>
+                            <div class='extra_person__wrapper--input-wrapper--group'>
+                                <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
+                                    <abbr class='required' title='{$required}'>*</abbr>
+                                </label>
+                                <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
+                            </div>
                         </div>
-                        <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
-                                <abbr class='required' title='{$required}'>*</abbr>
-                            </label>
-                            <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
-                        </div>
-                        <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
-                                <abbr class='required' title='{$required}'>*</abbr>
-                            </label>
-                            <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
-                        </div>
-                    </div>
-                </div>
-            ";
+                        ";
+            echo "</div>";
         }
     }
 }
@@ -198,7 +200,6 @@ function fe_add_not_renter_fields(  ) {
 add_action ('woocommerce_checkout_order_processed', 'fe_save_custom_fields', 10, 3);
 function fe_save_custom_fields( $order_id, $posted_data, $order ) {
     $groupedPersonData = fe_groupPersonData($_POST);
-    // TODO: push locker info
     update_post_meta($order_id, 'locker_person_data', $groupedPersonData);
 
 }
