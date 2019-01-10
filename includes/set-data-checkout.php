@@ -154,18 +154,7 @@ function fe_add_not_renter_fields(  ) {
         $_product = wc_get_product($variation_id);
         $product_name = $_product->get_title();
 
-        // $test = wc_get_product_variation_attributes($variation_id); ['attribute_pa_locker' => 'm-hv-de', ...]
-        $test = wc_get_formatted_variation($_product);
         for($y = 0; $y < $quantity; $y++) {
-            // if ($quantity > 1) {
-            //     if ($y === 1) {
-            //         echo "
-            //         <div class='hide_if_default hide_if_yes extra_person_field'>
-            //         <button role='button' type='button' id='populate_data_for_other_lockers'>populate user data</button>
-            //         </div>
-            //         ";
-            //     }
-            // }
 
             echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field'>";
                 $stringifiedProduct = fe_stringify_product_attr($_product);
