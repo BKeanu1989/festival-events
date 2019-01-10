@@ -44,4 +44,13 @@
         //     color: $white;
         // }
     }
+
+    &.miscellaneous-info{
+        .card__body{
+            display: flex;
+            &--item{
+                flex: 1;
+            }
+        }
+    }
 }

@@ -40,6 +40,10 @@
           border-bottom: 1px solid #253746; }
     .card.locker_infos:not(:last-of-type) {
       margin-right: 20px; }
+  .card.miscellaneous-info .card__body {
+    display: flex; }
+    .card.miscellaneous-info .card__body--item {
+      flex: 1; }
 
 .banner__wrapper {
   margin-bottom: 1em;
