@@ -121,3 +121,21 @@ function fe_validate_person_data($allPersonData) {
         }
     }
 }
+
+function fe_stringify_product_attr($variation) 
+{
+    $array = [];
+
+    $variation_attributes = $variation->get_attributes();
+    $array[] = $variation->get_title();
+    foreach ( $variation_attributes as $name => $value ) {
+        // If this is a term slug, get the term's nice name.
+        if ( taxonomy_exists( $name ) ) {
+            $term = get_term_by( 'slug', $value, $name );#
+            $array[] = $term->name;
+        }
+    }
+
+    $string = implode(', ', $array);
+    return $string;
+}
