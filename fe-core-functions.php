@@ -100,7 +100,6 @@ function fe_groupPersonData($postedData, $extra_person = true) {
 }
 
 function fe_validate_person_data($allPersonData) {
-    // TODO: rewrite validation function to fit new need
     for($i = 0; $i < count($allPersonData); $i++) {
         
         $personData = $allPersonData[$i];
