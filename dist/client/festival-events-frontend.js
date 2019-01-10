@@ -9,52 +9,35 @@ var are_you_renter = void 0;
 var are_you_renter_set = false;
 var form_checkout = void 0;
 
-are_you_renter_container = document.querySelector('#renter_field');
-if (are_you_renter_container) {
-    are_you_renter = Array.from(are_you_renter_container.querySelectorAll('input[type="radio"]'));
-    if (are_you_renter) {
-        are_you_renter.forEach(function (radioButton) {
-            radioButton.addEventListener('change', function () {
-                are_you_renter_set = true;
-                var value = radioButton.value;
-                if (value === 'yes') {
-                    // do nothing xD
-                    var visibleFields = Array.from(document.querySelectorAll('.extra_person_field:not(.hide_if_yes)'));
+// are_you_renter_container = document.querySelector('#renter_field');
 
-                    visibleFields.forEach(function (x) {
-                        x.classList.add('hide_if_yes');
-                        x.classList.add('hide_if_default');
-                        x.classList.toggle('fadeIn');
-                    });
-                    // are_you_renter_container.classList.toggle('blink');
-                }
-                if (value === 'no') {
-                    // toggle class hide_if_yes hide_if_default
-                    var hiddenFields = Array.from(document.querySelectorAll('.hide_if_yes.hide_if_default'));
+// if (are_you_renter_container) {
+are_you_renter = Array.from(document.querySelectorAll('input[type="radio"][name^="renter"'));
+if (are_you_renter) {
+    are_you_renter.forEach(function (radioButton) {
+        console.log(radioButton);
+        radioButton.addEventListener('change', function () {
+            are_you_renter_set = true;
+            var value = radioButton.value;
+            var key = radioButton.dataset.identifier;
+            console.log("key:", key);
+            var findExtraPerson = document.querySelector('.extra_person__wrapper[data-identifier="' + key + '"');
 
-                    hiddenFields.forEach(function (x) {
-                        var span = x.querySelector('span.optional');
-                        if (span) {
-                            var parent = span.parentNode;
-                            // the following is only done for appearance - no functionality is added
-                            var abbr = document.createElement('abbr');
-                            abbr.classList.add('required');
-                            // TODO: screen reader foreign languages...
-                            abbr.setAttribute('title', 'erforderlich');
-                            var abbr_content = document.createTextNode('*');
-                            abbr.appendChild(abbr_content);
-                            parent.replaceChild(abbr, span);
-                        }
-
-                        x.classList.remove('hide_if_yes');
-                        x.classList.remove('hide_if_default');
-                        x.classList.toggle('fadeIn');
-                    });
-                }
-            });
+            if (value === 'yes') {
+                // do nothing xD
+                findExtraPerson.classList.add('hide_if_yes');
+                findExtraPerson.classList.add('hide_if_default');
+                findExtraPerson.classList.toggle('fadeIn');
+            }
+            if (value === 'no') {
+                findExtraPerson.classList.remove('hide_if_yes');
+                findExtraPerson.classList.remove('hide_if_default');
+                findExtraPerson.classList.toggle('fadeIn');
+            }
         });
-    }
+    });
 }
+// }
 form_checkout = document.querySelector('form[name="checkout"]');
 if (form_checkout) {
     jQuery('form.checkout').on('checkout_place_order', function () {
@@ -73,6 +56,8 @@ if (form_checkout) {
         return true;
     });
 }
+
+//TODO: client side validation of extra fields
 var chooseLockerButtons = void 0,
     lockerSelect = void 0,
     productForm = void 0;
@@ -94,11 +79,29 @@ if (chooseLockerButtons) {
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
             jQuery(".variations_form").trigger('check_variations');
-            // TODO: force update of form (price) -> if everything is set
             productForm.scrollIntoView({ behavior: 'smooth' });
         });
     });
 }
+// let form = document.querySelector('form.variations_form.cart');
+// let listeners = getEventListeners(form);
+// let whiteListed = ['reload_product_variations', 'show_variation', 'reset_data', 'change', 'found_variation', 'check_variations', 'update_variation_values'];
+
+// monitorEvents(form, whiteListed);
+
+// // not really working (for jquery events only?)
+
+// let form = document.querySelector('form.variations_form.cart');
+// let listeners = getEventListeners(form);
+// listeners = Object.keys(listeners);
+// listeners.forEach((listener) => {
+//     console.log(listener);
+//     if (listener === 'check_variations') {
+//         jQuery('body').on(listener, function() {
+//             console.log(`triggered ${listener}`);
+//         })
+//     }
+// })
 var $confirmEmail = void 0;
 
 $confirmEmail = document.querySelector('#billing_email_confirm');
