@@ -1,33 +1,4 @@
 <?php
-// still working?
-// not used anymore
-// add_action( 'woocommerce_checkout_create_order_line_item', 'fe_add_custom_data_to_order_item', 10, 4 );
-// function fe_add_custom_data_to_order_item( $item, $cart_item_key, $values, $order ) {
-//     global $_POST;
-//     // TODO: add server side validation
-//     foreach( $item as $cart_item_key => $cart_item_values ) {
-//         $key = (isset($cart_item_values['key'])) ? $cart_item_values['key'] : '';
-//         write_log($key);
-//         if (! isset($_POST[$key])) continue;
-//         $quantity = $cart_item_values['quantity'];
-//         for($i = 0; $i < $quantity; $i++) {
-//             $first_name_for_locker = $_POST[$key]['first_name'][$i];
-//             $last_name_for_locker = $_POST[$key]['last_name'][$i];
-//             $birthdate_for_locker = $_POST[$key]['birthdate'][$i];
-//             if ($quantity > 1) {
-//                 $item->add_meta_data("_multiple_values_bool", 1, true);
-//                 $item->add_meta_data("_first_name_for_locker--{$quantity}", $first_name_for_locker, true);
-//                 $item->add_meta_data("_last_name_for_locker--{$quantity}", $last_name_for_locker, true);
-//                 $item->add_meta_data("_birthdate_for_locker--{$quantity}", $birthdate_for_locker, true);
-//             } else {
-//                 $item->add_meta_data('_first_name_for_locker', $first_name_for_locker, true);
-//                 $item->add_meta_data('_last_name_for_locker', $last_name_for_locker, true);
-//                 $item->add_meta_data('_birthdate_for_locker', $birthdate_for_locker, true);
-//             }
-//         }
-//     }
-// }
-
 /**
  * Add Confirm Email Field
  * 
@@ -81,55 +52,31 @@ function fe_validate_bday() {
 }
 
 /**
- * 
- */
-
-// add_filter( 'woocommerce_checkout_fields', 'fe_add_are_you_renter');
-// function fe_add_are_you_renter( $fields ) {
-//     $fields['billing']['renter'] = array(
-//         'label' => __('Bist du Mieter des Schließfachs?', 'festival-events'),
-//         'required' => true,
-//         'class' => ['inline'],
-//         'clear' => true,
-//         'priority' => 1,
-//         'type' => 'radio',
-//         'options' => [
-//             "yes" => __('Ja', 'festival-events'),
-//             "no" => __('Nein', 'festival-events')
-//         ]
-//     );
-
-//     return $fields;
-// }
-
-/**
  * Source of truth: for 'locker person'
  */
-add_action( 'woocommerce_checkout_billing', 'fe_are_you_renter' );
-function fe_are_you_renter() {
+// add_action( 'woocommerce_checkout_billing', 'fe_are_you_renter' );
+function fe_are_you_renter($key = 0) {
     // works
-    global $woocommerce;
-    $items = $woocommerce->cart->get_cart();
     $are_you_renter = __('Bist du Mieter des Schließfachs?', 'festival-events');
     $yes = __('Ja', 'festival-events');
     $no = __('Nein', 'festival-events');
     $required = __('erforderlich', 'festival-events');
     echo "
-    <p class='form-row inline validate-required' id='renter_field' data-priority='1'>
+    <p class='form-row inline validate-required' data-priority='1'>
         <label for='yes' class=''>{$are_you_renter}
             <abbr class='required' title='{$required}'>*</abbr>
         </label>
         <span class='woocommerce-input-wrapper'>
-            <input type='radio' class='input-radio ' value='yes' name='renter' id='renter_yes'>
-                <label for='renter_yes' class='radio '>{$yes}</label>
-            <input type='radio' class='input-radio ' value='no' name='renter' id='renter_no'>
-                <label for='renter_no' class='radio '>{$no}</label>
+            <input type='radio' class='input-radio' value='yes' name='renter[$key]' id='renter_yes-[$key]' data-identifier='$key'>
+                <label for='renter_yes-[$key]' class='radio'>{$yes}</label>
+            <input type='radio' class='input-radio' value='no' name='renter[$key]' id='renter_no-[$key]' data-identifier='$key'>
+                <label for='renter_no-[$key]' class='radio'>{$no}</label>
         </span>
     </p>";
 }
 
 // FIXME: client side js
-add_action ( 'woocommerce_checkout_billing', 'fe_locker_person_description');
+// add_action ( 'woocommerce_checkout_billing', 'fe_locker_person_description');
 function fe_locker_person_description() {
     $locker_person_description = __("Nachfolgend werden die einzelnen Schließfächer aufgelistet, sodass du ... personendaten eintragen kannst.", 'festival-events');
     echo "
@@ -155,33 +102,34 @@ function fe_add_not_renter_fields(  ) {
         $product_name = $_product->get_title();
 
         for($y = 0; $y < $quantity; $y++) {
-
-            echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field'>";
-                $stringifiedProduct = fe_stringify_product_attr($_product);
-                echo "<p class='product_name'>1x $stringifiedProduct</p>";
+            $identifier = $item["data_hash"] . $y;
+            $stringifiedProduct = fe_stringify_product_attr($_product);
+            echo "<p class='product_name'>1x $stringifiedProduct</p>";
+            fe_are_you_renter($identifier);
+            echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field' data-identifier='$identifier'>";
                 echo "
-                        <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
-                        <div class='extra_person__wrapper--input-wrapper'>
-                            <div class='extra_person__wrapper--input-wrapper--group'>
-                                <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
-                                    <abbr class='required' title='{$required}'>*</abbr>
-                                </label>
-                                <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
-                            </div>
-                            <div class='extra_person__wrapper--input-wrapper--group'>
-                                <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
-                                    <abbr class='required' title='{$required}'>*</abbr>
-                                </label>
-                                <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='hide_if_yes hide_if_default extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
-                            </div>
-                            <div class='extra_person__wrapper--input-wrapper--group'>
-                                <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
-                                    <abbr class='required' title='{$required}'>*</abbr>
-                                </label>
-                                <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='hide_if_yes hide_if_default extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
-                            </div>
+                    <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
+                    <div class='extra_person__wrapper--input-wrapper'>
+                        <div class='extra_person__wrapper--input-wrapper--group'>
+                            <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
+                                <abbr class='required' title='{$required}'>*</abbr>
+                            </label>
+                            <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
                         </div>
-                        ";
+                        <div class='extra_person__wrapper--input-wrapper--group'>
+                            <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
+                                <abbr class='required' title='{$required}'>*</abbr>
+                            </label>
+                            <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
+                        </div>
+                        <div class='extra_person__wrapper--input-wrapper--group'>
+                            <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
+                                <abbr class='required' title='{$required}'>*</abbr>
+                            </label>
+                            <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
+                        </div>
+                    </div>
+                    ";
             echo "</div>";
         }
     }
