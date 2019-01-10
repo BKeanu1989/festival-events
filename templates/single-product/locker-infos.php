@@ -44,33 +44,11 @@ foreach($givenLockers AS $key => $value) {
     $tableData["useable"][$key] = $useable;
 }
 ?>
-<div class="wrapper">
+<div class="wrapper info">
     <h2 class="wrapper__title">
         <?php echo __('Information zum Schließfach', 'festival-events'); ?>
     </h2>
     <div class="card__container">
-        <?php 
-            foreach($lockers as $key => $value) { 
-                    $identifier = fe_slugify_locker($value);
-                ?>
-                <div class="card locker_infos" data-identifier="<?php echo $identifier ?>">
-                    <div class="card__title">
-                        <?php echo $value; ?>
-                    </div>
-                    <div class="card__body">
-                        <?php
-                            foreach($lockerInfo[$value] AS $description) { ?>
-                                <div class="card__body--description">
-                                    <?php echo $description; ?>
-                                </div>
-                            <?php }
-                        ?>
-                    </div>
-                    <!-- <div class="card__footer">
-                        <button role="button" class="button chooseLocker" data-identifier="<?php echo $identifier; ?>"><?php echo __('Auswählen', 'festival-events'); ?></button>
-                    </div> -->
-                </div>
-            <?php } ?>
         </div>
         <table>
             <tr>
@@ -82,13 +60,6 @@ foreach($givenLockers AS $key => $value) {
                 ?>
             </tr>
             <?php
-                // foreach($lockerInfo AS $key => $value) {
-                //     echo "<tr>";
-                //     foreach($lockerInfo[$key] AS $descriptor => $attribute) {
-                //         echo "<td>{$attribute}</td>";
-                //         }
-                //     echo "</tr>";
-                // }
                 foreach($tableData AS $key => $value) {
                     echo "<tr>";
                     switch($key) {
