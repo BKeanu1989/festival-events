@@ -185,4 +185,11 @@ body.woocommerce {
 .extra_person__container {
     background-color: rgba(160, 206, 78, 0.4);
     margin-bottom: 1em;
+
+    .extra_person__wrapper{
+        input.invalid{
+            box-shadow: inset 2px 0 0 #e2401c;
+        }
+    }
 }
+
