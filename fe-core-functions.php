@@ -59,49 +59,92 @@ function fe_slugify_locker($name) {
 function fe_groupPersonData($postedData, $keys = [], $extra_person = true) {
     // TODO: test new way
     $array = [];
-    if ($extra_person) {
+    // if ($extra_person) {
         // should we use another source of truth?
-        $_products = $postedData['extra_person-first_name'];
-        foreach ($_products as $variation_id => $value) {
-            $countProducts = count($_products[$variation_id]);
-            for($i = 0; $i < $countProducts; $i++) {
+
+        $allRenter = $postedData['renter'];
+
+        foreach($allRenter AS $identifier => $value) {
+            if ($value === 'yes') {
+                // take billing
                 $personData = [];
-                
-                $firstname = $postedData['extra_person-first_name'][$variation_id][$i];
-                $lastname = $postedData['extra_person-last_name'][$variation_id][$i];
-                $bday = $postedData['extra_person-birthdate'][$variation_id][$i];
-                $product_name = $postedData['extra_person-product_name'][$variation_id][$i];
+    
+                $firstname = $postedData['billing_first_name'];
+                $lastname = $postedData['billing_last_name'];
+                $bday = $postedData['billing_birthdate'];
+                $product_name = $postedData['extra_person-product_name'][$identifier];
+                $variation_id = $postedData['extra_person-variation_id'][$identifier];
+                $product_id = $postedData['extra_person-product_id'][$identifier];
         
                 $personData["first_name"] = $firstname;
                 $personData["last_name"] = $lastname;
                 $personData["birthdate"] = $bday;
                 $personData["product_name"] = $product_name;
                 $personData["variation_id"] = $variation_id;
+                $personData["product_id"] = $product_id;
+        
+                $array[] = $personData;
+            }
+            if ($value === 'no') {
+                $personData = [];
+                
+                $firstname = $postedData['extra_person-first_name'][$identifier];
+                $lastname = $postedData['extra_person-last_name'][$identifier];
+                $bday = $postedData['extra_person-birthdate'][$identifier];
+                $product_name = $postedData['extra_person-product_name'][$identifier];
+                $variation_id = $postedData['extra_person-variation_id'][$identifier];
+                $product_id = $postedData['extra_person-product_id'][$identifier];
+        
+                $personData["first_name"] = $firstname;
+                $personData["last_name"] = $lastname;
+                $personData["birthdate"] = $bday;
+                $personData["product_name"] = $product_name;
+                $personData["variation_id"] = $variation_id;
+                $personData["product_id"] = $product_id;
                 $array[] = $personData;
             }
         }
-    }
-    if ($extra_person === false) {
-        $_products = $postedData['extra_person-first_name'];
 
-        foreach ($_products as $variation_id => $value) {
-            $personData = [];
-    
-            $firstname = $postedData['_billing_first_name'];
-            $lastname = $postedData['_billing_last_name'];
-            $bday = $postedData['_billing_birthdate'];
-            $product_name = $postedData['extra_person-product_name'][$variation_id][0];
-    
-            $personData["first_name"] = $firstname;
-            $personData["last_name"] = $lastname;
-            $personData["birthdate"] = $bday;
-            $personData["product_name"] = $product_name;
-            $personData["variation_id"] = $variation_id;
-    
-            $array[] = $personData;
-        }
+        // foreach ($_products as $variation_id => $value) {
+        //     $countProducts = count($_products[$variation_id]);
+        //     for($i = 0; $i < $countProducts; $i++) {
+        //         $personData = [];
+                
+        //         $firstname = $postedData['extra_person-first_name'][$variation_id][$i];
+        //         $lastname = $postedData['extra_person-last_name'][$variation_id][$i];
+        //         $bday = $postedData['extra_person-birthdate'][$variation_id][$i];
+        //         $product_name = $postedData['extra_person-product_name'][$variation_id][$i];
+        
+        //         $personData["first_name"] = $firstname;
+        //         $personData["last_name"] = $lastname;
+        //         $personData["birthdate"] = $bday;
+        //         $personData["product_name"] = $product_name;
+        //         $personData["variation_id"] = $variation_id;
+        //         $array[] = $personData;
+        //     }
+        // }
+    // }
+    // if ($extra_person === false) {
+    //     $_products = $postedData['extra_person-first_name'];
 
-    }
+    //     foreach ($_products as $variation_id => $value) {
+    //         $personData = [];
+    
+    //         $firstname = $postedData['_billing_first_name'];
+    //         $lastname = $postedData['_billing_last_name'];
+    //         $bday = $postedData['_billing_birthdate'];
+    //         $product_name = $postedData['extra_person-product_name'][$variation_id][0];
+    
+    //         $personData["first_name"] = $firstname;
+    //         $personData["last_name"] = $lastname;
+    //         $personData["birthdate"] = $bday;
+    //         $personData["product_name"] = $product_name;
+    //         $personData["variation_id"] = $variation_id;
+    
+    //         $array[] = $personData;
+    //     }
+
+    // }
     return $array;
 }
 
@@ -123,7 +166,7 @@ function fe_validate_person_data($allPersonData) {
         }
 
         if (empty($bday)) {
-            wc_add_notice( __( 'Dein Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
+            wc_add_notice( __( 'Der Geburtstag darf nicht leer sein.', 'festival-events' ), 'error' );
         }
     }
 }
