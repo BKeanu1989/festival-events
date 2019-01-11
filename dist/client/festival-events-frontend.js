@@ -47,29 +47,8 @@ if (form_checkout) {
     jQuery('form.checkout').on('checkout_place_order', function () {
         var validatedCheckboxes = validateCheckbox();
         if (!validatedCheckboxes) {
-            try {
-                all_are_you_renter_container[0].scrollIntoView({ behavior: 'smooth' });
-                all_are_you_renter_container.forEach(function (x) {
-                    if (x.classList.contains('blink')) {
-                        console.log("remove blink class");
-                        x.classList.remove('blink');
-                    }
-                });
-                // blinking is set in css
-                setTimeout(function () {
-                    console.log(all_are_you_renter_container);
-                    all_are_you_renter_container.forEach(function (x) {
-                        // console.log(x);
-                        if (!wm_validationPassed.get(x)) {
-                            x.classList.add('blink');
-                            console.log(x);
-                        }
-                    });
-                }, 500);
-                return false;
-            } catch (err) {
-                console.log(err);
-            }
+            handleInvalidCheckbox();
+            return false;
         }
         return true;
     });
@@ -101,10 +80,38 @@ function validateCheckbox() {
     return validationPassed;
 }
 
+function handleInvalidCheckbox() {
+    try {
+        all_are_you_renter_container[0].scrollIntoView({ behavior: 'smooth' });
+        all_are_you_renter_container.forEach(function (x) {
+            if (x.classList.contains('blink')) {
+                console.log("remove blink class");
+                x.classList.remove('blink');
+            }
+        });
+        // blinking is set in css
+        setTimeout(function () {
+            console.log(all_are_you_renter_container);
+            all_are_you_renter_container.forEach(function (x) {
+                // console.log(x);
+                if (!wm_validationPassed.get(x)) {
+                    x.classList.add('blink');
+                    console.log(x);
+                }
+            });
+        }, 500);
+        return false;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 //TODO: client side validation of extra fields
 // get all extra_person__wrapper fields without hide_if_yes hide_if_default
 fieldsToValidate = document.querySelectorAll('.extra_person__wrapper:not(.hide_if_yes)');
-if (fieldsToValidate) {}
+if (fieldsToValidate) {
+    console.log(fieldsToValidate);
+}
 var chooseLockerButtons = void 0,
     lockerSelect = void 0,
     productForm = void 0;
