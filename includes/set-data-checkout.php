@@ -98,36 +98,39 @@ function fe_add_not_renter_fields(  ) {
     foreach($items AS $key => $item) {
         $quantity = $item['quantity'];
         $variation_id = $item['variation_id'];
-        $_product = wc_get_product($variation_id);
-        $product_name = $_product->get_title();
+        $variation = wc_get_product($variation_id);
+        $product_id = wp_get_post_parent_id($variation_id);
+        $product_name = $variation->get_title();
 
         for($y = 0; $y < $quantity; $y++) {
             $identifier = $item["data_hash"] . $y;
-            $stringifiedProduct = fe_stringify_product_attr($_product);
+            $stringifiedProduct = fe_stringify_product_attr($variation);
             echo "<div class='extra_person__container'>";
                 echo "<p class='product_name'>1x $stringifiedProduct</p>";
                 fe_are_you_renter($identifier);
                 echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field' data-identifier='$identifier'>";
                     echo "
-                        <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
+                    <input type='hidden' name='extra_person-product_name[$identifier]' value='$product_name'>
+                    <input type='hidden' name='extra_person-variation_id[$identifier]' value='$variation_id'>
+                    <input type='hidden' name='extra_person-product_id[$identifier]' value='$product_id'>
                         <div class='extra_person__wrapper--input-wrapper'>
                             <div class='extra_person__wrapper--input-wrapper--group'>
-                                <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
+                                <label for='extra_person-first_name[$identifier]' class=''>{$first_name_string}
                                     <abbr class='required' title='{$required}'>*</abbr>
                                 </label>
-                                <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
+                                <input type='text' id='extra_person-first_name[$identifier]' placeholder='michaela' class='extra_person_field' name='extra_person-first_name[$identifier]'>
                             </div>
                             <div class='extra_person__wrapper--input-wrapper--group'>
-                                <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
+                                <label for='extra_person-last_name[$identifier]' class=''>{$last_name_string}
                                     <abbr class='required' title='{$required}'>*</abbr>
                                 </label>
-                                <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
+                                <input type='text' id='extra_person-last_name[$identifier]' placeholder='müller' class='extra_person_field' name='extra_person-last_name[$identifier]'>
                             </div>
                             <div class='extra_person__wrapper--input-wrapper--group'>
-                                <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
+                                <label for='extra_person-birthdate[$identifier]' class=''>{$birthdate_string}
                                     <abbr class='required' title='{$required}'>*</abbr>
                                 </label>
-                                <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
+                                <input type='date' id='extra_person-birthdate[$identifier]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$identifier]'>
                             </div>
                         </div>
                         ";
@@ -149,9 +152,9 @@ function fe_save_custom_fields( $order_id, $posted_data, $order ) {
 add_action( 'woocommerce_checkout_process' , 'fe_validate_custom_fields');
 function fe_validate_custom_fields() {
     // write_log($_POST);
-    if ($_POST['renter'] === 'no') {
+    // if ($_POST['renter'] === 'no') {
         // validate each extra person field
         $groupedData = fe_groupPersonData($_POST);
         fe_validate_person_data($groupedData);
-    }
+    // }
 }
