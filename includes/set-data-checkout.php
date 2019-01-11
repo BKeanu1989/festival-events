@@ -104,32 +104,34 @@ function fe_add_not_renter_fields(  ) {
         for($y = 0; $y < $quantity; $y++) {
             $identifier = $item["data_hash"] . $y;
             $stringifiedProduct = fe_stringify_product_attr($_product);
-            echo "<p class='product_name'>1x $stringifiedProduct</p>";
-            fe_are_you_renter($identifier);
-            echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field' data-identifier='$identifier'>";
-                echo "
-                    <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
-                    <div class='extra_person__wrapper--input-wrapper'>
-                        <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
-                                <abbr class='required' title='{$required}'>*</abbr>
-                            </label>
-                            <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
+            echo "<div class='extra_person__container'>";
+                echo "<p class='product_name'>1x $stringifiedProduct</p>";
+                fe_are_you_renter($identifier);
+                echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field' data-identifier='$identifier'>";
+                    echo "
+                        <input type='hidden' name='extra_person-product_name[$variation_id][$y]' value='$product_name'>
+                        <div class='extra_person__wrapper--input-wrapper'>
+                            <div class='extra_person__wrapper--input-wrapper--group'>
+                                <label for='extra_person-first_name[$variation_id][$y]' class=''>{$first_name_string}
+                                    <abbr class='required' title='{$required}'>*</abbr>
+                                </label>
+                                <input type='text' id='extra_person-first_name[$variation_id][$y]' placeholder='michaela' class='extra_person_field' name='extra_person-first_name[$variation_id][$y]'>
+                            </div>
+                            <div class='extra_person__wrapper--input-wrapper--group'>
+                                <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
+                                    <abbr class='required' title='{$required}'>*</abbr>
+                                </label>
+                                <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
+                            </div>
+                            <div class='extra_person__wrapper--input-wrapper--group'>
+                                <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
+                                    <abbr class='required' title='{$required}'>*</abbr>
+                                </label>
+                                <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
+                            </div>
                         </div>
-                        <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-last_name[$variation_id][$y]' class=''>{$last_name_string}
-                                <abbr class='required' title='{$required}'>*</abbr>
-                            </label>
-                            <input type='text' id='extra_person-last_name[$variation_id][$y]' placeholder='müller' class='extra_person_field' name='extra_person-last_name[$variation_id][$y]'>
-                        </div>
-                        <div class='extra_person__wrapper--input-wrapper--group'>
-                            <label for='extra_person-birthdate[$variation_id][$y]' class=''>{$birthdate_string}
-                                <abbr class='required' title='{$required}'>*</abbr>
-                            </label>
-                            <input type='date' id='extra_person-birthdate[$variation_id][$y]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$variation_id][$y]'>
-                        </div>
-                    </div>
-                    ";
+                        ";
+                echo "</div>";
             echo "</div>";
         }
     }
