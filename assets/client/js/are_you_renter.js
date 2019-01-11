@@ -52,3 +52,5 @@ if (form_checkout) {
 }
 
 //TODO: client side validation of extra fields
+// get all extra_person__wrapper fields without hide_if_yes hide_if_default
+let fieldsToValidate =  document.querySelectorAll('.extra_person__wrapper:not(.hide_if_yes)');
