@@ -145,8 +145,8 @@ body.woocommerce {
         .woocommerce{
             position: relative;
             .woocommerce-cart-form{
-                // width: 70%;
-                // float: left;
+                width: 70%;
+                float: left;
             }
             .cart-collaterals{
                 float: left;
@@ -180,4 +180,9 @@ body.woocommerce {
 
 .singleproduct .summary.entry-summary{
     width: 30%;
+}
+
+.extra_person__container {
+    background-color: rgba(160, 206, 78, 0.4);
+    margin-bottom: 1em;
 }

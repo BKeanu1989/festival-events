@@ -144,6 +144,9 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
 
 .woocommerce-cart .entry-content .woocommerce {
   position: relative; }
+  .woocommerce-cart .entry-content .woocommerce .woocommerce-cart-form {
+    width: 70%;
+    float: left; }
   .woocommerce-cart .entry-content .woocommerce .cart-collaterals {
     float: left;
     width: 30%;
@@ -165,3 +168,7 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
 
 .singleproduct .summary.entry-summary {
   width: 30%; }
+
+.extra_person__container {
+  background-color: rgba(160, 206, 78, 0.4);
+  margin-bottom: 1em; }
