@@ -49,8 +49,14 @@ function fe_slugify_locker($name) {
     $slugified_locker = str_replace($needleStack_Array, $replaceStack_Array, $name);
     return $slugified_locker;
 }
-
-function fe_groupPersonData($postedData, $extra_person = true) {
+/**
+ * 
+ * Groups Person data to save 
+ * @param $postedData   | $_POST
+ * @param $keys         | keys to identify posted persons
+ * @param $extra_person | if renter no -> get billing data
+ */
+function fe_groupPersonData($postedData, $keys = [], $extra_person = true) {
     // TODO: test new way
     $array = [];
     if ($extra_person) {
