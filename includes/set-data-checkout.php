@@ -14,6 +14,9 @@ function fe_add_email_verification_field_checkout( $fields ) {
         'priority' => 999,
         'type' => 'email'
     );
+
+    unset($fields['billing']['billing_address_2']);
+    unset($fields['billing']['billing_phone']);
     return $fields;
 }
 
@@ -62,17 +65,19 @@ function fe_are_you_renter($key = 0) {
     $no = __('Nein', 'festival-events');
     $required = __('erforderlich', 'festival-events');
     echo "
-    <p class='form-row inline validate-required' data-priority='1'>
-        <label for='yes' class=''>{$are_you_renter}
-            <abbr class='required' title='{$required}'>*</abbr>
-        </label>
-        <span class='woocommerce-input-wrapper'>
-            <input type='radio' class='input-radio' value='yes' name='renter[$key]' id='renter_yes-[$key]' data-identifier='$key'>
-                <label for='renter_yes-[$key]' class='radio'>{$yes}</label>
-            <input type='radio' class='input-radio' value='no' name='renter[$key]' id='renter_no-[$key]' data-identifier='$key'>
-                <label for='renter_no-[$key]' class='radio'>{$no}</label>
-        </span>
-    </p>";
+    <div class='checkbox-required' data-identifier='$key'>
+        <p class='form-row inline validate-required' data-priority='1'>
+            <label for='yes' class=''>{$are_you_renter}
+                <abbr class='required' title='{$required}'>*</abbr>
+            </label>
+            <span class='woocommerce-input-wrapper'>
+                <input type='radio' class='input-radio' value='yes' name='renter[$key]' id='renter_yes-[$key]' data-identifier='$key'>
+                    <label for='renter_yes-[$key]' class='radio'>{$yes}</label>
+                <input type='radio' class='input-radio' value='no' name='renter[$key]' id='renter_no-[$key]' data-identifier='$key'>
+                    <label for='renter_no-[$key]' class='radio'>{$no}</label>
+            </span>
+        </p>
+    </div>";
 }
 
 // FIXME: client side js
