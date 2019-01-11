@@ -62,7 +62,7 @@ function fe_groupPersonData($postedData, $keys = [], $extra_person = true) {
     // if ($extra_person) {
         // should we use another source of truth?
 
-        $allRenter = $postedData['renter'];
+        $allRenter = (isset($postedData['renter'])) ? $postedData['renter'] : [];
 
         foreach($allRenter AS $identifier => $value) {
             if ($value === 'yes') {
