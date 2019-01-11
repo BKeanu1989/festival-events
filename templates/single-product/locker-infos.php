@@ -49,7 +49,7 @@ foreach($givenLockers AS $key => $value) {
         <?php echo __('Information zum Schließfach', 'festival-events'); ?>
     </h2>
     <div class="card__container">
-        </div>
+        <!-- </div> -->
         <table>
             <tr>
                 <th></th>
@@ -85,3 +85,4 @@ foreach($givenLockers AS $key => $value) {
             ?>
         </table>
     </div>
+</div>
