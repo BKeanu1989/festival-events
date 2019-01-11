@@ -14,8 +14,8 @@ body.woocommerce {
 }
 
 .storefront-full-width-content.single-product div.product .summary {
-    width: 100% !important;
-    float: unset !important;
+    // width: 100% !important;
+    // float: unset !important;
 
 }
 
@@ -29,8 +29,9 @@ body.woocommerce {
 
 .single-product-form-wrapper {
     // display: flex;
-    width: 100%;
-    position: relative;
+    position: fixed;
+    left: 50%;
+    z-index: 1000;
 
     .wrapper{
         width: 70%;
@@ -39,11 +40,11 @@ body.woocommerce {
     }
 
     .variations_form {
-        width: 20vw;
-        // position: sticky;
-        position: fixed;
-        left: 70vw;
-        float: left;
+        // width: 20vw;
+        // // position: sticky;
+        // position: fixed;
+        // left: 70vw;
+        // float: left;
 
     }
 
@@ -128,8 +129,8 @@ body.woocommerce {
 
 .woocommerce.single-product{
     .wrapper{
+        width: 70%;
         &.info{
-            width: 70%;
         }
         
         
@@ -144,8 +145,8 @@ body.woocommerce {
         .woocommerce{
             position: relative;
             .woocommerce-cart-form{
-                width: 70%;
-                float: left;
+                // width: 70%;
+                // float: left;
             }
             .cart-collaterals{
                 float: left;
@@ -175,4 +176,8 @@ body.woocommerce {
 .storefront-full-width-content.woocommerce-cart .entry-header,
 .storefront-full-width-content.woocommerce-checkout .entry-header{
     padding: 0 0 2.5em !important;
+}
+
+.singleproduct .summary.entry-summary{
+    width: 30%;
 }
