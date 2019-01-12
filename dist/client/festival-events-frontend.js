@@ -1,6 +1,12 @@
 'use strict';
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11,7 +17,6 @@ var fieldsToValidate = void 0;
 var uniqueIdentifiers = new Set();
 
 all_are_you_renter_container = document.querySelectorAll('div.checkbox-required[data-identifier]');
-var wm_validationPassed = new WeakMap();
 
 if (all_are_you_renter_container) {
     are_you_renter_boxes = Array.from(document.querySelectorAll('input[type="radio"][name^="renter"'));
@@ -45,57 +50,391 @@ if (all_are_you_renter_container) {
 form_checkout = document.querySelector('form[name="checkout"]');
 if (form_checkout) {
     jQuery('form.checkout').on('checkout_place_order', function () {
-        var validatedCheckboxes = validateCheckbox();
-        if (!validatedCheckboxes) {
-            handleInvalidCheckbox();
-        }
 
-        var allFieldsValid = handleFieldsToValidate();
-        console.log("should scroll @invalid");
-        if (!allFieldsValid || !validatedCheckboxes) return false;
-        return true;
+        var radioValidator = new RadioValidator();
+        radioValidator.init();
+
+        // if (wm_validationPassed.get(radioValidator) === false) return false;
+
+        var inputValidator = new InputValidator();
+        inputValidator.init();
+
+        // if (wm_validationPassed.get(inputValidator) === false) return false;
+        // let validatedCheckboxes = validateCheckbox();
+        // if (!validatedCheckboxes) {
+        //     handleInvalidCheckbox();
+        // }
+
+        if (wm_validationPassed.get(radioValidator) === false || wm_validationPassed.get(inputValidator) === false) return false;
+
+        // let allFieldsValid = handleFieldsToValidate();
+        // console.log("should scroll @invalid");
+        // if (!allFieldsValid || !validatedCheckboxes) return false;
+        // return true;
+        // return false;
     });
 }
 
-//TODO: validate all renter buttons
-// set for data-identifier (grouping)
-// if no value is set in a group --> fail validation
-function validateCheckbox() {
-    var validationArray = [];
-    var validationPassed = void 0;
-    uniqueIdentifiers.forEach(function (data_hash) {
-        try {
-            var _validationPassed = false;
-            var radioContainer = document.querySelector('div[data-identifier="' + data_hash + '"]');
-            var radiosPerGroup = Array.from(radioContainer.querySelectorAll('input[type="radio"]'));
-            _validationPassed = radiosPerGroup.some(function (element) {
-                return element.checked;
+// function resetValidationClassesNScroll($elements) {
+//     let firstErrorElement = false;
+//     $elements.forEach((x) => {
+//         if (x.classList.contains('blink')) {
+//             x.classList.remove('blink');
+//         }
+//         console.log("are you here");
+//         if (wm_validationPassed.get(x) === false && !firstErrorElement) {
+//             firstErrorElement = true;
+//             console.log("should scroll to", x);
+//         }
+//         if (firstErrorElement) {
+//             x.scrollIntoView({behavior: 'smooth'});
+//         }
+//     });
+// }
+
+// function scrollIntoViewNBlink($elements) {
+//     try {
+//         resetValidationClassesNScroll($elements);
+
+//         setTimeout(() => {
+//             $elements.forEach((x) => {
+//                 // console.log(x);
+//                 if (wm_validationPassed.get(x) === false) {
+//                     x.classList.add('blink');
+//                 }
+//             })
+//         }, 500);
+//     } catch(err) {
+//         console.log(err);
+//     }
+// }
+var chooseLockerButtons = void 0,
+    lockerSelect = void 0,
+    productForm = void 0;
+
+chooseLockerButtons = Array.from(document.querySelectorAll('button.chooseLocker'));
+lockerSelect = document.querySelector('select#pa_locker');
+productForm = document.querySelector('form.cart.variations_form');
+
+if (chooseLockerButtons) {
+    chooseLockerButtons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            var identifier = event.target.dataset.identifier + '-' + currentLanguage;
+            var options = Array.from(lockerSelect.options);
+            var chosen = options.filter(function (x) {
+                if (x.value === identifier) {
+                    return x;
+                }
             });
-            wm_validationPassed.set(radioContainer, _validationPassed);
-            validationArray.push(_validationPassed);
-        } catch (err) {
-            console.log(err);
-        }
+            chosen = chosen[0];
+            lockerSelect.value = chosen.value;
+            jQuery(".variations_form").trigger('check_variations');
+            productForm.scrollIntoView({ behavior: 'smooth' });
+        });
     });
-    validationPassed = validationArray.every(function (x) {
-        return x;
-    });
-    return validationPassed;
 }
+var wm_validationPassed = new WeakMap();
 
-function handleInvalidCheckbox() {
-    try {
-
-        // blinking is set in css
-        scrollIntoViewNBlink(all_are_you_renter_container);
-        return false;
-    } catch (err) {
-        console.log(err);
+var Validator = function () {
+    function Validator() {
+        _classCallCheck(this, Validator);
     }
-}
+
+    _createClass(Validator, [{
+        key: 'init',
+        value: function init() {}
+    }, {
+        key: 'scrollIntoView',
+        value: function scrollIntoView($element) {
+            $element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }]);
+
+    return Validator;
+}();
+
+var RadioValidator = function (_Validator) {
+    _inherits(RadioValidator, _Validator);
+
+    function RadioValidator() {
+        _classCallCheck(this, RadioValidator);
+
+        var _this = _possibleConstructorReturn(this, (RadioValidator.__proto__ || Object.getPrototypeOf(RadioValidator)).call(this));
+
+        _this.allRadioContainer;
+        _this.allUniqueHashes;
+        _this.groupedRadioButtons = [];
+        return _this;
+    }
+
+    _createClass(RadioValidator, [{
+        key: 'init',
+        value: function init() {
+            this.allRadioContainer();
+            this.uniqueHashes();
+            this.groupRadioButtons();
+
+            this.validationHandler();
+            this.handleInvalid();
+            this.scrollToFirstInvalid();
+        }
+    }, {
+        key: 'groupRadioButtons',
+        value: function groupRadioButtons() {
+            var _this2 = this;
+
+            this.allUniqueHashes.forEach(function (hash) {
+                var radioContainer = document.querySelector('div[data-identifier="' + hash + '"]');
+                _this2.groupedRadioButtons.push(radioContainer);
+            });
+        }
+    }, {
+        key: 'allRadioContainer',
+        value: function allRadioContainer() {
+            // this.allRadioButtons = document.querySelector()
+            this.allRadioContainer = Array.from(document.querySelectorAll('div[data-identifier]'));
+        }
+    }, {
+        key: 'uniqueHashes',
+        value: function uniqueHashes() {
+            // just to be sure via set
+            this.allUniqueHashes = new Set(this.allRadioContainer.map(function (x) {
+                return x.dataset.identifier;
+            }));
+        }
+    }, {
+        key: 'validationHandler',
+        value: function validationHandler() {
+            var validationArray = [];
+            var passedValidation = void 0;
+            this.groupedRadioButtons.forEach(function (singleGroup) {
+                try {
+                    var radioButtons = Array.from(singleGroup.querySelectorAll('input[type="radio"]'));
+                    var validationPassed = false;
+                    validationPassed = radioButtons.some(function (radioInput) {
+                        return radioInput.checked;
+                    });
+                    wm_validationPassed.set(singleGroup, validationPassed);
+                    validationArray.push(validationPassed);
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+            passedValidation = validationArray.every(function (x) {
+                return x;
+            });
+            wm_validationPassed.set(this, passedValidation);
+        }
+    }, {
+        key: 'handleInvalid',
+        value: function handleInvalid() {
+            this.groupedRadioButtons.forEach(function (singleGroup) {
+                try {
+                    if (singleGroup.classList.contains('blink')) {
+                        singleGroup.classList.remove('blink');
+                    }
+                    setTimeout(function () {
+                        if (wm_validationPassed.get(singleGroup) === false) {
+                            singleGroup.classList.add('blink');
+                        }
+                    }, 500);
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+        }
+    }, {
+        key: 'scrollToFirstInvalid',
+        value: function scrollToFirstInvalid() {
+            var _this3 = this;
+
+            try {
+                this.groupedRadioButtons.some(function (singleGroup) {
+                    try {
+                        if (wm_validationPassed.get(singleGroup) === false) {
+                            _get(RadioValidator.prototype.__proto__ || Object.getPrototypeOf(RadioValidator.prototype), 'scrollIntoView', _this3).call(_this3, singleGroup);
+                            return true;
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }]);
+
+    return RadioValidator;
+}(Validator);
+
+// function validateCheckbox() {
+//     let validationArray = [];
+//     let validationPassed;
+//     uniqueIdentifiers.forEach((data_hash) => {
+//         try {
+//             let validationPassed = false;
+//             let radioContainer = document.querySelector(`div[data-identifier="${data_hash}"]`);
+//             let radiosPerGroup = Array.from(radioContainer.querySelectorAll('input[type="radio"]'));
+//             validationPassed = radiosPerGroup.some((element) => {
+//                 return element.checked
+//             });
+//             wm_validationPassed.set(radioContainer, validationPassed);
+//             validationArray.push(validationPassed);
+//         } catch(err) {
+//             console.log(err);
+//         }
+//     });
+//     validationPassed = validationArray.every((x) => x);
+//     return validationPassed;
+// // }
+
+
+// function handleInvalidCheckbox() {
+//     try {
+
+//         // blinking is set in css
+//         scrollIntoViewNBlink(all_are_you_renter_container);
+//         return false;
+//     } catch(err) {
+//         console.log(err);
+//     }    
+// }
+
+
+var InputValidator = function (_Validator2) {
+    _inherits(InputValidator, _Validator2);
+
+    function InputValidator() {
+        _classCallCheck(this, InputValidator);
+
+        var _this4 = _possibleConstructorReturn(this, (InputValidator.__proto__ || Object.getPrototypeOf(InputValidator)).call(this));
+
+        _this4.groupsToValidate;
+        _this4.validationPassed_array = [];
+        return _this4;
+    }
+
+    _createClass(InputValidator, [{
+        key: 'init',
+        value: function init() {
+            this.groupsToValidate = Array.from(document.querySelectorAll('.extra_person__wrapper:not(.hide_if_yes)'));
+
+            this.validationHandler();
+            this.handleInvalid();
+        }
+    }, {
+        key: 'validationHandler',
+        value: function validationHandler() {
+            var _this5 = this;
+
+            this.groupsToValidate.forEach(function (singleGroup) {
+                try {
+                    _this5.validateInputGroup(singleGroup);
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+            var passedValidation = this.validationPassed_array.every(function (x) {
+                return x;
+            });
+            wm_validationPassed.set(this, passedValidation);
+        }
+    }, {
+        key: 'validateInputGroup',
+        value: function validateInputGroup($group) {
+            var _this6 = this;
+
+            var passed = void 0;
+            var $firstname = $group.querySelector('[name^="extra_person-first_name"]');
+            var $lastname = $group.querySelector('[name^="extra_person-last_name"]');
+            var $bday = $group.querySelector('[name^="extra_person-birthdate"]');
+
+            var groupInputs = [$firstname, $lastname, $bday];
+
+            groupInputs.forEach(function ($input) {
+                _this6.handleEmptyInput($input);
+            });
+
+            passed = groupInputs.every(function (input) {
+                return input.value;
+            });
+
+            this.validationPassed_array.push(passed);
+            wm_validationPassed.set($group, passed);
+        }
+    }, {
+        key: 'handleInvalid',
+        value: function handleInvalid() {
+            // this.groupsToValidate
+            console.log(wm_validationPassed);
+            this.groupsToValidate.forEach(function (singleContainer) {
+                try {
+                    var singleGroup = singleContainer.querySelector('.extra_person__wrapper--input-wrapper');
+                    if (singleGroup.classList.contains('blink')) {
+                        singleGroup.classList.remove('blink');
+                    }
+                    setTimeout(function () {
+                        if (wm_validationPassed.get(singleContainer) === false) {
+                            singleGroup.classList.add('blink');
+                        }
+                    }, 500);
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+
+            this.scrollToFirstInvalid();
+        }
+    }, {
+        key: 'scrollToFirstInvalid',
+        value: function scrollToFirstInvalid() {
+            var _this7 = this;
+
+            try {
+                this.groupsToValidate.some(function (singleGroup) {
+                    if (wm_validationPassed.get(singleGroup) === false) {
+                        _get(InputValidator.prototype.__proto__ || Object.getPrototypeOf(InputValidator.prototype), 'scrollIntoView', _this7).call(_this7, singleGroup);
+                        return true;
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }, {
+        key: 'attachInputEvent',
+        value: function attachInputEvent($input) {
+            $input.addEventListener('input', function (event) {
+                try {
+                    if ($input.classList.contains('invalid')) {
+                        $input.classList.remove('invalid');
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+        }
+    }, {
+        key: 'handleEmptyInput',
+        value: function handleEmptyInput($input) {
+            if ($input.value === '') {
+                if ($input.classList.contains('invalid')) {
+                    $input.classList.remove('invalid');
+                }
+                $input.classList.add('invalid');
+                this.attachInputEvent($input);
+            }
+        }
+    }]);
+
+    return InputValidator;
+}(Validator);
 
 //TODO: client side validation of extra fields
 // get all extra_person__wrapper fields without hide_if_yes hide_if_default
+
+
 function handleFieldsToValidate() {
     var validationPassed_array = [];
     fieldsToValidate = document.querySelectorAll('.extra_person__wrapper:not(.hide_if_yes)');
@@ -160,66 +499,6 @@ function attachInputEvent() {
         });
     });
 }
-
-function resetValidationClassesNScroll($elements) {
-    var firstErrorElement = false;
-    $elements.forEach(function (x) {
-        if (x.classList.contains('blink')) {
-            x.classList.remove('blink');
-        }
-        console.log("are you here");
-        if (wm_validationPassed.get(x) === false && !firstErrorElement) {
-            firstErrorElement = true;
-            console.log("should scroll to", x);
-        }
-        if (firstErrorElement) {
-            x.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-}
-
-function scrollIntoViewNBlink($elements) {
-    try {
-        resetValidationClassesNScroll($elements);
-
-        setTimeout(function () {
-            $elements.forEach(function (x) {
-                // console.log(x);
-                if (wm_validationPassed.get(x) === false) {
-                    x.classList.add('blink');
-                }
-            });
-        }, 500);
-    } catch (err) {
-        console.log(err);
-    }
-}
-var chooseLockerButtons = void 0,
-    lockerSelect = void 0,
-    productForm = void 0;
-
-chooseLockerButtons = Array.from(document.querySelectorAll('button.chooseLocker'));
-lockerSelect = document.querySelector('select#pa_locker');
-productForm = document.querySelector('form.cart.variations_form');
-
-if (chooseLockerButtons) {
-    chooseLockerButtons.forEach(function (button) {
-        button.addEventListener("click", function (event) {
-            var identifier = event.target.dataset.identifier + '-' + currentLanguage;
-            var options = Array.from(lockerSelect.options);
-            var chosen = options.filter(function (x) {
-                if (x.value === identifier) {
-                    return x;
-                }
-            });
-            chosen = chosen[0];
-            lockerSelect.value = chosen.value;
-            jQuery(".variations_form").trigger('check_variations');
-            productForm.scrollIntoView({ behavior: 'smooth' });
-        });
-    });
-}
-
 // let form = document.querySelector('form.variations_form.cart');
 // let listeners = getEventListeners(form);
 // let whiteListed = ['reload_product_variations', 'show_variation', 'reset_data', 'change', 'found_variation', 'check_variations', 'update_variation_values'];
@@ -295,18 +574,18 @@ var PopulateUserData = function () {
     }, {
         key: 'setData',
         value: function setData() {
-            var _this = this;
+            var _this8 = this;
 
             this._firstNames.forEach(function ($firstname) {
-                $firstname.value = _this.firstName;
+                $firstname.value = _this8.firstName;
             });
 
             this._lastNames.forEach(function ($lastName) {
-                $lastName.value = _this.lastName;
+                $lastName.value = _this8.lastName;
             });
 
             this._birthdates.forEach(function ($birthdate) {
-                $birthdate.value = _this.birthdate;
+                $birthdate.value = _this8.birthdate;
             });
         }
     }]);
