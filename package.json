@@ -27,7 +27,7 @@
     "babel-admin": "./node_modules/.bin/babel ./admin/festival-events.js --out-dir dist",
     "babel-frontend": "./node_modules/.bin/babel ./client/festival-events-frontend.js --out-dir dist",
     "min-admin-js": "gulp concat-admin-js && npm run babel-admin && gulp uglify-admin",
-    "min-frontend-js": "gulp concat-frontend-js && npm run babel-frontend && gulp uglify-frontend"
+    "min-frontend-js": "gulp concat-classes-js && gulp concat-frontend-js && npm run babel-frontend && gulp uglify-frontend"
   },
   "author": "",
   "license": "ISC"
