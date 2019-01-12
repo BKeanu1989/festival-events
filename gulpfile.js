@@ -46,6 +46,17 @@ gulp.task('concat-frontend-js', function() {
         .pipe(gulp.dest('client'))
 })
 
+gulp.task('concat-classes-js', function() {
+    let files = ['Validator.js', 'RadioValidator.js', 'InputValidator.js'];
+    files = files.map((x) => {
+        return './assets/client/classes/' + x;
+    })
+    // console.log(files);
+    return gulp.src(files)
+        .pipe(concat('classes-frontend.js'))
+        .pipe(gulp.dest('./assets/client/js'));
+})
+
 gulp.task('uglify-admin', function() {
     return gulp.src('./dist/admin/festival-events.js')
         .pipe(uglify())
