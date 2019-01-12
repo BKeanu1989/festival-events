@@ -58,6 +58,12 @@ if (form_checkout) {
         if (wm_validationPassed.get(radioValidator) === false || wm_validationPassed.get(inputValidator) === false) return false;
     });
 }
+
+jQuery('form.variations').on('found_variation', function () {
+
+    jQuery('.single_variation .price').show();
+});
+
 var chooseLockerButtons = void 0,
     lockerSelect = void 0,
     productForm = void 0;
@@ -79,7 +85,6 @@ if (chooseLockerButtons) {
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
             jQuery(".variations_form").trigger('check_variations');
-            jQuery('.single_variation .price').show();
             productForm.scrollIntoView({ behavior: 'smooth' });
         });
     });

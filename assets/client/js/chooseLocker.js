@@ -17,7 +17,6 @@ if (chooseLockerButtons) {
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
             jQuery(".variations_form").trigger('check_variations');
-            jQuery( '.single_variation .price' ).show();
             productForm.scrollIntoView({behavior: 'smooth'});
         })
     });

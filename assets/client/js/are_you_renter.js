@@ -47,3 +47,8 @@ if (form_checkout) {
 
     });
 }
+
+jQuery( 'form.variations' ).on( 'found_variation', function() {
+
+    jQuery( '.single_variation .price' ).show();
+})
