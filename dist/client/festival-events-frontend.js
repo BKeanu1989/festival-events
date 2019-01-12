@@ -48,8 +48,11 @@ if (form_checkout) {
         var validatedCheckboxes = validateCheckbox();
         if (!validatedCheckboxes) {
             handleInvalidCheckbox();
-            return false;
         }
+
+        var allFieldsValid = handleFieldsToValidate();
+        console.log("should scroll @invalid");
+        if (!allFieldsValid || !validatedCheckboxes) return false;
         return true;
     });
 }
@@ -82,24 +85,9 @@ function validateCheckbox() {
 
 function handleInvalidCheckbox() {
     try {
-        all_are_you_renter_container[0].scrollIntoView({ behavior: 'smooth' });
-        all_are_you_renter_container.forEach(function (x) {
-            if (x.classList.contains('blink')) {
-                console.log("remove blink class");
-                x.classList.remove('blink');
-            }
-        });
+
         // blinking is set in css
-        setTimeout(function () {
-            console.log(all_are_you_renter_container);
-            all_are_you_renter_container.forEach(function (x) {
-                // console.log(x);
-                if (!wm_validationPassed.get(x)) {
-                    x.classList.add('blink');
-                    console.log(x);
-                }
-            });
-        }, 500);
+        scrollIntoViewNBlink(all_are_you_renter_container);
         return false;
     } catch (err) {
         console.log(err);
@@ -108,9 +96,103 @@ function handleInvalidCheckbox() {
 
 //TODO: client side validation of extra fields
 // get all extra_person__wrapper fields without hide_if_yes hide_if_default
-fieldsToValidate = document.querySelectorAll('.extra_person__wrapper:not(.hide_if_yes)');
-if (fieldsToValidate) {
-    console.log(fieldsToValidate);
+function handleFieldsToValidate() {
+    var validationPassed_array = [];
+    fieldsToValidate = document.querySelectorAll('.extra_person__wrapper:not(.hide_if_yes)');
+    if (fieldsToValidate) {
+        fieldsToValidate.forEach(function (singleWrapper) {
+            var returnValue = void 0;
+            var $firstname = singleWrapper.querySelector('[name^="extra_person-first_name"]');
+            var $lastname = singleWrapper.querySelector('[name^="extra_person-last_name"]');
+            var $bday = singleWrapper.querySelector('[name^="extra_person-birthdate"]');
+
+            var singleWrapperInputs = [$firstname, $lastname, $bday];
+
+            returnValue = handleEmptyInput(singleWrapperInputs);
+            validationPassed_array.push(returnValue);
+            attachInputEvent(singleWrapperInputs);
+        });
+    }
+    scrollIntoViewNBlink(fieldsToValidate);
+
+    return validationPassed_array.every(function (x) {
+        return x;
+    });
+}
+
+function handleEmptyInput() {
+    var $inputs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+    var validationPassed_array = [];
+    $inputs.forEach(function ($input) {
+        try {
+            var single_passed_validation = void 0;
+            if ($input.value === '') {
+                single_passed_validation = false;
+                $input.classList.add('invalid');
+            } else {
+                single_passed_validation = true;
+            }
+            validationPassed_array.push(single_passed_validation);
+            wm_validationPassed.set($input, single_passed_validation);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+    var validationPassed = validationPassed_array.every(function (x) {
+        return x;
+    });
+    return validationPassed;
+}
+
+function attachInputEvent() {
+    var $inputs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+    $inputs.forEach(function ($input) {
+        $input.addEventListener('input', function (event) {
+            try {
+                if ($input.classList.contains('invalid')) {
+                    $input.classList.remove('invalid');
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    });
+}
+
+function resetValidationClassesNScroll($elements) {
+    var firstErrorElement = false;
+    $elements.forEach(function (x) {
+        if (x.classList.contains('blink')) {
+            x.classList.remove('blink');
+        }
+        console.log("are you here");
+        if (wm_validationPassed.get(x) === false && !firstErrorElement) {
+            firstErrorElement = true;
+            console.log("should scroll to", x);
+        }
+        if (firstErrorElement) {
+            x.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+}
+
+function scrollIntoViewNBlink($elements) {
+    try {
+        resetValidationClassesNScroll($elements);
+
+        setTimeout(function () {
+            $elements.forEach(function (x) {
+                // console.log(x);
+                if (wm_validationPassed.get(x) === false) {
+                    x.classList.add('blink');
+                }
+            });
+        }, 500);
+    } catch (err) {
+        console.log(err);
+    }
 }
 var chooseLockerButtons = void 0,
     lockerSelect = void 0,
@@ -137,6 +219,7 @@ if (chooseLockerButtons) {
         });
     });
 }
+
 // let form = document.querySelector('form.variations_form.cart');
 // let listeners = getEventListeners(form);
 // let whiteListed = ['reload_product_variations', 'show_variation', 'reset_data', 'change', 'found_variation', 'check_variations', 'update_variation_values'];
