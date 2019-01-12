@@ -48,9 +48,9 @@ foreach($givenLockers AS $key => $value) {
     <h2 class="wrapper__title">
         <?php echo __('Information zum Schließfach', 'festival-events'); ?>
     </h2>
-    <div class="card__container">
+    <div class="card__container table-responsive">
         <!-- </div> -->
-        <table>
+        <table class="table">
             <tr>
                 <th></th>
                 <?php
