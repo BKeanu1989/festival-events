@@ -14,7 +14,6 @@ var all_are_you_renter_container = void 0;
 var are_you_renter_boxes = void 0;
 var form_checkout = void 0;
 var fieldsToValidate = void 0;
-var uniqueIdentifiers = new Set();
 
 all_are_you_renter_container = document.querySelectorAll('div.checkbox-required[data-identifier]');
 
@@ -23,7 +22,6 @@ if (all_are_you_renter_container) {
     if (are_you_renter_boxes) {
         are_you_renter_boxes.forEach(function (radioButton) {
             var key = radioButton.dataset.identifier;
-            uniqueIdentifiers.add(key);
             radioButton.addEventListener('change', function () {
                 try {
                     var value = radioButton.value;
@@ -54,60 +52,12 @@ if (form_checkout) {
         var radioValidator = new RadioValidator();
         radioValidator.init();
 
-        // if (wm_validationPassed.get(radioValidator) === false) return false;
-
         var inputValidator = new InputValidator();
         inputValidator.init();
 
-        // if (wm_validationPassed.get(inputValidator) === false) return false;
-        // let validatedCheckboxes = validateCheckbox();
-        // if (!validatedCheckboxes) {
-        //     handleInvalidCheckbox();
-        // }
-
         if (wm_validationPassed.get(radioValidator) === false || wm_validationPassed.get(inputValidator) === false) return false;
-
-        // let allFieldsValid = handleFieldsToValidate();
-        // console.log("should scroll @invalid");
-        // if (!allFieldsValid || !validatedCheckboxes) return false;
-        // return true;
-        // return false;
     });
 }
-
-// function resetValidationClassesNScroll($elements) {
-//     let firstErrorElement = false;
-//     $elements.forEach((x) => {
-//         if (x.classList.contains('blink')) {
-//             x.classList.remove('blink');
-//         }
-//         console.log("are you here");
-//         if (wm_validationPassed.get(x) === false && !firstErrorElement) {
-//             firstErrorElement = true;
-//             console.log("should scroll to", x);
-//         }
-//         if (firstErrorElement) {
-//             x.scrollIntoView({behavior: 'smooth'});
-//         }
-//     });
-// }
-
-// function scrollIntoViewNBlink($elements) {
-//     try {
-//         resetValidationClassesNScroll($elements);
-
-//         setTimeout(() => {
-//             $elements.forEach((x) => {
-//                 // console.log(x);
-//                 if (wm_validationPassed.get(x) === false) {
-//                     x.classList.add('blink');
-//                 }
-//             })
-//         }, 500);
-//     } catch(err) {
-//         console.log(err);
-//     }
-// }
 var chooseLockerButtons = void 0,
     lockerSelect = void 0,
     productForm = void 0;
@@ -129,6 +79,7 @@ if (chooseLockerButtons) {
             chosen = chosen[0];
             lockerSelect.value = chosen.value;
             jQuery(".variations_form").trigger('check_variations');
+            jQuery('.single_variation .price').show();
             productForm.scrollIntoView({ behavior: 'smooth' });
         });
     });
@@ -191,13 +142,11 @@ var RadioValidator = function (_Validator) {
     }, {
         key: 'allRadioContainer',
         value: function allRadioContainer() {
-            // this.allRadioButtons = document.querySelector()
             this.allRadioContainer = Array.from(document.querySelectorAll('div[data-identifier]'));
         }
     }, {
         key: 'uniqueHashes',
         value: function uniqueHashes() {
-            // just to be sure via set
             this.allUniqueHashes = new Set(this.allRadioContainer.map(function (x) {
                 return x.dataset.identifier;
             }));
@@ -268,40 +217,6 @@ var RadioValidator = function (_Validator) {
     return RadioValidator;
 }(Validator);
 
-// function validateCheckbox() {
-//     let validationArray = [];
-//     let validationPassed;
-//     uniqueIdentifiers.forEach((data_hash) => {
-//         try {
-//             let validationPassed = false;
-//             let radioContainer = document.querySelector(`div[data-identifier="${data_hash}"]`);
-//             let radiosPerGroup = Array.from(radioContainer.querySelectorAll('input[type="radio"]'));
-//             validationPassed = radiosPerGroup.some((element) => {
-//                 return element.checked
-//             });
-//             wm_validationPassed.set(radioContainer, validationPassed);
-//             validationArray.push(validationPassed);
-//         } catch(err) {
-//             console.log(err);
-//         }
-//     });
-//     validationPassed = validationArray.every((x) => x);
-//     return validationPassed;
-// // }
-
-
-// function handleInvalidCheckbox() {
-//     try {
-
-//         // blinking is set in css
-//         scrollIntoViewNBlink(all_are_you_renter_container);
-//         return false;
-//     } catch(err) {
-//         console.log(err);
-//     }    
-// }
-
-
 var InputValidator = function (_Validator2) {
     _inherits(InputValidator, _Validator2);
 
@@ -366,8 +281,6 @@ var InputValidator = function (_Validator2) {
     }, {
         key: 'handleInvalid',
         value: function handleInvalid() {
-            // this.groupsToValidate
-            console.log(wm_validationPassed);
             this.groupsToValidate.forEach(function (singleContainer) {
                 try {
                     var singleGroup = singleContainer.querySelector('.extra_person__wrapper--input-wrapper');
@@ -430,75 +343,6 @@ var InputValidator = function (_Validator2) {
 
     return InputValidator;
 }(Validator);
-
-//TODO: client side validation of extra fields
-// get all extra_person__wrapper fields without hide_if_yes hide_if_default
-
-
-function handleFieldsToValidate() {
-    var validationPassed_array = [];
-    fieldsToValidate = document.querySelectorAll('.extra_person__wrapper:not(.hide_if_yes)');
-    if (fieldsToValidate) {
-        fieldsToValidate.forEach(function (singleWrapper) {
-            var returnValue = void 0;
-            var $firstname = singleWrapper.querySelector('[name^="extra_person-first_name"]');
-            var $lastname = singleWrapper.querySelector('[name^="extra_person-last_name"]');
-            var $bday = singleWrapper.querySelector('[name^="extra_person-birthdate"]');
-
-            var singleWrapperInputs = [$firstname, $lastname, $bday];
-
-            returnValue = handleEmptyInput(singleWrapperInputs);
-            validationPassed_array.push(returnValue);
-            attachInputEvent(singleWrapperInputs);
-        });
-    }
-    scrollIntoViewNBlink(fieldsToValidate);
-
-    return validationPassed_array.every(function (x) {
-        return x;
-    });
-}
-
-function handleEmptyInput() {
-    var $inputs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-    var validationPassed_array = [];
-    $inputs.forEach(function ($input) {
-        try {
-            var single_passed_validation = void 0;
-            if ($input.value === '') {
-                single_passed_validation = false;
-                $input.classList.add('invalid');
-            } else {
-                single_passed_validation = true;
-            }
-            validationPassed_array.push(single_passed_validation);
-            wm_validationPassed.set($input, single_passed_validation);
-        } catch (err) {
-            console.log(err);
-        }
-    });
-    var validationPassed = validationPassed_array.every(function (x) {
-        return x;
-    });
-    return validationPassed;
-}
-
-function attachInputEvent() {
-    var $inputs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-    $inputs.forEach(function ($input) {
-        $input.addEventListener('input', function (event) {
-            try {
-                if ($input.classList.contains('invalid')) {
-                    $input.classList.remove('invalid');
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        });
-    });
-}
 // let form = document.querySelector('form.variations_form.cart');
 // let listeners = getEventListeners(form);
 // let whiteListed = ['reload_product_variations', 'show_variation', 'reset_data', 'change', 'found_variation', 'check_variations', 'update_variation_values'];
@@ -518,6 +362,8 @@ function attachInputEvent() {
 //         })
 //     }
 // })
+
+
 var $confirmEmail = void 0;
 
 $confirmEmail = document.querySelector('#billing_email_confirm');
