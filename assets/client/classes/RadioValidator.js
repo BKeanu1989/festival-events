@@ -24,12 +24,10 @@ class RadioValidator extends Validator {
     }
 
     allRadioContainer() {
-        // this.allRadioButtons = document.querySelector()
         this.allRadioContainer = Array.from(document.querySelectorAll('div[data-identifier]'));
     }
 
     uniqueHashes() {
-        // just to be sure via set
         this.allUniqueHashes = new Set(this.allRadioContainer.map((x) => {
             return x.dataset.identifier;
         }));
@@ -89,36 +87,3 @@ class RadioValidator extends Validator {
         }
     }
 }
-
-// function validateCheckbox() {
-//     let validationArray = [];
-//     let validationPassed;
-//     uniqueIdentifiers.forEach((data_hash) => {
-//         try {
-//             let validationPassed = false;
-//             let radioContainer = document.querySelector(`div[data-identifier="${data_hash}"]`);
-//             let radiosPerGroup = Array.from(radioContainer.querySelectorAll('input[type="radio"]'));
-//             validationPassed = radiosPerGroup.some((element) => {
-//                 return element.checked
-//             });
-//             wm_validationPassed.set(radioContainer, validationPassed);
-//             validationArray.push(validationPassed);
-//         } catch(err) {
-//             console.log(err);
-//         }
-//     });
-//     validationPassed = validationArray.every((x) => x);
-//     return validationPassed;
-// // }
-
-
-// function handleInvalidCheckbox() {
-//     try {
-
-//         // blinking is set in css
-//         scrollIntoViewNBlink(all_are_you_renter_container);
-//         return false;
-//     } catch(err) {
-//         console.log(err);
-//     }    
-// }
