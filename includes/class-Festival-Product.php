@@ -733,7 +733,6 @@ function fe_rebuild_woocommerce() {
     // add_action ('woocommerce_before_single_product_summary', 'fe_opening_items_and_locations_html', 30);
     add_action( 'woocommerce_before_single_product_summary', 'fe_template_single_title', 40 );
     
-    add_action('woocommerce_after_shop_loop_item', 'fe_after_shop_loop_wrapper_close', 0);
     // woocommerce_after_shop_loop_item
     // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
