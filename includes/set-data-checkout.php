@@ -91,6 +91,12 @@ function fe_locker_person_description() {
     ";
 }
 
+add_filter( 'woocommerce_checkout_billing', 'fe_add_extra_persons_title');
+function fe_add_extra_persons_title() {
+    $extra_person_title = __('Schließfach Nutzer', 'festival-events');
+    echo "<div class='extra_persons'>";
+    echo "<h3 class='custom_title'>{$extra_person_title}</h3>";
+}
 add_filter( 'woocommerce_checkout_billing', 'fe_add_not_renter_fields');
 function fe_add_not_renter_fields(  ) {
     global $woocommerce;
@@ -106,6 +112,8 @@ function fe_add_not_renter_fields(  ) {
         $variation = wc_get_product($variation_id);
         $product_id = wp_get_post_parent_id($variation_id);
         $product_name = $variation->get_title();
+
+
 
         for($y = 0; $y < $quantity; $y++) {
             $identifier = $item["data_hash"] . $y;
@@ -144,7 +152,10 @@ function fe_add_not_renter_fields(  ) {
         }
     }
 }
-
+add_filter( 'woocommerce_checkout_billing', 'fe_add_extra_persons_title_close');
+function fe_add_extra_persons_title_close() {
+    echo "</div>";
+}
 add_action ('woocommerce_checkout_order_processed', 'fe_save_custom_fields', 10, 3);
 function fe_save_custom_fields( $order_id, $posted_data, $order ) {
     $groupedPersonData = fe_groupPersonData($_POST);

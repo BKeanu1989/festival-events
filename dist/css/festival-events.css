@@ -253,3 +253,8 @@ a.button.checkout-button {
   a.button.checkout-button:hover {
     background-color: #96c346;
     border-color: #96c346; }
+
+.extra_persons h3 {
+  background-color: #253746;
+  color: white;
+  padding: 5px; }
