@@ -83,7 +83,7 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
   .single-product-form-wrapper {
     position: fixed;
     left: 70%;
-    z-index: 1000;
+    z-index: 1;
     width: 20vw;
     background-color: #253746;
     padding: 2em; }
