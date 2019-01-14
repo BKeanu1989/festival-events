@@ -105,6 +105,8 @@ function fe_add_not_renter_fields(  ) {
     $last_name_string = __('Nachname', 'festival-events');
     $birthdate_string = __('Geburtstag', 'festival-events');
     $required = __('erforderlich', 'festival-events');
+    
+    $counter = 1;
 
     foreach($items AS $key => $item) {
         $quantity = $item['quantity'];
@@ -114,12 +116,11 @@ function fe_add_not_renter_fields(  ) {
         $product_name = $variation->get_title();
 
 
-
         for($y = 0; $y < $quantity; $y++) {
             $identifier = $item["data_hash"] . $y;
             $stringifiedProduct = fe_stringify_product_attr($variation);
             echo "<div class='extra_person__container'>";
-                echo "<p class='product_name'>1x $stringifiedProduct</p>";
+                echo "<p class='product_name'>$counter. $stringifiedProduct</p>";
                 fe_are_you_renter($identifier);
                 echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field' data-identifier='$identifier'>";
                     echo "
@@ -149,6 +150,7 @@ function fe_add_not_renter_fields(  ) {
                         ";
                 echo "</div>";
             echo "</div>";
+            $counter++;
         }
     }
 }
@@ -169,7 +171,7 @@ function fe_validate_custom_fields() {
     // write_log($_POST);
     // if ($_POST['renter'] === 'no') {
         // validate each extra person field
-        $groupedData = fe_groupPersonData($_POST);
-        fe_validate_person_data($groupedData);
+    $groupedData = fe_groupPersonData($_POST);
+    fe_validate_person_data($groupedData);
     // }
 }
