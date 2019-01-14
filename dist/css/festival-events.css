@@ -177,6 +177,11 @@ h3.product_title.entry-title {
   color: white;
   padding: 5px; }
 
+.woocommerce-checkout h3#order_payment_heading {
+  background-color: #253746;
+  color: white;
+  padding: 5px; }
+
 .woocommerce-checkout .woocommerce-additional-fields #order_review_heading {
   display: none !important; }
 

@@ -178,6 +178,12 @@ h3{
         }
     }
 
+    h3#order_payment_heading{
+        background-color: $blackBG;
+        color: white;
+        padding: 5px;
+    }
+
     .woocommerce-additional-fields{
         #order_review_heading{
             display: none !important;
