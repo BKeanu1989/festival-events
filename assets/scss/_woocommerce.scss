@@ -145,7 +145,14 @@ body.woocommerce {
     }
 }
 
-
+.woocommerce-checkout{
+    thead{
+        th{
+            background-color: $blackBG;
+            color: $white;
+        }
+    }
+}
 
 .woocommerce-cart{
     &-form{
@@ -211,6 +218,11 @@ body.woocommerce {
     }
 
     body.woocommerce{
+        .single-product div.product form.cart{
+            margin-bottom: 0;
+            padding: 0;
+        }
+
         &.storefront-full-width-content.single-product div.product .summary{
             color: white;
             background-color: $blackBG;
@@ -224,7 +236,8 @@ body.woocommerce {
 
 .storefront-full-width-content.woocommerce-cart .entry-header,
 .storefront-full-width-content.woocommerce-checkout .entry-header{
-    padding: 0 0 2.5em !important;
+    padding: 1.5em 0px 1.5em !important;
+    
 }
 
 .singleproduct .summary.entry-summary{
