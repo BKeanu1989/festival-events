@@ -44,22 +44,5 @@ $get_opening_times_per_location = get_post_meta($product_id, '_opening_times');
                 </div>
             </div>
         </div>
-    
-        <!-- <div class="card our-service">
-            <div class="card__title">
-                <h2><?php _e('Unser Service für dich', 'festival-events'); ?></h2>
-            </div>
-            <div class="card__image">
-                <img src="https://festivalsafeboxen.bigboxberlin.de/wp-content/uploads/2016/02/strom.jpg" alt="">
-            </div>
-            <div class="card__body">
-                <ul>
-                    <li><i class="fas fa-charging-station"></i><span class="description">Alle Schließfächer sind mit einer Steckdose ausgestattet.</span></li>
-                    <li><i class="fas fa-exclamation-circle"></i><span class="description">High-Voltage Schließfächer für stromintensive Geräte wie z.B. JBL Soundboxen oder Notebooks.</span></li>
-                    <li><i class="fas fa-heart"></i><span class="description">Du kannst jederzeit an Dein Schließfach. Unser Personal ist rund um die Uhr für Dich da.</span></li>
-                    <li><i class="fas fa-thumbs-up"></i><span class="description">Dein Schließfach-Inhalt ist mit bis zu 500 Euro versichert.</span></li>
-                </ul>
-            </div>
-        </div> -->
     </div>
 </div>

@@ -149,7 +149,6 @@ add_action ('woocommerce_checkout_order_processed', 'fe_save_custom_fields', 10,
 function fe_save_custom_fields( $order_id, $posted_data, $order ) {
     $groupedPersonData = fe_groupPersonData($_POST);
     update_post_meta($order_id, 'locker_person_data', $groupedPersonData);
-
 }
 
 

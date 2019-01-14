@@ -86,3 +86,5 @@ foreach($givenLockers AS $key => $value) {
         </table>
     </div>
 </div>
+</div> <!-- close container -->
+
