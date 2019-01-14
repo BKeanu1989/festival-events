@@ -27,6 +27,11 @@
     display: flex; }
   .card__title {
     text-align: center; }
+    .card__title h2 {
+      color: #fff;
+      background-color: #253746;
+      padding: 15px;
+      font-weight: bold; }
   .card.locker_infos {
     background-color: #253746;
     padding: 10px; }
