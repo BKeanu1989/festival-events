@@ -48,6 +48,15 @@
       border: 5px solid #253746; }
       .card.miscellaneous-info .card__body--item:last-of-type {
         margin-left: 2em; }
+  @media (max-width: 400px) {
+    .card.miscellaneous-info .card__body {
+      flex-direction: column; }
+      .card.miscellaneous-info .card__body--item {
+        width: unset;
+        padding: 0;
+        border: unset; }
+        .card.miscellaneous-info .card__body--item:last-of-type {
+          margin-left: 0; } }
 
 .banner__wrapper {
   margin-bottom: 1em;

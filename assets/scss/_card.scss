@@ -59,5 +59,21 @@
                 }
             }
         }
+
+        @media (max-width: 400px){
+            .card__body{
+                flex-direction: column;
+                &--item{
+                    width: unset;
+                    padding: 0;
+                    border: unset;
+
+
+                    &:last-of-type{
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
     }
 }
