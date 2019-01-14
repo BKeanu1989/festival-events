@@ -28,10 +28,17 @@ body.woocommerce {
 }
 
 @media (min-width: 768px){
+
+    .single-product-form-container{
+        display: flex;
+        flex-direction: column;
+    }
     .single-product-form-wrapper {
         // display: flex;
-        position: fixed;
-        left: 70%;
+        // position: fixed;
+        position: absolute;
+        // left: 70%;
+        right: 0;
         z-index: 1;
         width: 20vw;
         background-color: $blackBG;
@@ -144,15 +151,15 @@ body.woocommerce {
     .entry-content{
         .woocommerce{
             position: relative;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+
             .woocommerce-cart-form{
                 width: 70%;
-                float: left;
             }
             .cart-collaterals{
-                float: left;
-                width: 30%;
-                left: 67%;
-                position: fixed;
+                width: 25%;
 
                 @media (min-width: 768px){
                     .cart_totals{
@@ -194,9 +201,12 @@ body.woocommerce {
 }
 
 .extra_person__container {
-    background-color: rgba(160, 206, 78, 0.4);
+    // background-color: rgba(160, 206, 78, 0.4);
     margin-bottom: 1em;
 
+    .product_name{
+        margin: 0;
+    }
     .extra_person__wrapper{
         input.invalid{
             box-shadow: inset 2px 0 0 #e2401c;
