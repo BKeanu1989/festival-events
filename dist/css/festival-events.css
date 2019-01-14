@@ -160,11 +160,13 @@ h3.product_title.entry-title {
 
 .woocommerce-checkout .woocommerce-billing-fields h3 {
   background-color: #253746;
-  color: white; }
+  color: white;
+  padding: 5px; }
 
 .woocommerce-checkout .woocommerce-shipping-fields h3 {
   background-color: #253746;
-  color: white; }
+  color: white;
+  padding: 5px; }
 
 .woocommerce-checkout .woocommerce-additional-fields #order_review_heading {
   display: none !important; }
