@@ -209,6 +209,11 @@ body.woocommerce {
         background-color: $poisonGreen;
         border-color: $poisonGreen;
         width: 100%;
+
+        &:hover{
+            background-color: $hoverGreen;
+            border-color: $hoverGreen; 
+        }
     }
 }
 
@@ -216,4 +221,9 @@ a.button.checkout-button{
     background-color: $poisonGreen;
     border-color: $poisonGreen;
     width: 100%;
+
+    &:hover{
+        background-color: $hoverGreen;
+        border-color: $hoverGreen; 
+    }
 }

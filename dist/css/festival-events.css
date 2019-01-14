@@ -186,8 +186,14 @@ body.woocommerce button.single_add_to_cart_button {
   background-color: #9BDB00;
   border-color: #9BDB00;
   width: 100%; }
+  body.woocommerce button.single_add_to_cart_button:hover {
+    background-color: #96c346;
+    border-color: #96c346; }
 
 a.button.checkout-button {
   background-color: #9BDB00;
   border-color: #9BDB00;
   width: 100%; }
+  a.button.checkout-button:hover {
+    background-color: #96c346;
+    border-color: #96c346; }
