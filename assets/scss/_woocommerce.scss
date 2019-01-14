@@ -148,6 +148,14 @@ body.woocommerce {
 
 
 .woocommerce-cart{
+    &-form{
+        .woocommerce-cart-form__contents{
+            th{
+                background-color: $blackBG;
+                color: $white;
+            }
+        }
+    }
     .entry-content{
         .woocommerce{
             position: relative;
@@ -160,6 +168,29 @@ body.woocommerce {
             }
             .cart-collaterals{
                 width: 25%;
+                .cart_totals{
+                    background-color: $blackBG;
+                    padding: 2em;
+                    padding-bottom: 1em;
+                    
+                    color: $white;
+                    
+                    h2{
+                        color: $white;
+                    }
+                    table {
+                        tbody{
+                            tr{
+                                td,th{
+                                    background-color: $blackBG;
+                                }
+                            }
+                        }
+                    }   
+                    .wc-proceed-to-checkout{
+                        margin-bottom: 0;
+                    }
+                }
 
                 @media (min-width: 768px){
                     .cart_totals{
