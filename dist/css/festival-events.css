@@ -43,7 +43,11 @@
   .card.miscellaneous-info .card__body {
     display: flex; }
     .card.miscellaneous-info .card__body--item {
-      flex: 1; }
+      width: calc(50% - 5px);
+      padding: 5px;
+      border: 5px solid #253746; }
+      .card.miscellaneous-info .card__body--item:last-of-type {
+        margin-left: 2em; }
 
 .banner__wrapper {
   margin-bottom: 1em;
@@ -79,6 +83,10 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
   padding: 15px;
   font-weight: bold; }
 
+h3.product_title.entry-title {
+  padding: 0;
+  margin-bottom: 0; }
+
 @media (min-width: 768px) {
   .single-product-form-container {
     display: flex;
@@ -89,7 +97,8 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
     z-index: 1;
     width: 20vw;
     background-color: #253746;
-    padding: 2em; }
+    padding: 2em;
+    padding-bottom: 0; }
     .single-product-form-wrapper .wrapper {
       width: 70%;
       float: left;

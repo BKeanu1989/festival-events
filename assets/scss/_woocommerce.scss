@@ -27,6 +27,13 @@ body.woocommerce {
     font-weight: bold;
 }
 
+h3{
+    &.product_title.entry-title {
+        padding: 0;
+        margin-bottom: 0;
+    }
+}
+
 @media (min-width: 768px){
 
     .single-product-form-container{
@@ -43,6 +50,7 @@ body.woocommerce {
         width: 20vw;
         background-color: $blackBG;
         padding: 2em;
+        padding-bottom: 0;
     
         .wrapper{
             width: 70%;
