@@ -22,7 +22,6 @@ function getLockers($variations) {
     
     return $lockers;
 }
-defined( 'ABSPATH' ) || exit;
 global $product;
 
 $variations = $product->get_available_variations();
