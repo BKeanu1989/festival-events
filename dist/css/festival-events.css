@@ -158,6 +158,17 @@ h3.product_title.entry-title {
   background-color: #253746;
   color: #fff; }
 
+.woocommerce-checkout .woocommerce-billing-fields h3 {
+  background-color: #253746;
+  color: white; }
+
+.woocommerce-checkout .woocommerce-shipping-fields h3 {
+  background-color: #253746;
+  color: white; }
+
+.woocommerce-checkout .woocommerce-additional-fields #order_review_heading {
+  display: none !important; }
+
 .woocommerce-cart-form .woocommerce-cart-form__contents th {
   background-color: #253746;
   color: #fff; }
