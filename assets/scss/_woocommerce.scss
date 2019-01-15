@@ -328,3 +328,24 @@ a.button.checkout-button{
         padding: 5px;
     }
 }
+
+.widget.woocommerce{
+    .woocommerce-mini-cart__buttons{
+        .button.wc-forward{
+            background-color: $blackBG;
+            color: $white;
+            &:hover{
+                background-color: $blackBG_hover;
+            }
+            
+            &.checkout{
+                background-color: $poisonGreen;
+                color: $white;
+
+                &:hover{
+                    background-color: $hoverGreen;
+                }
+            }
+        }
+    }
+}
