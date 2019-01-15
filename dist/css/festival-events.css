@@ -1,12 +1,14 @@
 .margin-next {
   margin-bottom: 1rem; }
 
-.wrapper__title {
+.wrapper__title, .card__title h2, .banner__text--wrapper, .product_title.entry-title {
   text-align: center;
   color: #fff;
   background-color: #253746;
-  padding: 15px;
-  font-weight: bold;
+  padding: 5px;
+  font-weight: bold; }
+
+.wrapper__title {
   margin: 1em 0; }
   .wrapper__title--warning {
     background-color: #db0000; }
@@ -27,11 +29,6 @@
     display: flex; }
   .card__title {
     text-align: center; }
-    .card__title h2 {
-      color: #fff;
-      background-color: #253746;
-      padding: 15px;
-      font-weight: bold; }
   .card.locker_infos {
     background-color: #253746;
     padding: 10px; }
@@ -75,11 +72,6 @@
   transform: translate(-50%);
   text-align: center;
   font-size: 1.5em; }
-  .banner__text--wrapper {
-    background-color: rgba(87, 87, 87, 0.4);
-    color: #fff;
-    font-weight: bold;
-    padding: 15px; }
 
 body.woocommerce .storefront-full-width-content.single-product div.product .summary {
   width: 100%; }
@@ -89,13 +81,6 @@ body.woocommerce .storefront-full-width-content.single-product div.product .summ
 
 .storefront-full-width-content.single-product div.product .summary {
   width: 100%; }
-
-.product_title.entry-title {
-  text-align: center;
-  color: #fff;
-  background-color: #253746;
-  padding: 15px;
-  font-weight: bold; }
 
 h3.product_title.entry-title {
   padding: 0;

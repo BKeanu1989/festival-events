@@ -15,10 +15,11 @@
         font-size: 1.5em;
 
         &--wrapper{
-            background-color: rgba(87, 87, 87, 0.4);
-            color: $white;
-            font-weight: bold;
-            padding: 15px;
+            // background-color: rgba(87, 87, 87, 0.4);
+            // color: $white;
+            // font-weight: bold;
+            // padding: 15px;
+            @extend %component-title;
         }
     }
 }

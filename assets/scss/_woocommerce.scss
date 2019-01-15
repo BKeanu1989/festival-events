@@ -20,11 +20,13 @@ body.woocommerce {
 }
 
 .product_title.entry-title {
-    text-align: center;
-    color: $white;
-    background-color: $blackBG;
-    padding: 15px;
-    font-weight: bold;
+    // text-align: center;
+    // color: $white;
+    // background-color: $blackBG;
+    // padding: 15px;
+    // font-weight: bold;
+
+    @extend %component-title;
 }
 
 h3{

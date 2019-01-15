@@ -14,10 +14,11 @@
     &__title {
         text-align: center;
         h2{
-            color: #fff;
-            background-color: #253746;
-            padding: 15px;
-            font-weight: bold;
+            // color: #fff;
+            // background-color: #253746;
+            // padding: 15px;
+            // font-weight: bold;
+            @extend %component-title;
         }
     }
     
