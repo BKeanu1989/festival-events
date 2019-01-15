@@ -253,3 +253,14 @@ a.button.checkout-button {
   background-color: #253746;
   color: white;
   padding: 5px; }
+
+.widget.woocommerce .woocommerce-mini-cart__buttons .button.wc-forward {
+  background-color: #253746;
+  color: #fff; }
+  .widget.woocommerce .woocommerce-mini-cart__buttons .button.wc-forward:hover {
+    background-color: #193248; }
+  .widget.woocommerce .woocommerce-mini-cart__buttons .button.wc-forward.checkout {
+    background-color: #9BDB00;
+    color: #fff; }
+    .widget.woocommerce .woocommerce-mini-cart__buttons .button.wc-forward.checkout:hover {
+      background-color: #96c346; }
