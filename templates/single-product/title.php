@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-the_title( '<h1 class="product_title entry-title">', '</h1>' );
+// the_title( '<h1 class="product_title entry-title">', '</h1>' );
 do_action('fe_product_is_not_purchasable');
 
 echo '<div class="single-product-form-container">'; // container
