@@ -18,14 +18,14 @@ var fieldsToValidate = void 0;
 all_are_you_renter_container = document.querySelectorAll('div.checkbox-required[data-identifier]');
 
 if (all_are_you_renter_container) {
-    are_you_renter_boxes = Array.from(document.querySelectorAll('input[type="radio"][name^="renter"'));
+    are_you_renter_boxes = Array.from(document.querySelectorAll('input[type="radio"][name^="renter"]'));
     if (are_you_renter_boxes) {
         are_you_renter_boxes.forEach(function (radioButton) {
             var key = radioButton.dataset.identifier;
             radioButton.addEventListener('change', function () {
                 try {
                     var value = radioButton.value;
-                    var findExtraPerson = document.querySelector('.extra_person__wrapper[data-identifier="' + key + '"');
+                    var findExtraPerson = document.querySelector('.extra_person__wrapper[data-identifier="' + key + '"]');
 
                     if (value === 'yes') {
                         findExtraPerson.classList.add('hide_if_yes');
