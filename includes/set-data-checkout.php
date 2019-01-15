@@ -82,14 +82,14 @@ function fe_are_you_renter($key = 0) {
 
 // FIXME: client side js
 // add_action ( 'woocommerce_checkout_billing', 'fe_locker_person_description');
-function fe_locker_person_description() {
-    $locker_person_description = __("Nachfolgend werden die einzelnen Schließfächer aufgelistet, sodass du ... personendaten eintragen kannst.", 'festival-events');
-    echo "
-        <div class='extra_person_field hide_if_default hide_if_yes'>
-            <p><i class='fa fa-info-circle' aria-hidden='true'></i>$locker_person_description</p>
-        </div>
-    ";
-}
+// function fe_locker_person_description() {
+//     $locker_person_description = __("Nachfolgend werden die einzelnen Schließfächer aufgelistet, sodass du ... personendaten eintragen kannst.", 'festival-events');
+//     echo "
+//         <div class='extra_person_field hide_if_default hide_if_yes'>
+//             <p><i class='fa fa-info-circle' aria-hidden='true'></i>$locker_person_description</p>
+//         </div>
+//     ";
+// }
 
 add_filter( 'woocommerce_checkout_billing', 'fe_add_extra_persons_title');
 function fe_add_extra_persons_title() {
@@ -107,6 +107,7 @@ function fe_add_not_renter_fields(  ) {
     $required = __('erforderlich', 'festival-events');
     
     $counter = 1;
+    $lockerExtraPersonNote = __('Bitte gib hier die Daten des Nutzers ein: ', 'festival-events');
 
     foreach($items AS $key => $item) {
         $quantity = $item['quantity'];
@@ -124,6 +125,7 @@ function fe_add_not_renter_fields(  ) {
                 fe_are_you_renter($identifier);
                 echo "<div class='extra_person__wrapper hide_if_yes hide_if_default extra_person_field' data-identifier='$identifier'>";
                     echo "
+                    <span class='extra_person-note'>$lockerExtraPersonNote</span>
                     <input type='hidden' name='extra_person-product_name[$identifier]' value='$product_name'>
                     <input type='hidden' name='extra_person-variation_id[$identifier]' value='$variation_id'>
                     <input type='hidden' name='extra_person-product_id[$identifier]' value='$product_id'>
