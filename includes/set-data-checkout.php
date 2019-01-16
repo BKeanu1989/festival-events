@@ -177,3 +177,30 @@ function fe_validate_custom_fields() {
     fe_validate_person_data($groupedData);
     // }
 }
+
+
+// add_action('woocommerce_after_order_notes', 'fe_checkout_widerrufsrecht');
+add_action('woocommerce_checkout_terms_and_conditions', 'fe_checkout_widerrufsrecht');
+function fe_checkout_widerrufsrecht( ) {
+
+    echo '<div id="fe_checkout_widerruf">';
+    $home = get_home_url();
+    // FIXME: get widerrufsrecht page for language
+
+    woocommerce_form_field( 'fe_checkout_widerruf', array(
+    'type'          => 'checkbox',
+    'class'         => array('notes'),
+    'label'         => __('Mit Abgabe einer Bestellung best&auml;tigen Sie, das <a href="'.$home.'/widerrufsrecht">Widerrufsrecht</a> zur Kenntnis genommen zu haben.', 'festival-events'),
+    'placeholder'       => __('WRB'),
+    'required'         => true,
+    ));
+    echo '</div>'; 
+}
+
+add_action('woocommerce_checkout_process', 'fe_checkout_widerrufsrecht_valid');
+function fe_checkout_widerrufsrecht_valid() {
+    if (!isset($_POST['fe_checkout_widerruf'])) {
+        wc_add_notice( __( 'Bitte best&auml;tigen Sie die Kenntnisnahme des <a href="'.$home.'/widerrufsrecht">Widerrufsrecht</a>.', 'festival-events' ), 'error' );
+    }
+
+}
