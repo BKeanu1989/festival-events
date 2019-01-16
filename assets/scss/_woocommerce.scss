@@ -41,13 +41,14 @@ h3{
     .single-product-form-container{
         display: flex;
         flex-direction: column;
+        position: relative;
     }
     .single-product-form-wrapper {
         // position: absolute;
         // right: 0;
 
-        position: fixed;
-        right: 10%;
+        position: absolute;
+        right: 0;
 
         z-index: 1;
         width: 20vw;

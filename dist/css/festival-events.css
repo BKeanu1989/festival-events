@@ -89,10 +89,11 @@ h3.product_title.entry-title {
 @media (min-width: 768px) {
   .single-product-form-container {
     display: flex;
-    flex-direction: column; }
+    flex-direction: column;
+    position: relative; }
   .single-product-form-wrapper {
-    position: fixed;
-    right: 10%;
+    position: absolute;
+    right: 0;
     z-index: 1;
     width: 20vw;
     background-color: #253746;
