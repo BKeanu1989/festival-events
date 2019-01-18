@@ -9,25 +9,57 @@ global $lockerDescription, $withOptional, $product;
 
 $lockers = array_map('trim', explode(',',$product->get_attribute('pa_locker')));
 
-$lockerKeys = ["size" => __("Größe", 'festival-events'), "suitability" => __('Eignung', 'festival-events'), "power" => __('Leistung', 'festival-events'), "useable" => __('Nutzbar für', 'festival-events')];
+$lockerKeys = [
+    "outerDiameter" => __("Außenmaß (HxBxT in cm)", 'festival-events'), 
+    "innerDiameter" => __("Innenmaß (HxBxT in cm)", 'festival-events'), 
+    "suitability" => __('Geeignet für', 'festival-events'), 
+    "power" => __('Steckdosenleistung', 'festival-events'), 
+    "useable" => __('Mehrfachstecker USB-Verteiler', 'festival-events')
+];
 
 $lockerInfo = [
-"M" => [__("Außenmaß: 18cm x 12cm x 35cm (BxHxT), Innenmaß: 25cm x 14cm x 35 cm (BxHxT)"), __("passend für Wertsachen, kleine Tasche, kleine elektronische Geräte"), __("Steckdose max. 15 Watt"), __("Zum Laden von Handy, Kamera, Powerbank")],
-"L" => [__("Außenmaß: 18cm x 40cm x 35cm (BxHxT), Innenmaß: 25cm x 42cm x 35 cm (BxHxT)"), __("passend für Wertsachen, Tasche/Rucksack, elektronische Geräte"), __("Steckdose max. 15 Watt"), __("Zum Laden von Handy, Kamera, Powerbank")],
-"M High-Voltage" => [__("Außenmaß: 18cm x 12cm x 35cm (BxHxT), Innenmaß: 25cm x 14cm x 35 cm (BxHxT)"), __("passend für Wertsachen, kleine Tasche, kleine elektronische Geräte"), __("Steckdose max. 90 Watt"), __("Zum Laden von Notebook bis 11 Zoll, Soundbox.")], 
-"L High-Voltage" => [__("Außenmaß: 18cm x 40cm x 35cm (BxHxT), Innenmaß: 25cm x 42cm x 35 cm (BxHxT)"), __("passend für Wertsachen, Tasche/Rucksack, elektronische Geräte"), __("Steckdose max. 90 Watt"), __("Zum Laden von Notebook bis 15 Zoll, Soundbox.")], 
+"M" => [
+    __("18 x 12 x 35 cm", 'festival-events'),
+    __("25 x 14 x 35 cm", 'festival-events'),
+    __("Wertsachen, kleine Tasche, kleine elektronische Geräte", 'festival-events'),
+    [
+        __("max. 15 Watt", 'festival-events'),
+        __("Ausreichend zum Laden von Handy, Kamera, Powerbank", 'festival-events')
+    ],
+    __("Nicht erlaubt. Bitte halte Dich daran, da bei Überschreitung der 15 Watt die Sicherung rausfliegen wird.", 'festival-events')
+],
+"L" => [
+    __("18 x 40 x 35 cm", 'festival-events'),
+    __("25 x 42 x 35 cm", 'festival-events'),
+    __("Wertsachen, Tasche oder Rucksack, elektronische Geräte", 'festival-events'),
+    [
+        __("max. 15 Watt", 'festival-events'),
+        __("Ausreichend zum Laden von Handy, Kamera, Powerbank", 'festival-events'),
+    ],
+    __("Nicht erlaubt. Bitte halte Dich daran, da bei Überschreitung der 15 Watt die Sicherung rausfliegen wird.", 'festival-events')
+],
+"M High-Voltage" => [
+    __("18 x 12 x 35 cm", 'festival-events'),
+    __("25 x 14 x 35 cm", 'festival-events'),
+    __("Wertsachen, kleine Tasche, kleine elektronische Geräte", 'festival-events'),
+    [
+        __("max. 90 Watt", 'festival-events'),
+        __("Ausreichend zum Laden von Notebook bis 11 Zoll, Soundbox, gleichzeitiges Aufladen mehrerer Handys/Powerbanks", 'festival-events'),
+    ],
+    __("Erlaubt, beachte bitte jedoch die max. Steckdosenleistung von 90 Watt.", 'festival-events')
+], 
+"L High-Voltage" => [
+    __("18 x 40 x 35 cm", 'festival-events'),
+    __("25 x 42 x 35 cm", 'festival-events'),
+    __("Wertsachen, Tasche oder Rucksack, elektronische Geräte", 'festival-events'),
+    [
+        __("max. 90 Watt", 'festival-events'),
+        __("Ausreichend zum Laden von Notebook bis 11 Zoll, Soundbox, gleichzeitiges Aufladen mehrerer Handys/Powerbanks", 'festival-events'),
+    ],
+    __("Erlaubt, beachte bitte jedoch die max. Steckdosenleistung von 90 Watt.", 'festival-events')
+], 
 "XL" => ["", "", "", ""], 
 "XL High-Voltage" => ["", "", "", ""]];
-
-// foreach($lockerInfo AS $key => $value) {
-//     $arraySize = count($lockerInfo[$key]);
-
-//     for ($i = 0; $i < $arraySize; $i++) {
-//         $temp = $lockerInfo[$key][$i];
-//         $lockerInfo[$key][$lockerKeys[$i]] = $temp;
-//         unset($lockerInfo[$key][$i]);
-//     }
-// }
 
 $givenLockers = [];
 foreach($lockers AS $key => $value) {
@@ -37,8 +69,9 @@ foreach($lockers AS $key => $value) {
 $tableData = [];
 
 foreach($givenLockers AS $key => $value) {
-    list($size, $suitability, $power, $useable) = $givenLockers[$key];
-    $tableData["size"][$key] = $size;
+    list($outerDiameter, $innerDiameter, $suitability, $power, $useable) = $givenLockers[$key];
+    $tableData["outerDiameter"][$key] = $outerDiameter;
+    $tableData["innerDiameter"][$key] = $innerDiameter;
     $tableData["suitability"][$key] = $suitability;
     $tableData["power"][$key] = $power;
     $tableData["useable"][$key] = $useable;
@@ -63,22 +96,35 @@ foreach($givenLockers AS $key => $value) {
                 foreach($tableData AS $key => $value) {
                     echo "<tr>";
                     switch($key) {
-                        case 'size':
-                            $description = __('Größe', 'festival-events');
+                        case 'outerDiameter':
+                            $description = __('Außenmaß (HxBxT in cm)', 'festival-events');
                             break;
+                        case 'innerDiameter':
+                            $description = __('Innenmaß (HxBxT in cm)', 'festival-events');
+                            break;                            
                         case 'suitability':
-                            $description = __('Eignung', 'festival-events');
+                            $description = __('Geeignet für', 'festival-events');
                             break;
                         case 'power':
-                            $description = __('Leistung', 'festival-events');
+                            $description = __('Steckdosenleistung', 'festival-events');
                             break;
                         case 'useable':
-                            $description = __('Nutzbar für', 'festival-events');
+                            $description = __('Mehrfachstecker USB-Verteiler', 'festival-events');
                             break;
                     }
                     echo "<td>{$description}</td>";
                     foreach($tableData[$key] AS $info) {
-                        echo "<td>{$info}</td>";
+                        if (is_array($info)) {
+                            echo "<td>";
+                                echo "<ul>";
+                                foreach($info as $listItem) {
+                                    echo "<li>{$listItem}</li>";
+                                }
+                                echo "</ul>";
+                            echo "</td>";
+                        } else {
+                            echo "<td>{$info}</td>";
+                        }
                     }
                     echo "</tr>";
                 }
