@@ -188,3 +188,11 @@ function fe_stringify_product_attr($variation)
     $string = implode(', ', $array);
     return $string;
 }
+
+function fe_locker_name($value)
+{
+    if (taxonomy_exists('pa_locker')) {
+        $name = get_term_by( 'slug', $value, 'pa_locker');
+        return $name->name;
+    }
+}
