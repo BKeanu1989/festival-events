@@ -1,4 +1,4 @@
-# Copyright (C) 2018 StoreFront Child
+# Copyright (C) 2019 StoreFront Child
 # This file is distributed under the same license as the StoreFront Child package.
 msgid ""
 msgstr ""
@@ -12,6 +12,18 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: fe-core-functions.php:161
+msgid "Der Vorname darf nicht leer sein."
+msgstr ""
+
+#: fe-core-functions.php:165
+msgid "Der Nachname darf nicht leer sein."
+msgstr ""
+
+#: fe-core-functions.php:169
+msgid "Der Geburtstag darf nicht leer sein."
+msgstr ""
 
 #: includes/class-Festival-Product.php:79
 msgid "Festivalstart:"
@@ -37,7 +49,7 @@ msgstr ""
 msgid "Willst du neben dem Full Festival Zeitraum auch die einzelnen Tage auflisten?"
 msgstr ""
 
-#: includes/class-Festival-Product.php:153, templates/single-product/opening-items-and-locations.php:30
+#: includes/class-Festival-Product.php:153
 msgid "Standorte:"
 msgstr ""
 
@@ -49,61 +61,169 @@ msgstr ""
 msgid "Banner Text:"
 msgstr ""
 
-#: includes/class-Festival-Product.php:227, includes/class-Festival-Product.php:272
+#: includes/class-Festival-Product.php:227, includes/class-Festival-Product.php:273, includes/set-data-checkout.php:193, includes/set-data-checkout.php:203
 msgstr ""
 
-#: includes/class-Festival-Product.php:273
+#: includes/class-Festival-Product.php:263
+msgid "Hier können die Varianten erstellt werden: "
+msgstr ""
+
+#: includes/class-Festival-Product.php:274
 msgid "vorhanden?"
 msgstr ""
 
-#: includes/class-Festival-Product.php:339
+#: includes/class-Festival-Product.php:354
 msgid "Varianten erstellen"
 msgstr ""
 
-#: includes/class-Festival-Product.php:389
+#: includes/class-Festival-Product.php:404
 msgid "Preis für "
+msgstr ""
+
+#: includes/set-data-checkout.php:10
+msgid "Bestätige deine Email Adresse"
+msgstr ""
+
+#: includes/set-data-checkout.php:28
+msgid "Deine Email Adressen stimmen nicht überein."
+msgstr ""
+
+#: includes/set-data-checkout.php:39, includes/set-data-checkout.php:106, templates/cart/user-infos.php:40
+msgid "Geburtstag"
+msgstr ""
+
+#: includes/set-data-checkout.php:53
+msgid "Dein Geburtstag darf nicht leer sein."
+msgstr ""
+
+#: includes/set-data-checkout.php:63
+msgid "Bist du Mieter des Schließfachs?"
+msgstr ""
+
+#: includes/set-data-checkout.php:64
+msgid "Ja"
+msgstr ""
+
+#: includes/set-data-checkout.php:65
+msgid "Nein"
+msgstr ""
+
+#: includes/set-data-checkout.php:66, includes/set-data-checkout.php:107, templates/cart/user-infos.php:26, templates/cart/user-infos.php:33, templates/cart/user-infos.php:40
+msgid "erforderlich"
+msgstr ""
+
+#: includes/set-data-checkout.php:96
+msgid "Schließfach Nutzer"
+msgstr ""
+
+#: includes/set-data-checkout.php:104, templates/cart/user-infos.php:26
+msgid "Vorname"
+msgstr ""
+
+#: includes/set-data-checkout.php:105, templates/cart/user-infos.php:33
+msgid "Nachname"
+msgstr ""
+
+#: includes/set-data-checkout.php:110
+msgid "Bitte gib hier die Daten des Nutzers ein: "
 msgstr ""
 
 #: templates/cart/user-infos.php:14
 msgid "Persönliche Daten für das/die Schließfächer"
 msgstr ""
 
-#: templates/cart/user-infos.php:20
-msgid "Name"
+#: templates/single-product/locker-infos.php:13, templates/single-product/locker-infos.php:118
+msgid "Außenmaß (HxBxT in cm)"
 msgstr ""
 
-#: templates/cart/user-infos.php:20
-msgid "erforderlich"
+#: templates/single-product/locker-infos.php:14, templates/single-product/locker-infos.php:121
+msgid "Innenmaß (HxBxT in cm)"
 msgstr ""
 
-#: templates/single-product/locker-infos.php:24
+#: templates/single-product/locker-infos.php:15, templates/single-product/locker-infos.php:124
+msgid "Geeignet für"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:16, templates/single-product/locker-infos.php:127
+msgid "Steckdosenleistung"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:17, templates/single-product/locker-infos.php:130
+msgid "Mehrfachstecker USB-Verteiler"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:22, templates/single-product/locker-infos.php:42
+msgid "18 x 12 x 35 cm"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:23, templates/single-product/locker-infos.php:43
+msgid "25 x 14 x 35 cm"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:24, templates/single-product/locker-infos.php:44
+msgid "Wertsachen, kleine Tasche, kleine elektronische Geräte"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:26, templates/single-product/locker-infos.php:36, templates/single-product/locker-infos.php:66
+msgid "max. 15 Watt"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:27, templates/single-product/locker-infos.php:37, templates/single-product/locker-infos.php:67
+msgid "Ausreichend zum Laden von Handy, Kamera, Powerbank"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:29, templates/single-product/locker-infos.php:39, templates/single-product/locker-infos.php:69
+msgid "Nicht erlaubt. Bitte halte Dich daran, da bei Überschreitung der 15 Watt die Sicherung rausfliegen wird."
+msgstr ""
+
+#: templates/single-product/locker-infos.php:32, templates/single-product/locker-infos.php:52
+msgid "18 x 40 x 35 cm"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:33, templates/single-product/locker-infos.php:53
+msgid "25 x 42 x 35 cm"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:34, templates/single-product/locker-infos.php:54
+msgid "Wertsachen, Tasche oder Rucksack, elektronische Geräte"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:46, templates/single-product/locker-infos.php:56, templates/single-product/locker-infos.php:76
+msgid "max. 90 Watt"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:47, templates/single-product/locker-infos.php:57
+msgid "Ausreichend zum Laden von Notebook bis 11 Zoll, Soundbox, gleichzeitiges Aufladen mehrerer Handys/Powerbanks"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:49, templates/single-product/locker-infos.php:59, templates/single-product/locker-infos.php:79
+msgid "Erlaubt, beachte bitte jedoch die max. Steckdosenleistung von 90 Watt."
+msgstr ""
+
+#: templates/single-product/locker-infos.php:62, templates/single-product/locker-infos.php:72
+msgid "33 x 40 x 48 cm"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:63, templates/single-product/locker-infos.php:73
+msgid "37 x 43,5 x 48 cm"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:64, templates/single-product/locker-infos.php:74
+msgid "Wertsachen, größere Tasche/Motorrad-Helm, elektronische Geräte"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:77
+msgid "Ausreichend zum Laden von Notebook bis 11 Zoll, Soundbox, gleichzeitiges Aufladen  mehrerer Handys/Powerbanks"
+msgstr ""
+
+#: templates/single-product/locker-infos.php:100
 msgid "Information zum Schließfach"
 msgstr ""
 
-#: templates/single-product/locker-infos.php:14
-msgid "Außenmaß: 18cm x 12cm x 35cm (BxHxT), Innenmaß: 25cm x 14cm x 35 cm (BxHxT)"
-msgstr ""
-
-#: templates/single-product/locker-infos.php:14
-msgid "passend für Wertsachen, kleine Tasche, kleine elektronische Geräte"
-msgstr ""
-
-#: templates/single-product/locker-infos.php:14
-msgid "Steckdose max. 15 Watt"
-msgstr ""
-
-#: templates/single-product/locker-infos.php:14
-msgid "Zum Laden von Handy, Kamera, Powerbank"
-msgstr ""
-
 #: templates/single-product/opening-items-and-locations.php:21
-msgid "Standorte & Öffnungszeiten"
+msgid "Allgemeine Informationen"
 msgstr ""
 
-#: templates/single-product/opening-items-and-locations.php:38
-msgid "Öffnungszeiten"
-msgstr ""
-
-#: templates/single-product/opening-items-and-locations.php:50
-msgid "Unser Service für dich"
+#: templates/single-product/opening-items-and-locations.php:26
+msgid "Standort"
 msgstr ""
