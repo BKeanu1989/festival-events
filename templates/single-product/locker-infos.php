@@ -58,8 +58,26 @@ $lockerInfo = [
     ],
     __("Erlaubt, beachte bitte jedoch die max. Steckdosenleistung von 90 Watt.", 'festival-events')
 ], 
-"XL" => ["", "", "", ""], 
-"XL High-Voltage" => ["", "", "", ""]];
+"XL" => [
+    __("33 x 40 x 48 cm", 'festival-events'),
+    __("37 x 43,5 x 48 cm", 'festival-events'),
+    __("Wertsachen, größere Tasche/Motorrad-Helm, elektronische Geräte", 'festival-events'),
+    [
+        __("max. 15 Watt", 'festival-events'),
+        __("Ausreichend zum Laden von Handy, Kamera, Powerbank", 'festival-events'),
+    ],
+    __("Nicht erlaubt. Bitte halte Dich daran, da bei Überschreitung der 15 Watt die Sicherung rausfliegen wird.", 'festival-events')
+], 
+"XL High-Voltage" => [
+    __("33 x 40 x 48 cm", 'festival-events'),
+    __("37 x 43,5 x 48 cm", 'festival-events'),
+    __("Wertsachen, größere Tasche/Motorrad-Helm, elektronische Geräte", 'festival-events'),
+    [
+        __("max. 90 Watt", 'festival-events'),
+        __("Ausreichend zum Laden von Notebook bis 11 Zoll, Soundbox, gleichzeitiges Aufladen  mehrerer Handys/Powerbanks", 'festival-events'),
+    ],
+    __("Erlaubt, beachte bitte jedoch die max. Steckdosenleistung von 90 Watt.", 'festival-events')
+]];
 
 $givenLockers = [];
 foreach($lockers AS $key => $value) {
