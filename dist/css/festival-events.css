@@ -61,6 +61,12 @@
         .card.miscellaneous-info .card__body--item:last-of-type {
           margin-left: 0; } }
 
+@media (max-width: 769px) {
+  .card {
+    margin-bottom: 1rem; }
+    .card__container {
+      flex-direction: column; } }
+
 .banner__wrapper {
   margin-bottom: 1em;
   position: relative; }
