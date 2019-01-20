@@ -1,0 +1,34 @@
+@media (max-width: 769px) {
+    .woocommerce{
+        &.single-product{
+            .wrapper{
+                width: 100%;
+            }
+        }
+
+        &-cart{
+            .entry-content{
+                .woocommerce{
+                    flex-direction: column;
+                    form.woocommerce-cart-form{
+                        width: 100%;
+                    }
+
+                    .cart-collaterals{
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    .woocommerce-checkout{
+        .extra_person__wrapper--input-wrapper{
+            flex-direction: column;
+        }
+        
+        div.extra_person__wrapper--input-wrapper--group{
+            margin-right: 0;
+        }
+    }
+}
