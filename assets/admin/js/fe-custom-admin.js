@@ -8,6 +8,7 @@ variationsWrapper = document.querySelector('#variable_product_options_inner > di
 if (triggerPopulateButton) {
     triggerPopulateButton.addEventListener('click', () => {
         console.log("populate prices!!!");
+        document.body.style.cursor = 'wait';
     
         let priceSetter = new PriceSetter();
         priceSetter.populatePrices();
@@ -22,6 +23,7 @@ class PriceSetter {
     }
     
     populatePrices(mutationsList, observer) {
+        document.body.style.cursor = 'wait';
         jQuery.ajax({
             url: ajaxurl,
             data: {

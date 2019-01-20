@@ -381,6 +381,74 @@ if ($confirmEmail) {
         }
     });
 }
+
+var MoveElement = function () {
+    // only if window.innerWidth > 1200 whatever ...
+    function MoveElement($movingElement, $endingElement) {
+        _classCallCheck(this, MoveElement);
+
+        this.movingElement = $movingElement;
+        this.movingElementPos;
+        this.endingElement = $endingElement;
+        this.endingElementPos;
+        this.active = false;
+        this.pageYOffset;
+        this.oldPageYOffset;
+        this.unit = 'px';
+        this.step = 20;
+    }
+
+    _createClass(MoveElement, [{
+        key: 'init',
+        value: function init() {
+            this.pageYOffset = window.pageYOffset;
+            this.oldPageYOffset = window.pageYOffset;
+        }
+    }, {
+        key: 'install',
+        value: function install() {
+            this.init();
+            this.moveHandler();
+        }
+    }, {
+        key: 'moveElement',
+        value: function moveElement() {
+
+            var topNow = parseFloat(this.movingElement.style.top) || 0;
+            var newTop = this.pageYOffset - this.oldPageYOffset;
+            debugger;
+            var newTopString = newTop + this.unit;
+            this.movingElement.style.top = newTopString;
+        }
+    }, {
+        key: 'moveHandler',
+        value: function moveHandler() {
+            var that = this;
+            window.addEventListener('scroll', function (event) {
+
+                if (!that.active) {
+                    window.requestAnimationFrame(function () {
+                        that.pageYOffset = window.pageYOffset;
+                        that.moveElement();
+                        that.active = false;
+                    });
+                    // this.active = true;
+                }
+            });
+        }
+    }]);
+
+    return MoveElement;
+}();
+
+var $movingElement = document.querySelector('.single-product-form-wrapper');
+var $endingElement = document.querySelector('.wrapper.info');
+var mover = void 0;
+
+if ($movingElement && $endingElement) {
+    // mover = new MoveElement($movingElement, $endingElement);
+    // mover.install();
+}
 var triggerPopulateUserDataButton = void 0;
 
 triggerPopulateUserDataButton = document.querySelector('#populate_data_for_other_lockers');

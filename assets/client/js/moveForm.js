@@ -52,6 +52,6 @@ let $endingElement = document.querySelector('.wrapper.info');
 let mover;
 
 if ($movingElement && $endingElement) {
-    mover = new MoveElement($movingElement, $endingElement);
-    mover.install();
+    // mover = new MoveElement($movingElement, $endingElement);
+    // mover.install();
 }
