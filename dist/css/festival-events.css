@@ -70,6 +70,8 @@
 .banner__wrapper {
   margin-bottom: 1em;
   position: relative; }
+  .banner__wrapper img {
+    width: 100%; }
 
 .banner__text {
   width: 80%;
@@ -101,7 +103,7 @@ h3.product_title.entry-title {
     .woocommerce.single-product .wrapper table ul li:not(:last-of-type) {
       margin-bottom: 10px; }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .single-product-form-container {
     display: flex;
     flex-direction: column;
