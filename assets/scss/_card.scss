@@ -14,10 +14,6 @@
     &__title {
         text-align: center;
         h2{
-            // color: #fff;
-            // background-color: #253746;
-            // padding: 15px;
-            // font-weight: bold;
             @extend %component-title;
         }
     }
@@ -43,13 +39,6 @@
         &:not(:last-of-type) {
             margin-right: 20px;
         }
-
-
-
-        // .card__body {
-        //     background-color: $blackBG;
-        //     color: $white;
-        // }
     }
 
     &.miscellaneous-info{
@@ -83,5 +72,15 @@
                 }
             }
         }
+    }
+}
+
+@media (max-width: 769px) {
+    .card{
+        &__container{
+            flex-direction: column;
+        }
+
+        @include margin-next;
     }
 }
