@@ -280,3 +280,17 @@ a.button.checkout-button {
     color: #fff; }
     .widget.woocommerce .woocommerce-mini-cart__buttons .button.wc-forward.checkout:hover {
       background-color: #96c346; }
+
+@media (max-width: 769px) {
+  .woocommerce.single-product .wrapper {
+    width: 100%; }
+  .woocommerce-cart .entry-content .woocommerce {
+    flex-direction: column; }
+    .woocommerce-cart .entry-content .woocommerce form.woocommerce-cart-form {
+      width: 100%; }
+    .woocommerce-cart .entry-content .woocommerce .cart-collaterals {
+      width: 100%; }
+  .woocommerce-checkout .extra_person__wrapper--input-wrapper {
+    flex-direction: column; }
+  .woocommerce-checkout div.extra_person__wrapper--input-wrapper--group {
+    margin-right: 0; } }
