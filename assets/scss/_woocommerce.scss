@@ -340,4 +340,8 @@ a.button.checkout-button{
     }
 }
 
+.woocommerce-price-suffix{
+    display: none;
+}
+
 @import './media_queries/woocommerce';
