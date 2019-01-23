@@ -125,7 +125,7 @@ msgid "Nachname"
 msgstr ""
 
 #: includes/set-data-checkout.php:110
-msgid "Bitte gib hier die Daten des Nutzers ein: "
+msgid "Gib bitte hier die Daten des Schließfach-Nutzers ein: "
 msgstr ""
 
 #: templates/cart/user-infos.php:14
