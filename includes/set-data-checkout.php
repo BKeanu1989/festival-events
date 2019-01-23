@@ -107,7 +107,7 @@ function fe_add_not_renter_fields(  ) {
     $required = __('erforderlich', 'festival-events');
     
     $counter = 1;
-    $lockerExtraPersonNote = __('Gib bitte hier die Daten des Schließfach-Nutzers ein:: ', 'festival-events');
+    $lockerExtraPersonNote = __('Gib bitte hier die Daten des Schließfach-Nutzers ein: ', 'festival-events');
 
     foreach($items AS $key => $item) {
         $quantity = $item['quantity'];
@@ -202,5 +202,4 @@ function fe_checkout_widerrufsrecht_valid() {
     if (!isset($_POST['fe_checkout_widerruf'])) {
         wc_add_notice( __( 'Bitte best&auml;tigen Sie die Kenntnisnahme des <a href="'.$home.'/agb-widerruf">Widerrufsrecht</a>.', 'festival-events' ), 'error' );
     }
-
 }
