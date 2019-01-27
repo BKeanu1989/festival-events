@@ -61,7 +61,7 @@ msgstr ""
 msgid "Banner Text:"
 msgstr ""
 
-#: includes/class-Festival-Product.php:227, includes/class-Festival-Product.php:273, includes/set-data-checkout.php:193, includes/set-data-checkout.php:203
+#: includes/class-Festival-Product.php:227, includes/class-Festival-Product.php:273
 msgstr ""
 
 #: includes/class-Festival-Product.php:263
@@ -128,16 +128,24 @@ msgstr ""
 msgid "Gib bitte hier die Daten des Schließfach-Nutzers ein: "
 msgstr ""
 
+#: includes/set-data-checkout.php:195
+msgid "Ich bin einverstanden und verlange ausdrücklich, dass Sie vor Ende der Widerrufsfrist mit der Ausführung der beauftragten Dienstleistung beginnen. Mir ist bekannt, dass ich bei vollständiger Vertragserfüllung durch Sie mein <a href=\"%s/agb-widerruf\" target=\"_blank\">Widerrufsrecht</a> verliere."
+msgstr ""
+
+#: includes/set-data-checkout.php:206
+msgid "Bitte best&auml;tigen Sie die Kenntnisnahme des <a href=\"%s/agb-widerruf\" target=\"_blank\">Widerrufsrecht</a>."
+msgstr ""
+
 #: templates/cart/user-infos.php:14
 msgid "Persönliche Daten für das/die Schließfächer"
 msgstr ""
 
 #: templates/single-product/locker-infos.php:13, templates/single-product/locker-infos.php:118
-msgid "Außenmaß (HxBxT in cm)"
+msgid "Außenmaß (BxHxT in cm)"
 msgstr ""
 
 #: templates/single-product/locker-infos.php:14, templates/single-product/locker-infos.php:121
-msgid "Innenmaß (HxBxT in cm)"
+msgid "Innenmaß (BxHxT in cm)"
 msgstr ""
 
 #: templates/single-product/locker-infos.php:15, templates/single-product/locker-infos.php:124
@@ -173,7 +181,7 @@ msgid "Ausreichend zum Laden von Handy, Kamera, Powerbank"
 msgstr ""
 
 #: templates/single-product/locker-infos.php:29, templates/single-product/locker-infos.php:39, templates/single-product/locker-infos.php:69
-msgid "Nicht erlaubt. Bitte halte Dich daran, da bei Überschreitung der 15 Watt die Sicherung rausfliegen wird."
+msgid "Nicht erlaubt. Bei Überschreitung der 15 Watt springt die Sicherung raus."
 msgstr ""
 
 #: templates/single-product/locker-infos.php:32, templates/single-product/locker-infos.php:52
@@ -192,8 +200,8 @@ msgstr ""
 msgid "max. 90 Watt"
 msgstr ""
 
-#: templates/single-product/locker-infos.php:47, templates/single-product/locker-infos.php:57
-msgid "Ausreichend zum Laden von Notebook bis 11 Zoll, Soundbox, gleichzeitiges Aufladen mehrerer Handys/Powerbanks"
+#: templates/single-product/locker-infos.php:47, templates/single-product/locker-infos.php:57, templates/single-product/locker-infos.php:77
+msgid "Ausreichend zum Laden mehrerer Handys/Powerbanks, 11” Notebooks, große Soundbox"
 msgstr ""
 
 #: templates/single-product/locker-infos.php:49, templates/single-product/locker-infos.php:59, templates/single-product/locker-infos.php:79
@@ -210,10 +218,6 @@ msgstr ""
 
 #: templates/single-product/locker-infos.php:64, templates/single-product/locker-infos.php:74
 msgid "Wertsachen, größere Tasche/Motorrad-Helm, elektronische Geräte"
-msgstr ""
-
-#: templates/single-product/locker-infos.php:77
-msgid "Ausreichend zum Laden von Notebook bis 11 Zoll, Soundbox, gleichzeitiges Aufladen  mehrerer Handys/Powerbanks"
 msgstr ""
 
 #: templates/single-product/locker-infos.php:100
