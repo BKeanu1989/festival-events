@@ -134,13 +134,13 @@ function fe_add_not_renter_fields(  ) {
                                 <label for='extra_person-first_name[$identifier]' class=''>{$first_name_string}
                                     <abbr class='required' title='{$required}'>*</abbr>
                                 </label>
-                                <input type='text' id='extra_person-first_name[$identifier]' placeholder='michaela' class='extra_person_field' name='extra_person-first_name[$identifier]'>
+                                <input type='text' id='extra_person-first_name[$identifier]' placeholder='' class='extra_person_field' name='extra_person-first_name[$identifier]'>
                             </div>
                             <div class='extra_person__wrapper--input-wrapper--group'>
                                 <label for='extra_person-last_name[$identifier]' class=''>{$last_name_string}
                                     <abbr class='required' title='{$required}'>*</abbr>
                                 </label>
-                                <input type='text' id='extra_person-last_name[$identifier]' placeholder='müller' class='extra_person_field' name='extra_person-last_name[$identifier]'>
+                                <input type='text' id='extra_person-last_name[$identifier]' placeholder='' class='extra_person_field' name='extra_person-last_name[$identifier]'>
                             </div>
                             <div class='extra_person__wrapper--input-wrapper--group'>
                                 <label for='extra_person-birthdate[$identifier]' class=''>{$birthdate_string}
@@ -164,6 +164,8 @@ add_action ('woocommerce_checkout_order_processed', 'fe_save_custom_fields', 10,
 function fe_save_custom_fields( $order_id, $posted_data, $order ) {
     $groupedPersonData = fe_groupPersonData($_POST);
     update_post_meta($order_id, 'locker_person_data', $groupedPersonData);
+    update_post_meta($order_id, '_locker_person_data', $groupedPersonData);
+    update_post_meta($order_id, 'data_test', 'test');
 }
 
 
@@ -186,11 +188,11 @@ function fe_checkout_widerrufsrecht( ) {
     echo '<div id="fe_checkout_widerruf">';
     $home = get_home_url();
     // FIXME: get widerrufsrecht page for language
-
+    $label = __('Mit Abgabe einer Bestellung best&auml;tigen Sie, das');
     woocommerce_form_field( 'fe_checkout_widerruf', array(
     'type'          => 'checkbox',
     'class'         => array('notes'),
-    'label'         => __('Mit Abgabe einer Bestellung best&auml;tigen Sie, das <a href="'.$home.'/agb-widerruf">Widerrufsrecht</a> zur Kenntnis genommen zu haben.', 'festival-events'),
+    'label'         => sprintf(__('Ich bin einverstanden und verlange ausdrücklich, dass Sie vor Ende der Widerrufsfrist mit der Ausführung der beauftragten Dienstleistung beginnen. Mir ist bekannt, dass ich bei vollständiger Vertragserfüllung durch Sie mein <a href="%s/agb-widerruf" target="_blank">Widerrufsrecht</a> verliere.', 'festival-events'), $home),
     'placeholder'       => __('WRB'),
     'required'         => true,
     ));
@@ -199,7 +201,8 @@ function fe_checkout_widerrufsrecht( ) {
 
 add_action('woocommerce_checkout_process', 'fe_checkout_widerrufsrecht_valid');
 function fe_checkout_widerrufsrecht_valid() {
+    $home = get_home_url();
     if (!isset($_POST['fe_checkout_widerruf'])) {
-        wc_add_notice( __( 'Bitte best&auml;tigen Sie die Kenntnisnahme des <a href="'.$home.'/agb-widerruf">Widerrufsrecht</a>.', 'festival-events' ), 'error' );
+        wc_add_notice(sprintf( __( 'Bitte best&auml;tigen Sie die Kenntnisnahme des <a href="%s/agb-widerruf" target="_blank">Widerrufsrecht</a>.', 'festival-events' ), $home), 'error' );
     }
 }
