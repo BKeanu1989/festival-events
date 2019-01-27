@@ -45,8 +45,8 @@
         .card__body{
             display: flex;
             &--item{
-                // flex: 1;
-                width: calc(50% - 5px);
+                flex: 1;
+                // width: calc(50% - 5px);
                 padding: 5px;
                 border: 2px solid $blackBG;
                 margin-right: 2em;
