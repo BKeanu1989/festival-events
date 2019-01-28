@@ -163,9 +163,13 @@ function fe_add_extra_persons_title_close() {
 add_action ('woocommerce_checkout_order_processed', 'fe_save_custom_fields', 10, 3);
 function fe_save_custom_fields( $order_id, $posted_data, $order ) {
     $groupedPersonData = fe_groupPersonData($_POST);
-    update_post_meta($order_id, 'locker_person_data', $groupedPersonData);
+    for ($i = 0; $i < count($groupedPersonData); $i++) {
+        foreach($groupedPersonData[$i] AS $key => $value) {
+            $meta_key = $key . '_' . $i;
+            update_post_meta($order_id, $meta_key, $value);
+        }
+    }
     update_post_meta($order_id, '_locker_person_data', $groupedPersonData);
-    update_post_meta($order_id, 'data_test', 'test');
 }
 
 
@@ -203,6 +207,6 @@ add_action('woocommerce_checkout_process', 'fe_checkout_widerrufsrecht_valid');
 function fe_checkout_widerrufsrecht_valid() {
     $home = get_home_url();
     if (!isset($_POST['fe_checkout_widerruf'])) {
-        wc_add_notice(sprintf( __( 'Bitte best&auml;tigen Sie die Kenntnisnahme des <a href="%s/agb-widerruf" target="_blank">Widerrufsrecht</a>.', 'festival-events' ), $home), 'error' );
+        wc_add_notice(sprintf( __( 'Bitte best&auml;tige die Kenntnisnahme des <a href="%s/agb-widerruf" target="_blank">Widerrufs</a>.', 'festival-events' ), $home), 'error' );
     }
 }
