@@ -133,7 +133,7 @@ msgid "Ich bin einverstanden und verlange ausdrücklich, dass Sie vor Ende der W
 msgstr ""
 
 #: includes/set-data-checkout.php:206
-msgid "Bitte best&auml;tigen Sie die Kenntnisnahme des <a href=\"%s/agb-widerruf\" target=\"_blank\">Widerrufsrecht</a>."
+msgid "Bitte best&auml;tige die Kenntnisnahme des <a href=\"%s/agb-widerruf\" target=\"_blank\">Widerrufs</a>."
 msgstr ""
 
 #: templates/cart/user-infos.php:14
