@@ -60,7 +60,7 @@ function fe_validate_bday() {
 // add_action( 'woocommerce_checkout_billing', 'fe_are_you_renter' );
 function fe_are_you_renter($key = 0) {
     // works
-    $are_you_renter = __('Bist du Mieter des Schließfachs?', 'festival-events');
+    $are_you_renter = __('Bist du Nutzer des Schließfachs?', 'festival-events');
     $yes = __('Ja', 'festival-events');
     $no = __('Nein', 'festival-events');
     $required = __('erforderlich', 'festival-events');
@@ -109,6 +109,9 @@ function fe_add_not_renter_fields(  ) {
     $counter = 1;
     $lockerExtraPersonNote = __('Gib bitte hier die Daten des Schließfach-Nutzers ein: ', 'festival-events');
 
+    $birthday_title_note = __('Gib das Datum in diesem Format ein YYYY-MM-DD');
+    // <input type='date' id='extra_person-birthdate[$identifier]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$identifier]'>
+
     foreach($items AS $key => $item) {
         $quantity = $item['quantity'];
         $variation_id = $item['variation_id'];
@@ -146,7 +149,7 @@ function fe_add_not_renter_fields(  ) {
                                 <label for='extra_person-birthdate[$identifier]' class=''>{$birthdate_string}
                                     <abbr class='required' title='{$required}'>*</abbr>
                                 </label>
-                                <input type='date' id='extra_person-birthdate[$identifier]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$identifier]'>
+                                <input type='text' id='extra_person-birthdate[$identifier]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$identifier]' pattern='(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))' title='$birthday_title_note'>
                             </div>
                         </div>
                         ";
