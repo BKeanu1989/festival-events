@@ -97,7 +97,7 @@ msgid "Dein Geburtstag darf nicht leer sein."
 msgstr ""
 
 #: includes/set-data-checkout.php:63
-msgid "Bist du Mieter des Schließfachs?"
+msgid "Bist du Nutzer des Schließfachs?"
 msgstr ""
 
 #: includes/set-data-checkout.php:64
@@ -128,11 +128,11 @@ msgstr ""
 msgid "Gib bitte hier die Daten des Schließfach-Nutzers ein: "
 msgstr ""
 
-#: includes/set-data-checkout.php:195
+#: includes/set-data-checkout.php:199
 msgid "Ich bin einverstanden und verlange ausdrücklich, dass Sie vor Ende der Widerrufsfrist mit der Ausführung der beauftragten Dienstleistung beginnen. Mir ist bekannt, dass ich bei vollständiger Vertragserfüllung durch Sie mein <a href=\"%s/agb-widerruf\" target=\"_blank\">Widerrufsrecht</a> verliere."
 msgstr ""
 
-#: includes/set-data-checkout.php:206
+#: includes/set-data-checkout.php:210
 msgid "Bitte best&auml;tige die Kenntnisnahme des <a href=\"%s/agb-widerruf\" target=\"_blank\">Widerrufs</a>."
 msgstr ""
 
