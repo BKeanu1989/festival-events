@@ -79,10 +79,20 @@ $lockerInfo = [
     __("Erlaubt, beachte bitte jedoch die max. Steckdosenleistung von 90 Watt.", 'festival-events')
 ]];
 
-$givenLockers = [];
-foreach($lockers AS $key => $value) {
-    $givenLockers[$value] = $lockerInfo[$value];
+
+function buildLockerInfo($lockers) {
+    
+    $givenLockers = [];
+    foreach($lockers AS $key => $lockerName) {
+        
+
+        $givenLockers[$lockerName] = $lockerInfo[$lockerName];
+    }
+
+    return $givenLockers;
 }
+
+$givenLockers = buildLockerInfo($lockers); 
 
 $tableData = [];
 
@@ -99,6 +109,24 @@ foreach($givenLockers AS $key => $value) {
     <h2 class="wrapper__title">
         <?php echo __('Information zum Schließfach', 'festival-events'); ?>
     </h2>
+
+    <div class="card__container">
+
+        <?php foreach($givenLockers AS $lockerType => $lockerInfo) { 
+            list($outerDiameter, $innerDiameter, $suitability, $power, $useable) = $givenLockers[$lockerType];
+        ?> 
+            <div class="card">
+                <div class="card__title">
+                    <?php echo $lockerType; ?>
+                </div>
+                <div class="card__body">
+                    
+                </div>
+            </div>
+
+        <?php } ?>
+    </div>
+
     <div class="card__container table-responsive">
         <!-- </div> -->
         <table class="table">
