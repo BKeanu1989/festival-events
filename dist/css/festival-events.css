@@ -26,7 +26,23 @@
     list-style-type: none;
     margin: 0; }
   .card__container {
-    display: flex; }
+    display: flex;
+    flex-wrap: wrap; }
+    .card__container.lockers .card__body--group {
+      display: flex;
+      padding-bottom: 1em; }
+      .card__container.lockers .card__body--group--description {
+        flex: 2; }
+      .card__container.lockers .card__body--group--info {
+        flex: 3; }
+    @media (min-width: 769px) {
+      .card__container.lockers .card {
+        flex: unset;
+        width: calc(50% - 1em);
+        padding: 5px;
+        margin-bottom: 1em; }
+        .card__container.lockers .card:nth-of-type(odd) {
+          margin-right: 1em; } }
   .card__title {
     text-align: center; }
   .card.locker_infos {
