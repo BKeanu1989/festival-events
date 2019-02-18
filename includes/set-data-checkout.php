@@ -41,7 +41,8 @@ function fe_add_birthdate_field_checkout( $fields ) {
         'class' => [],
         'clear' => true,
         'priority' => 25,
-        'type' => 'date'
+        'type' => 'text',
+        'placeholder' => '1990-02-05'
     );
     return $fields;
 }
@@ -146,7 +147,7 @@ function fe_add_not_renter_fields(  ) {
                                 <label for='extra_person-birthdate[$identifier]' class=''>{$birthdate_string}
                                     <abbr class='required' title='{$required}'>*</abbr>
                                 </label>
-                                <input type='date' id='extra_person-birthdate[$identifier]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$identifier]'>
+                                <input type='text' id='extra_person-birthdate[$identifier]' placeholder='2000-12-12' class='extra_person_field input-text' name='extra_person-birthdate[$identifier]' pattern='(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))' title='$birthday_title_note'>
                             </div>
                         </div>
                         ";
