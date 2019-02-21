@@ -79,75 +79,77 @@ $lockerInfo = [
     __("Erlaubt, beachte bitte jedoch die max. Steckdosenleistung von 90 Watt.", 'festival-events')
 ]];
 
-$givenLockers = [];
-foreach($lockers AS $key => $value) {
-    $givenLockers[$value] = $lockerInfo[$value];
+function buildLockerInfo($lockers, $lockerInfo) {
+    $givenLockers = [];
+    foreach($lockers AS $key => $lockerName) {
+        $givenLockers[$lockerName] = $lockerInfo[$lockerName];
+    }
+    return $givenLockers;
 }
 
-$tableData = [];
+$givenLockers = buildLockerInfo($lockers, $lockerInfo); 
 
-foreach($givenLockers AS $key => $value) {
-    list($outerDiameter, $innerDiameter, $suitability, $power, $useable) = $givenLockers[$key];
-    $tableData["outerDiameter"][$key] = $outerDiameter;
-    $tableData["innerDiameter"][$key] = $innerDiameter;
-    $tableData["suitability"][$key] = $suitability;
-    $tableData["power"][$key] = $power;
-    $tableData["useable"][$key] = $useable;
-}
 ?>
 <div class="wrapper info">
     <h2 class="wrapper__title">
         <?php echo __('Information zum Schließfach', 'festival-events'); ?>
     </h2>
-    <div class="card__container table-responsive">
-        <!-- </div> -->
-        <table class="table">
-            <tr>
-                <th></th>
-                <?php
-                    foreach($lockers AS $key => $value) {
-                        echo "<th>{$value}</th>";
-                    }
-                ?>
-            </tr>
-            <?php
-                foreach($tableData AS $key => $value) {
-                    echo "<tr>";
-                    switch($key) {
-                        case 'outerDiameter':
-                            $description = __('Außenmaß (HxBxT in cm)', 'festival-events');
-                            break;
-                        case 'innerDiameter':
-                            $description = __('Innenmaß (HxBxT in cm)', 'festival-events');
-                            break;                            
-                        case 'suitability':
-                            $description = __('Geeignet für', 'festival-events');
-                            break;
-                        case 'power':
-                            $description = __('Steckdosenleistung', 'festival-events');
-                            break;
-                        case 'useable':
-                            $description = __('Mehrfachstecker USB-Verteiler', 'festival-events');
-                            break;
-                    }
-                    echo "<td>{$description}</td>";
-                    foreach($tableData[$key] AS $info) {
-                        if (is_array($info)) {
-                            echo "<td>";
-                                echo "<ul>";
-                                foreach($info as $listItem) {
-                                    echo "<li>{$listItem}</li>";
-                                }
-                                echo "</ul>";
-                            echo "</td>";
-                        } else {
-                            echo "<td>{$info}</td>";
-                        }
-                    }
-                    echo "</tr>";
-                }
-            ?>
-        </table>
+
+    <div class="card__container lockers">
+        <?php foreach($givenLockers AS $lockerType => $lockerInfo) { 
+            list($outerDiameter, $innerDiameter, $suitability, $power, $useable) = $givenLockers[$lockerType];
+        ?> 
+            <div class="card">
+                <div class="card__title">
+                    <?php echo $lockerType; ?>
+                </div>
+                <div class="card__body">
+                    <div class="card__body--group">
+                        <div class="card__body--group--description">
+                            <?php echo $lockerKeys['outerDiameter']; ?>
+                        </div>
+                        <div class="card__body--group--info">
+                            <?php echo $outerDiameter; ?>
+                        </div>
+                    </div>
+                    <div class="card__body--group">
+                        <div class="card__body--group--description">
+                            <?php echo $lockerKeys['innerDiameter']; ?>
+                        </div>
+                        <div class="card__body--group--info">
+                            <?php echo $innerDiameter; ?>
+                        </div>
+                    </div>
+                    <div class="card__body--group">
+                        <div class="card__body--group--description">
+                            <?php echo $lockerKeys['suitability']; ?>
+                        </div>
+                        <div class="card__body--group--info">
+                            <?php echo $suitability; ?>
+                        </div>
+                    </div>
+                    <div class="card__body--group">
+                        <div class="card__body--group--description">
+                            <?php echo $lockerKeys['power']; ?>
+                        </div>
+                        <div class="card__body--group--info">
+                            <?php foreach($power AS $single) {
+                                echo $single;
+                            }; ?>
+                        </div>
+                    </div>
+                    <div class="card__body--group">
+                        <div class="card__body--group--description">
+                            <?php echo $lockerKeys['useable']; ?>
+                        </div>
+                        <div class="card__body--group--info">
+                            <?php echo $useable; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <?php } ?>
     </div>
 </div>
 </div> <!-- close container -->

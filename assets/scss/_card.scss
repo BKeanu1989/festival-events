@@ -1,3 +1,5 @@
+$margin: 1em;
+
 .card {
 
     ul {
@@ -9,6 +11,37 @@
     
     &__container {
         display: flex;
+        flex-wrap: wrap;
+        
+        &.lockers{
+
+            .card__body{
+                &--group{
+                    display: flex;
+                    padding-bottom: $margin;
+                    
+                    &--description{
+                        flex: 2;
+                    }
+
+                    &--info{
+                        flex: 3;
+                    }
+                }
+            }
+            @media (min-width: 769px) {
+                .card{
+                    flex: unset;
+                    width: calc(50% - #{$margin});
+                    padding: 5px;
+                    margin-bottom: $margin;
+    
+                    &:nth-of-type(odd){
+                        margin-right: $margin;
+                    }
+                }
+            }
+        }
     }
 
     &__title {
@@ -17,6 +50,8 @@
             @extend %component-title;
         }
     }
+
+
     
     &.locker_infos {
         background-color: $blackBG;
