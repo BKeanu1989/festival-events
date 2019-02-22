@@ -41,7 +41,8 @@ function fe_add_birthdate_field_checkout( $fields ) {
         'class' => [],
         'clear' => true,
         'priority' => 25,
-        'type' => 'date'
+        'type' => 'text',
+        'placeholder' => '1990-02-05'
     );
     return $fields;
 }

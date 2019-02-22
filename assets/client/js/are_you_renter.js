@@ -24,6 +24,12 @@ if (all_are_you_renter_container) {
                         findExtraPerson.classList.remove('hide_if_yes');
                         findExtraPerson.classList.remove('hide_if_default');
                         findExtraPerson.classList.toggle('fadeIn');
+
+                        new Cleave(`input[name="extra_person-birthdate[${key}]"]`, {
+                            date: true,
+                            datePattern: ['Y', 'm', 'd'],
+                            delimiter: '-'
+                        });
                     }
                 } catch(err) {
                     console.log(err);

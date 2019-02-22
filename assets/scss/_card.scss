@@ -1,3 +1,5 @@
+$margin: 2em;
+
 .card {
 
     ul {
@@ -9,14 +11,53 @@
     
     &__container {
         display: flex;
+        flex-wrap: wrap;
+        
+        &.lockers{
+            .card__body{
+                &--group{
+                    display: flex;
+                    padding-bottom: $margin;
+                    
+                    &--description{
+                        flex: 2;
+                        font-weight: bold;
+                    }
+
+                    &--info{
+                        flex: 3;
+                    }
+                }
+            }
+            @media (min-width: 769px) {
+                .card{
+                    flex: unset;
+                    width: calc(50% - calc(#{$margin} / 2));
+                    padding: 15px;
+                    margin-bottom: $margin;
+                    border: 2px solid $blackBG;
+
+                    &:nth-of-type(odd){
+                        margin-right: $margin;
+                    }
+                }
+            }
+        }
     }
 
     &__title {
         text-align: center;
+        background-color: $blackBG;
+        color: $white;
+        margin-bottom: .75em;
+        font-size: 1.125em;
+
         h2{
             @extend %component-title;
         }
     }
+
+
     
     &.locker_infos {
         background-color: $blackBG;

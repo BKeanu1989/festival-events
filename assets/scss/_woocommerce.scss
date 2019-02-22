@@ -222,6 +222,7 @@ h3{
             display: flex;
             width: 100%;
             justify-content: space-between;
+            flex-wrap: wrap;
 
             .woocommerce-cart-form{
                 width: 70%;

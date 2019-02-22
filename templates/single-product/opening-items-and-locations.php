@@ -24,8 +24,8 @@ $iterator = 1;
                 <?php foreach($get_opening_times_per_location[0] AS $key => $value) { ?>
                     <div class="card__body--item card__locations">
                         <h3 style="text-align: center;"><?php _e('Standort', 'festival-events'); echo " " . $iterator ?></h3>
-                        <?php echo "<p style='font-weight:bold;'>". ucfirst($key) . "</p>" ?>
-                        <?php echo "<p style='font-weight:bold;'>". ucfirst($value) . "</p>" ?>
+                        <?php echo "<p style='font-weight: bold'>". ucfirst($key) . "</p>" ?>
+                        <?php echo "<p style='font-weight: bold'>". ucfirst($value) . "</p>" ?>
                         <?php $iterator++; ?>
                     </div>
                 <?php } ?>
