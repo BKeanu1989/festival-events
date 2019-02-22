@@ -97,6 +97,9 @@ function buildLockerInfo($lockers, $lockerInfo) {
         $givenLockers[$lockerName] = $lockerInfo[$lockerName];
     }
     uasort($givenLockers, "cmp");
+    array_map(function($locker) {
+        unset($locker['priority']);
+    }, $givenLockers);
     return $givenLockers;
 }
 
@@ -111,7 +114,7 @@ $givenLockers = buildLockerInfo($lockers, $lockerInfo);
 
     <div class="card__container lockers">
         <?php foreach($givenLockers AS $lockerType => $lockerInfo) { 
-            list($outerDiameter, $innerDiameter, $suitability, $power, $useable, $priority) = $givenLockers[$lockerType];
+            list($outerDiameter, $innerDiameter, $suitability, $power, $useable) = $givenLockers[$lockerType];
         ?> 
             <div class="card">
                 <div class="card__title">
