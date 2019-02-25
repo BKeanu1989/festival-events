@@ -43,6 +43,7 @@ function fe_admin_scripts() {
     global $post;
     wp_enqueue_style('festival-events', plugins_url('dist/css/festival-events.css', __FILE__), [], false, 'all');
     // $localizedVars = $post->ID;
+    wp_register_script('cleave', plugins_url('dist/admin/cleave.js', __FILE__), [], false, true);
     wp_register_script('fe-admin-script', plugins_url('dist/admin/festival-events.js', __FILE__), [], false, true);
     $localizedVars = [];
     if (!empty($post)) {
@@ -50,6 +51,7 @@ function fe_admin_scripts() {
     }
 
     wp_localize_script('fe-admin-script', 'localizedVars', $localizedVars);
+    wp_enqueue_script('cleave');
     wp_enqueue_script('fe-admin-script');
     // wp_enqueue_style('fe-bulma', 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css');
 }
