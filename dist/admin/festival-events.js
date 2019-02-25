@@ -11,6 +11,30 @@ buttons = Array.from(document.querySelectorAll('.foreign-language button'));
 buttons.forEach(function (x) {
     return x.disabled = true;
 });
+
+var $festivalStart = void 0;
+var $festivalEnd = void 0;
+
+$festivalStart = document.querySelector('#_festival_start');
+$festivalEnd = document.querySelector('#_festival_end');
+
+if ($festivalStart && $festivalEnd) {
+    try {
+        new Cleave('#_festival_start', {
+            date: true,
+            datePattern: ['Y', 'm', 'd'],
+            delimiter: '-'
+        });
+
+        new Cleave('#_festival_end', {
+            date: true,
+            datePattern: ['Y', 'm', 'd'],
+            delimiter: '-'
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
 var prices = void 0,
     variationsWrapper = void 0,
     variationsTab = void 0,
