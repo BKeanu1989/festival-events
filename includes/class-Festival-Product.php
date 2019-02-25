@@ -80,7 +80,7 @@ function woo_display_festival_times()
             'placeholder' => '01.08.2019',
             'desc_tip' => 'true',
             'description' => __('Trage hier das Datum vom Start des Festivals ein.', 'festival-events'),
-            'type' => 'date',
+            'type' => 'text',
         ]
     );
 
@@ -91,10 +91,9 @@ function woo_display_festival_times()
             'placeholder' => '08.08.2019',
             'desc_tip' => 'true',
             'description' => __('Trage hier das Datum vom Ende des Festivals ein.', 'festival-events'),
-            'type' => 'date',
+            'type' => 'text',
         ]
     );
-
 
     woocommerce_wp_checkbox(array(
         'id' => "_enumerate_days",
