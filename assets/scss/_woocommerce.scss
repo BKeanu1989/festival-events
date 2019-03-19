@@ -68,8 +68,9 @@ h3{
 
         z-index: 1;
         width: 20vw;
+        min-width: 200px;
         background-color: $blackBG;
-        padding: 2em;
+        padding: 1em;
         padding-bottom: 0;
     
         .wrapper{
